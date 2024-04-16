@@ -3,7 +3,7 @@ import { ExceptionController } from "../utility/exception_controller.js";
 export class BaseDataForNamed {
     constructor(isLoading) {
         this.isLoading = isLoading;
-        this.exceptionController = ExceptionController(null);
+        this.exceptionController = new ExceptionController(null);
     }
 
     getEnumDataForNamed() {
