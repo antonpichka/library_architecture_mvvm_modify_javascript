@@ -1,12 +1,15 @@
-import { ExceptionController } from "../utility/exception_controller.js";
+import { ExceptionController } from "../utility/exception_controller";
+import { LocalException } from "../utility/base_exception/local_exception";
+import { EnumGuilty } from "../utility/base_exception/enum_guilty";
 
 export class BaseDataForNamed {
     constructor(isLoading) {
-        this.isLoading = isLoading;
-        this.exceptionController = new ExceptionController(null);
+        this.isLoading = (isLoading instanceof Boolean ? isLoading : null);
+        let exceptionControllerq = new ExceptionController.success();
+        this.exceptionController = exceptionControllerq instanceof ExceptionController ? exceptionControllerq : null;
     }
 
     getEnumDataForNamed() {
-        throw new Error("This is method 'getEnumDataForNamed()' needs extends and must return type 'Enum'");
+        throw new LocalException("BaseDataForNamed",EnumGuilty.developer,"BaseDataForNamedQQGetEnumDataForNamed","Needs extends and must return type 'Enum'");
     }   
 }
