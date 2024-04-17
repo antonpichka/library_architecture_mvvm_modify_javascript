@@ -1,0 +1,12 @@
+import { LocalException } from "../utility/base_exception/local_exception";
+import { EnumGuilty } from "../utility/base_exception/enum_guilty";
+
+export class IIterator {
+    current() {
+        throw new LocalException("IIterator",EnumGuilty.developer,"IIteratorQQCurrent","Needs extends and must return type 'Object'");
+    }
+
+    moveNext() {
+        throw new LocalException("IIterator",EnumGuilty.developer,"IIteratorQQMoveNext","Needs extends and must return type 'Boolean'");
+    }
+}
