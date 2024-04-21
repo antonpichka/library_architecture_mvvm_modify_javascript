@@ -1,23 +1,33 @@
 import { BaseException } from "./base_exception";
 
 export class NetworkException extends BaseException {
+    #statusCode;
+    #nameStatusCode;
+    #descriptionStatusCode;
+
     constructor(thisClass,key,statusCode,nameStatusCode = "",descriptionStatusCode = "") {
-        this.statusCode = function() {
-            return (statusCode instanceof Number ? statusCode : null);
-        };
-        this.nameStatusCode = function() {
-            return (nameStatusCode instanceof String ? nameStatusCode : null);
-        };
-        this.descriptionStatusCode = function() {
-            return (descriptionStatusCode instanceof String ? descriptionStatusCode : null);
-        }
         super(thisClass,"NetworkException",key);
+        this.#statusCode = statusCode;
+        this.#nameStatusCode = nameStatusCode;
+        this.#descriptionStatusCode = descriptionStatusCode;
+    }
+
+    get statusCode() {
+        return this.#statusCode;
+    }
+
+    get nameStatusCode() {
+        return this.#nameStatusCode;
+    }
+
+    get descriptionStatusCode() {
+        return this.#descriptionStatusCode;
     }
 
     toString() {
         return "NetworkException(key: " + this.key() + ", " +
-            "statusCode: " + this.statusCode() + ", " +
-            "nameStatusCode (optional): " + this.nameStatusCode() + ", " +
-            "descriptionStatusCode (optional): " + this.descriptionStatusCode() + ")";
+            "statusCode: " + this.#statusCode + ", " +
+            "nameStatusCode (optional): " + this.#nameStatusCode + ", " +
+            "descriptionStatusCode (optional): " + this.#descriptionStatusCode + ")";
     }
 }

@@ -1,40 +1,46 @@
 import { BaseNamedStreamWState } from "./base_named_stream_w_state";
 import { LocalException } from "../base_exception/local_exception";
-import { BaseDataForNamed } from "../../base_data_for_named/base_data_for_named";
 import { EnumGuilty } from "../base_exception/enum_guilty";
 
 export class DefaultStreamWState extends BaseNamedStreamWState {
+    #dataForNamed;
+    #isDispose = false;
+    #callback;
+
     constructor(dataForNamed) {
-        let dataForNamedq = (dataForNamed instanceof BaseDataForNamed ? dataForNamed : null);
-        let isDisposeq = false;
-        let callbackq;
-        this.dispose = function() {
-            if(isDisposeq) {
-                return;
-            }
-            isDisposeq = true;
-            callbackq = null;
+        super();
+        this.#dataForNamed = dataForNamed;
+    }
+    
+    dispose() {
+        if(this.#isDispose) {
+            return;
         }
-        this.getDataForNamed = function() {
-            return dataForNamedq;   
+        this.#isDispose = true;
+        this.#callback = null;
+    }
+
+    get getDataForNamed() {
+        return this.#dataForNamed;
+    }
+
+    listenStreamDataForNamedFromCallback(callback) {
+        if(this.#isDispose) {
+            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQListenStreamDataForNamedFromCallback","Already disposed of");
         }
-        this.listenStreamDataForNamedFromCallback = function(callback) {
-            if(isDisposeq) {
-                throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQListenStreamDataForNamedFromCallback","Already disposed of");
-            }
-            if(callbackq != null) {
-                throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQListenStreamDataForNamedFromCallback","Duplicate");
-            }
-            callbackq = callback;
+        if(this.#callback != null) {
+            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQListenStreamDataForNamedFromCallback","Duplicate");
         }
-        this.notifyStreamDataForNamed = function() {
-            if(isDisposeq) {
-                throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQNotifyStreamDataForNamed","Already disposed of");
-            }
-            if(callbackq == null) {
-                throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQNotifyStreamDataForNamed","Stream has no listener");
-            }
-            callbackq(dataForNamedq);
+        this.#callback = callback;
+    }
+
+    notifyStreamDataForNamed() {
+        if(this.#isDispose) {
+            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQNotifyStreamDataForNamed","Already disposed of");
         }
+        if(this.#callback == null) {
+            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQNotifyStreamDataForNamed","Stream has no listener");
+        }
+        this.#callback(this.#dataForNamed);
     }
 }

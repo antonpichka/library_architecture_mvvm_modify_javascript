@@ -1,19 +1,26 @@
 import { BaseException } from "./base_exception";
 
 export class LocalException extends BaseException {
+    #valueWEnumGuilty;
+    #message;
+    
     constructor(thisClass,valueWEnumGuilty,key,message = "") {
-        this.valueWEnumGuilty = function() {
-            return (valueWEnumGuilty instanceof String ? valueWEnumGuilty : null);
-        };
-        this.message = function() {
-            return (message instanceof String ? message : null);
-        };
         super(thisClass,"LocalException",key);
+        this.#valueWEnumGuilty = valueWEnumGuilty;
+        this.#message = message;
+    }
+
+    get valueWEnumGuilty() {
+        return this.#valueWEnumGuilty;
+    }
+
+    get message() {
+        return this.#message;
     }
 
     toString() {
-        return "LocalException(valueWEnumGuilty: " + this.valueWEnumGuilty() + ", " + 
+        return "LocalException(valueWEnumGuilty: " + this.#valueWEnumGuilty + ", " + 
             "key: " + this.key() + ", " + 
-            "message (optional): " + this.message() + ")";
+            "message (optional): " + this.#message + ")";
     }
 }

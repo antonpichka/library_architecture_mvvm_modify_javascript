@@ -6,7 +6,7 @@ export class BaseNamedState {
         throw new LocalException("BaseNamedState",EnumGuilty.developer,"BaseNamedStateQQDispose","Needs extends");
     }
 
-    getDataForNamed() {
+    get getDataForNamed() {
         throw new LocalException("BaseNamedState",EnumGuilty.developer,"BaseNamedStateQQGetDataForNamed","Needs extends and must return type 'BaseDataForNamed'");
     }
 }

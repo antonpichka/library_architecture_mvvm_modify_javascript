@@ -1,15 +1,9 @@
-import { BaseException } from "../utility/base_exception/base_exception";
-
 export class ExceptionController {
-    /// DO NOT CALL DIRECTLY, USE A STATIC METHOD
+    #exception;
+
+    /// DO NOT CALL DIRECTLY, USE A STATIC METHOD: "success","exception"
     constructor(exception) {
-        let exceptionq = (exception instanceof BaseException ? exception : null);
-        this.getKeyParameterException = function() {
-            return exceptionq.key;
-        }
-        this.isWhereNotEqualsNullParameterException = function() {
-            return exceptionq != null;
-        }
+        this.#exception = exception;
     }
 
     static success() {
@@ -18,5 +12,13 @@ export class ExceptionController {
 
     static exception(exception) {
         return new ExceptionController(exception);
+    }
+
+    get getKeyParameterException() {
+        return this.#exception.key();
+    }
+
+    get isWhereNotEqualsNullParameterException() {
+        return this.#exception != null;
     }
 }

@@ -1,18 +1,20 @@
 import "../utility";
 
-export class BaseException { 
+export class BaseException {
+    #key;
+
     constructor(thisClass,exceptionClass,key) {
-        this.key = function() {
-            return (key instanceof String ? key : null);
-        };
-        let thisClassq = (thisClass instanceof String ? thisClass : null);
-        let exceptionClassq = (exceptionClass instanceof String ? exceptionClass : null);
+        this.#key = key;
         debugPrintException("\n===start_to_trace_exception===\n");
         debugPrintException(
-            "WhereHappenedException(Class) --> " + thisClassq + "\n" +
-            "NameException(Class) --> " + exceptionClassq + "\n" +
+            "WhereHappenedException(Class) --> " + thisClass + "\n" +
+            "NameException(Class) --> " + exceptionClass + "\n" +
             "toString() --> " + this.toString());
         debugPrintException("\n===end_to_trace_exception===\n");
+    }
+
+    get key() {
+        return this.#key;
     }
     
     toString() {

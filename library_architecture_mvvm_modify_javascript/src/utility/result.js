@@ -1,15 +1,13 @@
 import { ExceptionController } from "./exception_controller";
 
 export class Result {
-    /// DO NOT CALL DIRECTLY, USE A STATIC METHOD
+    #parameter;
+    #exceptionController;
+
+    /// DO NOT CALL DIRECTLY, USE A STATIC METHOD: "success","exception"
     constructor(parameter,exceptionController) {
-        let exceptionControllerq = (exceptionController instanceof ExceptionController ? exceptionController : null)
-        this.parameter = function() {
-            return parameter;
-        }
-        this.exceptionController = function() {
-            return exceptionControllerq;
-        }
+        this.#parameter = parameter;
+        this.#exceptionController = exceptionController;
     }
 
     static success(parameter) {
@@ -18,5 +16,13 @@ export class Result {
 
     static exception(exception) {
         return new Result(null,new ExceptionController.exception(exception));
+    }
+
+    get parameter() {
+        return this.#parameter;
+    }
+
+    get exceptionController() {
+        return this.#exceptionController;
     }
 }

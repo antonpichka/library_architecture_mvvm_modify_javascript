@@ -6,7 +6,7 @@ export class BaseNamedStreamWState {
         throw new LocalException("BaseNamedStreamWState",EnumGuilty.developer,"BaseNamedStreamWStateQQDispose","Needs extends");
     }
 
-    getDataForNamed() {
+    get getDataForNamed() {
         throw new LocalException("BaseNamedStreamWState",EnumGuilty.developer,"BaseNamedStreamWStateQQGetDataForNamed","Needs extends and must return type 'BaseDataForNamed'");
     }
 
