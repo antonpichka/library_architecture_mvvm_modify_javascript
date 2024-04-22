@@ -1,9 +1,14 @@
 import "../utility";
+import { EnumGuilty } from "./enum_guilty";
+import { LocalException } from "./local_exception";
 
 export class BaseException {
     #key;
 
     constructor(thisClass,exceptionClass,key) {
+        if (new.target === BaseException) {
+            throw new LocalException("BaseException",EnumGuilty.developer,"BaseExceptionQQConstructor","Cannot instantiate abstract class");
+        }
         this.#key = key;
         debugPrintException("\n===start_to_trace_exception===\n");
         debugPrintException(

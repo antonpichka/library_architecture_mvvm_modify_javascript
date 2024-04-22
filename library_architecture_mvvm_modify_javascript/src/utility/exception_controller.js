@@ -18,7 +18,7 @@ export class ExceptionController {
         return this.#exception.key();
     }
 
-    get isWhereNotEqualsNullParameterException() {
+    isWhereNotEqualsNullParameterException() {
         return this.#exception != null;
     }
 }

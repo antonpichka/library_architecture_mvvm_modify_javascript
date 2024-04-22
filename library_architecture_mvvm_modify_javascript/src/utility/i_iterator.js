@@ -6,7 +6,7 @@ export class IIterator {
         throw new LocalException("IIterator",EnumGuilty.developer,"IIteratorQQCurrent","Needs extends and must return type 'Object'");
     }
 
-    get moveNext() {
+    moveNext() {
         throw new LocalException("IIterator",EnumGuilty.developer,"IIteratorQQMoveNext","Needs extends and must return type 'Boolean'");
     }
 }

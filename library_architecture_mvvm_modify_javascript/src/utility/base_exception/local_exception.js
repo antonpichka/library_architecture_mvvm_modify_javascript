@@ -19,8 +19,8 @@ export class LocalException extends BaseException {
     }
 
     toString() {
-        return "LocalException(valueWEnumGuilty: " + this.#valueWEnumGuilty + ", " + 
+        return "LocalException(valueWEnumGuilty: " + this.valueWEnumGuilty() + ", " + 
             "key: " + this.key() + ", " + 
-            "message (optional): " + this.#message + ")";
+            "message (optional): " + this.message() + ")";
     }
 }

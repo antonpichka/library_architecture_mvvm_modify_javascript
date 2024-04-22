@@ -30,8 +30,7 @@ export class TempCacheService {
 
     static closeStreamFromListKeyTempCacheParmeterInstance(listKeyTempCache) {
         const tempCacheWListAction = this.instance.#tempCacheWListAction;
-        for(let i = 0; i < listKeyTempCache.length; i++) {
-            const itemKeyTempCache = listKeyTempCache[i];
+        for(const itemKeyTempCache of listKeyTempCache) {
             if(!tempCacheWListAction.has(itemKeyTempCache)) {
                 return;
             }
@@ -76,8 +75,7 @@ export class TempCacheService {
             return;
         }
         const get = tempCacheWListAction.get(keyTempCache);
-        for(let i = 0; i < get.length; i++) {
-            const itemGet = get[i];
+        for(const itemGet of get) {
             itemGet(value);
         }
     }
