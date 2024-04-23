@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>temp_cache_test_main</title>
+    </head>
+    <body>
+        <div id="txt" style="text-align: center;">
+        </div>
+        <script type="module">
+          import { TempCacheService } from "../../named_service/temp_cache_service.js";
+      
+          async function main() {
+            const tempCacheService = TempCacheService.instance;
+            let key = "key";
+            tempCacheService.updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(key,"One");
+            let getFromKeyTempCacheParameterTempCache = tempCacheService.getFromKeyTempCacheParameterTempCache(key);
+            document.getElementById("txt").innerText = "\nGetFromKeyTempCacheParameterTempCache: " + getFromKeyTempCacheParameterTempCache;
+            tempCacheService.listenStreamFromKeyTempCacheAndCallbackParameterOne(key,(data)=> {
+                document.getElementById("txt").innerText += "\nListen: " + data;
+            });
+            await new Promise(resolve => setTimeout(resolve,1000));
+            tempCacheService.updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(key,"Two");
+            tempCacheService.listenStreamFromKeyTempCacheAndCallbackParameterOne(key,(data)=> {
+                document.getElementById("txt").innerText += "\nListenTwo: " + data;
+            });
+            await new Promise(resolve => setTimeout(resolve,1000));
+            tempCacheService.updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(key,"Three");
+            tempCacheService.listenStreamFromKeyTempCacheAndCallbackParameterOne(key,(data)=> {
+                document.getElementById("txt").innerText += "\nListenThree: " + data;
+            });
+          }
+          main();
+          // EXPECTED OUTPUT:
+          //
+          // GetFromKeyTempCacheParameterTempCache: One
+          // Listen: Two
+          // Listen: Three
+          // ListenTwo: Three
+        </script>
+    </body>
+</html>
