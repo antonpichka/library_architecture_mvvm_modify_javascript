@@ -1,6 +1,6 @@
-import { BaseNamedStreamWState } from "./base_named_stream_w_state";
-import { LocalException } from "../base_exception/local_exception";
-import { EnumGuilty } from "../base_exception/enum_guilty";
+import { BaseNamedStreamWState } from "./base_named_stream_w_state.js";
+import { LocalException } from "../base_exception/local_exception.js";
+import { EnumGuilty } from "../base_exception/enum_guilty.js";
 
 export class DefaultStreamWState extends BaseNamedStreamWState {
     #dataForNamed;

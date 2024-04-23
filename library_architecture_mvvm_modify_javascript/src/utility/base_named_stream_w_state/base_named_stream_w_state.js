@@ -1,5 +1,5 @@
-import { LocalException } from "../base_exception/local_exception";
-import { EnumGuilty } from "../base_exception/enum_guilty";
+import { LocalException } from "../base_exception/local_exception.js";
+import { EnumGuilty } from "../base_exception/enum_guilty.js";
 
 export class BaseNamedStreamWState {
     constructor() {

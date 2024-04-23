@@ -1,5 +1,5 @@
-import { LocalException } from "../../utility/base_exception/local_exception";
-import { EnumGuilty } from "../../utility/base_exception/enum_guilty";
+import { LocalException } from "../../utility/base_exception/local_exception.js";
+import { EnumGuilty } from "../../utility/base_exception/enum_guilty.js";
 
 export class BaseModelWNamedWNamedWNamedIterator {
     #listModelIterator;
@@ -15,17 +15,17 @@ export class BaseModelWNamedWNamedWNamedIterator {
         if(newListModel.length <= 0) {
             return new Array();
         }
-        this._listModelIterator().push(...newListModel);
+        this._listModelIterator.push(...newListModel);
         const newListModelFIRST = new Array();
         while(this.#moveNext()) {
-            const newModel = this._current();
+            const newModel = this._current;
             newListModelFIRST.push(newModel);
         }
         return newListModelFIRST;
     }
 
     get _current() {
-        throw new LocalException("BaseModelWNamedWNamedWNamedIterator",EnumGuilty.developer,"BaseModelWNamedWNamedWNamedIteratorQQCurrent","Needs extends and must return type 'Object'");
+        throw new LocalException("BaseModelWNamedWNamedWNamedIterator",EnumGuilty.developer,"BaseModelWNamedWNamedWNamedIteratorQQCurrent","Needs extends and must return type 'BaseModel'");
     } 
 
     get _listModelIterator() {
@@ -33,6 +33,6 @@ export class BaseModelWNamedWNamedWNamedIterator {
     }
 
     #moveNext() {
-        return this._listModelIterator().length > 0;
+        return this._listModelIterator.length > 0;
     }
 }

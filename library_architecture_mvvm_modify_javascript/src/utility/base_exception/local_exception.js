@@ -1,4 +1,4 @@
-import { BaseException } from "./base_exception";
+import { BaseException } from "./base_exception.js";
 
 export class LocalException extends BaseException {
     #valueWEnumGuilty;
@@ -19,8 +19,8 @@ export class LocalException extends BaseException {
     }
 
     toString() {
-        return "LocalException(valueWEnumGuilty: " + this.valueWEnumGuilty() + ", " + 
-            "key: " + this.key() + ", " + 
-            "message (optional): " + this.message() + ")";
+        return "LocalException(valueWEnumGuilty: " + this.valueWEnumGuilty + ", " + 
+            "key: " + this.key + ", " + 
+            "message (optional): " + this.message + ")";
     }
 }

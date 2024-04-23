@@ -1,4 +1,4 @@
-import { BaseModel } from "./base_model";
+import { BaseModel } from "./base_model.js";
 
 export class Strings extends BaseModel {
     #field;
@@ -9,7 +9,7 @@ export class Strings extends BaseModel {
     }
 
     get getClone() {
-        return new Strings(this.field());
+        return new Strings(this.field);
     }
 
     get field() {
@@ -17,6 +17,6 @@ export class Strings extends BaseModel {
     }
 
     toString() {
-        return "Strings(field: " + this.field() + ")";
+        return "Strings(field: " + this.field + ")";
     }
 }

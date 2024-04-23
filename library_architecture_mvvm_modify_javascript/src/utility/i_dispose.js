@@ -1,5 +1,5 @@
-import { LocalException } from "../utility/base_exception/local_exception";
-import { EnumGuilty } from "../utility/base_exception/enum_guilty";
+import { LocalException } from "../utility/base_exception/local_exception.js";
+import { EnumGuilty } from "../utility/base_exception/enum_guilty.js";
 
 export class IDispose {
     dispose() {

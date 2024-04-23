@@ -1,4 +1,4 @@
-import { ExceptionController } from "./exception_controller";
+import { ExceptionController } from "./exception_controller.js";
 
 export class Result {
     #parameter;

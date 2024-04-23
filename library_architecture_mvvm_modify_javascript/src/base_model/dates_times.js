@@ -1,4 +1,4 @@
-import { BaseModel } from "./base_model";
+import { BaseModel } from "./base_model.js";
 
 export class DatesTimes extends BaseModel {
     #dateTime;
@@ -9,7 +9,7 @@ export class DatesTimes extends BaseModel {
     }
 
     get getClone() {
-        return new DatesTimes(this.dateTime());
+        return new DatesTimes(this.dateTime);
     }
 
     get dateTime() {
@@ -17,6 +17,6 @@ export class DatesTimes extends BaseModel {
     }
 
     toString() {
-        return "DatesTimes(dateTime: " + this.dateTime().toString() + ")";
+        return "DatesTimes(dateTime: " + this.dateTime.toString() + ")";
     }
 }

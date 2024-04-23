@@ -1,4 +1,4 @@
-import { BaseException } from "./base_exception";
+import { BaseException } from "./base_exception.js";
 
 export class NetworkException extends BaseException {
     #statusCode;
@@ -104,9 +104,9 @@ export class NetworkException extends BaseException {
     }
 
     toString() {
-        return "NetworkException(key: " + this.key() + ", " +
-            "statusCode: " + this.statusCode() + ", " +
-            "nameStatusCode (optional): " + this.nameStatusCode() + ", " +
-            "descriptionStatusCode (optional): " + this.descriptionStatusCode() + ")";
+        return "NetworkException(key: " + this.key + ", " +
+            "statusCode: " + this.statusCode + ", " +
+            "nameStatusCode (optional): " + this.nameStatusCode + ", " +
+            "descriptionStatusCode (optional): " + this.descriptionStatusCode + ")";
     }
 }

@@ -1,4 +1,4 @@
-import { BaseModel } from "./base_model";
+import { BaseModel } from "./base_model.js";
 
 export class Bools extends BaseModel {
     #isField;
@@ -9,7 +9,7 @@ export class Bools extends BaseModel {
     }
 
     get getClone() {
-        return new Bools(this.isField());
+        return new Bools(this.isField);
     }
 
     get isField() {
@@ -17,6 +17,6 @@ export class Bools extends BaseModel {
     }
 
     toString() {
-        return "Bools(isField: " + this.isField() + ")";
+        return "Bools(isField: " + this.isField + ")";
     }
 }

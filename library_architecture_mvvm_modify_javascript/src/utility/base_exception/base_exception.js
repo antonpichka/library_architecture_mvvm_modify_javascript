@@ -1,6 +1,6 @@
-import "../utility";
-import { EnumGuilty } from "./enum_guilty";
-import { LocalException } from "./local_exception";
+import { debugPrintException } from "../utility.js";
+import { EnumGuilty } from "./enum_guilty.js";
+import { LocalException } from "./local_exception.js";
 
 export class BaseException {
     #key;

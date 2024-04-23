@@ -1,4 +1,4 @@
-import { BaseNamedState } from "./base_named_state";
+import { BaseNamedState } from "./base_named_state.js";
 
 export class DefaultState extends BaseNamedState {
     #dataForNamed;

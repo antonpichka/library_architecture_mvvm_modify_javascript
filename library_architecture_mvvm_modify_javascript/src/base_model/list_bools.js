@@ -1,4 +1,4 @@
-import { BaseListModel } from "./base_list_model";
+import { BaseListModel } from "./base_list_model.js";
 
 export class ListBools extends BaseListModel {
     constructor(listModel) {
@@ -7,15 +7,15 @@ export class ListBools extends BaseListModel {
 
     get getClone() {
         const newListModel = new Array();
-        for(const itemModel of this.listModel()) {
-            newListModel.push(itemModel.getClone());
+        for(const itemModel of this.listModel) {
+            newListModel.push(itemModel.getClone);
         }
         return new ListBools(newListModel);
     }
 
     toString() {
         let strListModel = "\n";
-        for(const itemModel of this.listModel()) {
+        for(const itemModel of this.listModel) {
             strListModel += itemModel.toString() + ",\n";
         }
         return "ListBools(listModel: [" + strListModel + "])";
