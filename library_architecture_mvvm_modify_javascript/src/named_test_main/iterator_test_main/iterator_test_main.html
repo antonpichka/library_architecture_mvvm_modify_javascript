@@ -4,39 +4,16 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>iterator_test_main</title>
+        <script type="module">
+          import { main } from "./iterator_test_main.js";
+          
+          document.addEventListener("DOMContentLoaded", function() {
+            main();
+          });
+        </script>
     </head>
     <body>
         <div id="txt" style="text-align: center;">
         </div>
-        <script type="module">
-          import { UserBalance } from "./iterator_test_main.js";
-          import { ListUserBalance } from "./iterator_test_main.js";
-          import { UserBalanceWOrderByDescWMoneyIterator } from "./iterator_test_main.js";
-      
-          function main() {
-            const listUserBalance = new ListUserBalance(new Array());
-            listUserBalance.insertListFromNewListModelParameterListModel([
-                new UserBalance("Jone",3),
-                new UserBalance("Freddy",1),
-                new UserBalance("Mitsuya",10),
-                new UserBalance("Duramichi",5),
-                new UserBalance("Hook",7),
-                new UserBalance("Sexy",-1)
-            ]);
-            document.getElementById("txt").innerText = "\nBefore: " + listUserBalance.toString();
-            const userBalanceWOrderByDescWMoneyIterator = new UserBalanceWOrderByDescWMoneyIterator();
-            listUserBalance.sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(userBalanceWOrderByDescWMoneyIterator);
-            document.getElementById("txt").innerText += "\nAfter: " + listUserBalance.toString();
-            listUserBalance.updateFromNewModelParameterListModel(new UserBalance("Duramichi", 15));
-            listUserBalance.sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(userBalanceWOrderByDescWMoneyIterator);
-            document.getElementById("txt").innerText += "\nAfter (Two): " + listUserBalance.toString();
-          }
-          main();
-          // EXPECTED OUTPUT:
-          //
-          // Before: [UserBalance(username: Jone, money: 3), UserBalance(username: Freddy, money: 1), UserBalance(username: Mitsuya, money: 10), UserBalance(username: Duramichi, money: 5), UserBalance(username: Hook, money: 7), UserBalance(username: Sexy, money: -1)]
-          // After: [UserBalance(username: Mitsuya, money: 10), UserBalance(username: Hook, money: 7), UserBalance(username: Duramichi, money: 5), UserBalance(username: Jone, money: 3), UserBalance(username: Freddy, money: 1), UserBalance(username: Sexy, money: -1)]
-          // After (Two): [UserBalance(username: Duramichi, money: 15), UserBalance(username: Mitsuya, money: 10), UserBalance(username: Hook, money: 7), UserBalance(username: Jone, money: 3), UserBalance(username: Freddy, money: 1), UserBalance(username: Sexy, money: -1)]
-        </script>
     </body>
 </html>
