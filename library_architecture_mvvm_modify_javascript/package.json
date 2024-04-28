@@ -1,14 +1,15 @@
 {
   "name": "library_architecture_mvvm_modify_javascript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MVVM Modify for Javascript but you can also port to another language",
+  "keywords": [
+    "LAMM",
+    "MVVM"
+  ],
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/antonpichka/library_architecture_mvvm_modify_javascript",
+    "url": "https://github.com/antonpichka/library_architecture_mvvm_modify_javascript.git",
     "directory": "library_architecture_mvvm_modify_javascript"
   },
   "license": "MIT",
@@ -16,6 +17,8 @@
     "LICENSE",
     "README.md",
     ".gitignore",
-    "index.js"
+    "src/",
+    "index.js",
+    "example/"
   ]
 }
