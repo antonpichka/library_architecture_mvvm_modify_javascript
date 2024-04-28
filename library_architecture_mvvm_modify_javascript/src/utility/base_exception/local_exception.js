@@ -8,6 +8,13 @@ export class LocalException extends BaseException {
         super(thisClass,"LocalException",key);
         this.#valueWEnumGuilty = valueWEnumGuilty;
         this.#message = message;
+        this._debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass();
+    }
+
+    toString() {
+        return "LocalException(valueWEnumGuilty: " + this.valueWEnumGuilty + ", " + 
+            "key: " + this.key + ", " + 
+            "message (optional): " + this.message + ")";
     }
 
     get valueWEnumGuilty() {
@@ -16,11 +23,5 @@ export class LocalException extends BaseException {
 
     get message() {
         return this.#message;
-    }
-
-    toString() {
-        return "LocalException(valueWEnumGuilty: " + this.valueWEnumGuilty + ", " + 
-            "key: " + this.key + ", " + 
-            "message (optional): " + this.message + ")";
     }
 }

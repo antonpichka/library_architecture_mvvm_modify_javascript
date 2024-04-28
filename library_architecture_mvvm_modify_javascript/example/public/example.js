@@ -1,4 +1,4 @@
-import { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, BaseNamedViewModel, DefaultStreamWState, debugPrint } from "../../node_modules/library_architecture_mvvm_modify_javascript";
+import { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, BaseNamedViewModel, DefaultStreamWState, debugPrint } from "../../index.js";
 
 class KeysHttpServiceUtility {
     /* IPAddress */
@@ -57,12 +57,12 @@ class IPAddress extends BaseModel {
         return new IPAddress(this.ip);
     }
 
-    get ip() {
-        return this.#ip;
-    }
-
     toString() {
         return "IPAddress(ip: " + this.ip + ")";
+    }
+
+    get ip() {
+        return this.#ip;
     }
 }
 
@@ -139,14 +139,10 @@ const EnumDataForMainView = {
 
 class DataForMainView extends BaseDataForNamed {
     iPAddress;
-    isDoneInit;
-    isDoneLoadedHtml;
 
-    constructor(isLoading,iPAddress,isDoneInit,isDoneLoadedHtml) {
+    constructor(isLoading,iPAddress) {
         super(isLoading);
         this.iPAddress = iPAddress;
-        this.isDoneInit = isDoneInit;
-        this.isDoneLoadedHtml = isDoneLoadedHtml;
     }
 
     get getEnumDataForNamed() {
@@ -157,10 +153,6 @@ class DataForMainView extends BaseDataForNamed {
             return EnumDataForMainView.exception;
         }
         return EnumDataForMainView.success;
-    }
-
-    isWhereThereAreUndoneParametersIsDoneInitAndIsDoneLoadedHtml() {
-        return !this.isDoneInit || !this.isDoneLoadedHtml;
     }
 }
 
@@ -175,27 +167,15 @@ class TestMainViewModel extends BaseNamedViewModel {
     // NamedUtility
 
     constructor() {
-        super(new DefaultStreamWState(new DataForMainView(true,new IPAddress(""),false)));
-    }
-
-    setIsDoneLoadedHtmlTrue() {
-        this.getDataForNamedParameterNamedStreamWState.isDoneLoadedHtml = true;
-    }
-
-    notifyStream() {
-        if(this.getDataForNamedParameterNamedStreamWState.isWhereThereAreUndoneParametersIsDoneInitAndIsDoneLoadedHtml()) {
-            return;
-        }
-        this.notifyStreamDataForNamedParameterNamedStreamWState();
+        super(new DefaultStreamWState(new DataForMainView(true,new IPAddress(""))));
     }
 
     async init() {
         // Simulation get "IPAddress"
         const iPAddress = new IPAddress("121.121.12.12");
-        await new Promise(resolve => setTimeout(resolve,1));
+        await new Promise(resolve => setTimeout(resolve,1000));
         this.getDataForNamedParameterNamedStreamWState.isLoading = false;
         this.getDataForNamedParameterNamedStreamWState.iPAddress = iPAddress.getClone;
-        this.getDataForNamedParameterNamedStreamWState.isDoneInit = true;
         return KeysSuccessUtility.sUCCESS;
     }
 }
@@ -207,40 +187,28 @@ class MainViewModel extends BaseNamedViewModel {
     // NamedUtility
 
     constructor() {
-        super(new DefaultStreamWState(new DataForMainView(true,new IPAddress(""),false)));
-    }
-
-    setIsDoneLoadedHtmlTrue() {
-        this.getDataForNamedParameterNamedStreamWState.isDoneLoadedHtml = true;
-    }
-
-    notifyStream() {
-        if(this.getDataForNamedParameterNamedStreamWState.isWhereThereAreUndoneParametersIsDoneInitAndIsDoneLoadedHtml()) {
-            return;
-        }
-        this.notifyStreamDataForNamedParameterNamedStreamWState();
+        super(new DefaultStreamWState(new DataForMainView(true,new IPAddress(""))));
     }
 
     async init() {
+        await new Promise(resolve => setTimeout(resolve,1000));
         const getIPAddressWhereJsonipAPIParameterHttpService = await this.#getEEIPAddressEEWhereJsonipAPIEEParameterHttpService.getIPAddressWhereJsonipAPIParameterHttpService();
         if(getIPAddressWhereJsonipAPIParameterHttpService.exceptionController.isWhereNotEqualsNullParameterException()) {
             return this.#firstQQInitQQGetIPAddressWhereJsonipAPIParameterHttpService(getIPAddressWhereJsonipAPIParameterHttpService.exceptionController);
         }
         this.getDataForNamedParameterNamedStreamWState.isLoading = false;
         this.getDataForNamedParameterNamedStreamWState.iPAddress = getIPAddressWhereJsonipAPIParameterHttpService.parameter.getClone;
-        this.getDataForNamedParameterNamedStreamWState.isDoneInit = true;
         return KeysSuccessUtility.sUCCESS;
     }
 
     async #firstQQInitQQGetIPAddressWhereJsonipAPIParameterHttpService(exceptionController) {
         this.getDataForNamedParameterNamedStreamWState.isLoading = false;
         this.getDataForNamedParameterNamedStreamWState.exceptionController = exceptionController;
-        this.getDataForNamedParameterNamedStreamWState.isDoneInit = true;
         return exceptionController.getKeyParameterException;
     }
 }
 
-export class MainView {
+class MainView {
     #viewModel;
 
     constructor() {
@@ -249,11 +217,7 @@ export class MainView {
         /// TEST CODE
         // this.#viewModel = new TestMainViewModel();
         this.#initParameterViewModel();
-    }
-
-    notifyStreamWhereDoneLoadedHtmlParameterViewModel() {
-        this.#viewModel.setIsDoneLoadedHtmlTrue();
-        this.#viewModel.notifyStream();
+        this.#buildParameterViewModel();
     }
 
     async #initParameterViewModel() {
@@ -262,19 +226,24 @@ export class MainView {
         });
         const result = await this.#viewModel.init();
         debugPrint("MainView: " + result);
-        this.#viewModel.notifyStream();
+        this.#viewModel.notifyStreamDataForNamedParameterNamedStreamWState();
     }
 
     #buildParameterViewModel() {
         const dataForNamedParameterNamedStreamWState = this.#viewModel.getDataForNamedParameterNamedStreamWState;
         switch(dataForNamedParameterNamedStreamWState.getEnumDataForNamed) {
             case EnumDataForMainView.isLoading:
-                document.getElementById("pMessage").innerText = "Loading";
+                document.getElementById("loader").style.display = "block";
+                document.getElementById("pMessage").hidden = true;
                 break;
             case EnumDataForMainView.exception:
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("pMessage").hidden = false;
                 document.getElementById("pMessage").innerText = dataForNamedParameterNamedStreamWState.exceptionController.getKeyParameterException;
                 break;
             case EnumDataForMainView.success:
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("pMessage").hidden = false;
                 document.getElementById("pMessage").innerText = dataForNamedParameterNamedStreamWState.iPAddress.toString();
                 break;
             default:
@@ -282,3 +251,38 @@ export class MainView {
         }
     }
 }
+
+function main() {
+    new MainView();
+}
+main();
+// Console {
+    // EXPECTED OUTPUT:
+    //
+    // MainView: sUCCESS
+
+    /// OR
+
+    // EXPECTED OUTPUT:
+    //
+    // ===start_to_trace_exception===
+    //
+    // WhereHappenedException(Class) --> ${WhereHappenedException(Class)}
+    // NameException(Class) --> ${NameException(Class)}
+    // toString() --> ${toString()}
+    //
+    // ===end_to_trace_exception===
+    //
+    // MainView: ${getKeyParameterException}
+// }
+// Html {
+    // EXPECTED OUTPUT:
+    //
+    // IPAddress(ip: ${your_ip})
+
+    /// OR
+
+    // EXPECTED OUTPUT:
+    //
+    // ${getKeyParameterException}
+// }

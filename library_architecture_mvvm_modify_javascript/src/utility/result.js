@@ -11,11 +11,11 @@ export class Result {
     }
 
     static success(parameter) {
-        return new Result(parameter,new ExceptionController.success());
+        return new Result(parameter,ExceptionController.success());
     }
 
     static exception(exception) {
-        return new Result(null,new ExceptionController.exception(exception));
+        return new Result(null,ExceptionController.exception(exception));
     }
 
     get parameter() {

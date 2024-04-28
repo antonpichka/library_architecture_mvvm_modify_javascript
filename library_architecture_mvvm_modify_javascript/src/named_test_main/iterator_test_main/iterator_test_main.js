@@ -16,17 +16,17 @@ class UserBalance extends BaseModel {
         return new UserBalance(this.username,this.money);
     }
 
+    toString() {
+        return "UserBalance(username: " + this.username + ", " 
+            + "money: " + this.money + ")";
+    }
+
     get username() {
         return this.#username;
     }
 
     get money() {
         return this.#money;
-    }
-
-    toString() {
-        return "UserBalance(username: " + this.username + ", " 
-            + "money: " + this.money + ")";
     }
 }
 
@@ -73,7 +73,7 @@ class UserBalanceWOrderByDescWMoneyIterator extends BaseModelWNamedWNamedWNamedI
     }
 }
 
-export function main() {
+function main() {
     const listUserBalance = new ListUserBalance(new Array());
     listUserBalance.insertListFromNewListModelParameterListModel([
         new UserBalance("Jone",3),
@@ -90,30 +90,31 @@ export function main() {
     listUserBalance.updateFromNewModelParameterListModel(new UserBalance("Duramichi", 15));
     listUserBalance.sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(userBalanceWOrderByDescWMoneyIterator);
     document.getElementById("txt").innerText += "\nAfter (Two): " + listUserBalance.toString();
-    // EXPECTED OUTPUT:
-    //
-    // Before: ListUserBalance(listModel: [
-    // UserBalance(username: Jone, money: 3),
-    // UserBalance(username: Freddy, money: 1),
-    // UserBalance(username: Mitsuya, money: 10),
-    // UserBalance(username: Duramichi, money: 5),
-    // UserBalance(username: Hook, money: 7),
-    // UserBalance(username: Sexy, money: -1),
-    // ])
-    // After: ListUserBalance(listModel: [
-    // UserBalance(username: Mitsuya, money: 10),
-    // UserBalance(username: Hook, money: 7),
-    // UserBalance(username: Duramichi, money: 5),
-    // UserBalance(username: Jone, money: 3),
-    // UserBalance(username: Freddy, money: 1),
-    // UserBalance(username: Sexy, money: -1),
-    // ])
-    // After (Two): ListUserBalance(listModel: [
-    // UserBalance(username: Duramichi, money: 15),
-    // UserBalance(username: Mitsuya, money: 10),
-    // UserBalance(username: Hook, money: 7),
-    // UserBalance(username: Jone, money: 3),
-    // UserBalance(username: Freddy, money: 1),
-    // UserBalance(username: Sexy, money: -1),
-    // ])
 }
+main();
+// EXPECTED OUTPUT:
+//
+// Before: ListUserBalance(listModel: [
+// UserBalance(username: Jone, money: 3),
+// UserBalance(username: Freddy, money: 1),
+// UserBalance(username: Mitsuya, money: 10),
+// UserBalance(username: Duramichi, money: 5),
+// UserBalance(username: Hook, money: 7),
+// UserBalance(username: Sexy, money: -1),
+// ])
+// After: ListUserBalance(listModel: [
+// UserBalance(username: Mitsuya, money: 10),
+// UserBalance(username: Hook, money: 7),
+// UserBalance(username: Duramichi, money: 5),
+// UserBalance(username: Jone, money: 3),
+// UserBalance(username: Freddy, money: 1),
+// UserBalance(username: Sexy, money: -1),
+// ])
+// After (Two): ListUserBalance(listModel: [
+// UserBalance(username: Duramichi, money: 15),
+// UserBalance(username: Mitsuya, money: 10),
+// UserBalance(username: Hook, money: 7),
+// UserBalance(username: Jone, money: 3),
+// UserBalance(username: Freddy, money: 1),
+// UserBalance(username: Sexy, money: -1),
+// ])

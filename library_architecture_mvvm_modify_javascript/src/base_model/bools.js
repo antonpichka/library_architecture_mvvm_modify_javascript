@@ -12,11 +12,11 @@ export class Bools extends BaseModel {
         return new Bools(this.isField);
     }
 
-    get isField() {
-        return this.#isField;
-    }
-
     toString() {
         return "Bools(isField: " + this.isField + ")";
+    }
+
+    get isField() {
+        return this.#isField;
     }
 }

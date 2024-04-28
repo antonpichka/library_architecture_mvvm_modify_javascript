@@ -12,11 +12,11 @@ export class DatesTimes extends BaseModel {
         return new DatesTimes(this.dateTime);
     }
 
-    get dateTime() {
-        return this.#dateTime;
-    }
-
     toString() {
         return "DatesTimes(dateTime: " + this.dateTime.toString() + ")";
+    }
+
+    get dateTime() {
+        return this.#dateTime;
     }
 }

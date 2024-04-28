@@ -13,7 +13,7 @@ export class BaseListModel {
 
     get getClone() {
         throw new LocalException("BaseListModel",EnumGuilty.developer,"BaseListModelQQGetClone","Needs extends and must return type 'BaseListModel'"); 
-    }
+    }   
 
     get listModel() {
         return this.#listModel;

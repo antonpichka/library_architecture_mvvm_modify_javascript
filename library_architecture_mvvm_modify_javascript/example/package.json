@@ -6,7 +6,6 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "library_architecture_mvvm_modify_javascript": "file:../library_architecture_mvvm_modify_javascript"
+    "express": "^4.19.2"
   }
 }

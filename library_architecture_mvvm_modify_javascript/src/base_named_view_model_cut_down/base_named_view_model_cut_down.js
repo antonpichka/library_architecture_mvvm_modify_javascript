@@ -27,6 +27,6 @@ export class BaseNamedViewModelCutDown {
     }
 
     get getDataForNamedParameterNamedState() {
-        return this._namedState.getDataForNamed();
+        return this._namedState.getDataForNamed;
     }
 }

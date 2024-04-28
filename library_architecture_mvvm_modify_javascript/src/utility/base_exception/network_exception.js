@@ -10,6 +10,7 @@ export class NetworkException extends BaseException {
         this.#statusCode = statusCode;
         this.#nameStatusCode = nameStatusCode;
         this.#descriptionStatusCode = descriptionStatusCode;
+        this._debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass();
     }
 
     static fromKeyAndStatusCode(thisClass,key,statusCode) {
@@ -91,6 +92,13 @@ export class NetworkException extends BaseException {
         }
     } 
 
+    toString() {
+        return "NetworkException(key: " + this.key + ", " +
+            "statusCode: " + this.statusCode + ", " +
+            "nameStatusCode (optional): " + this.nameStatusCode + ", " +
+            "descriptionStatusCode (optional): " + this.descriptionStatusCode + ")";
+    }
+
     get statusCode() {
         return this.#statusCode;
     }
@@ -101,12 +109,5 @@ export class NetworkException extends BaseException {
 
     get descriptionStatusCode() {
         return this.#descriptionStatusCode;
-    }
-
-    toString() {
-        return "NetworkException(key: " + this.key + ", " +
-            "statusCode: " + this.statusCode + ", " +
-            "nameStatusCode (optional): " + this.nameStatusCode + ", " +
-            "descriptionStatusCode (optional): " + this.descriptionStatusCode + ")";
     }
 }

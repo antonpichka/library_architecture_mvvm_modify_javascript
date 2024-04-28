@@ -12,11 +12,11 @@ export class Doubles extends BaseModel {
         return new Doubles(this.field);
     }
 
-    get field() {
-        return this.#field;
-    }
-
     toString() {
         return "Doubles(field: " + this.field + ")";
+    }
+
+    get field() {
+        return this.#field;
     }
 }

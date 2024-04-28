@@ -23,7 +23,7 @@ export class BaseNamedViewModel {
     }
 
     get getDataForNamedParameterNamedStreamWState() {
-        return this._namedStreamWState.getDataForNamed();       
+        return this._namedStreamWState.getDataForNamed;       
     }
 
     get _namedStreamWState() {

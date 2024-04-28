@@ -11,7 +11,7 @@ export class BaseDataForNamed {
             throw new LocalException("BaseDataForNamed",EnumGuilty.developer,"BaseDataForNamedQQConstructor","Cannot instantiate abstract class");
         }
         this.isLoading = isLoading;
-        this.exceptionController = new ExceptionController.success();
+        this.exceptionController = ExceptionController.success();
     }
 
     get getEnumDataForNamed() {

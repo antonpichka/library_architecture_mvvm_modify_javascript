@@ -12,11 +12,11 @@ export class Strings extends BaseModel {
         return new Strings(this.field);
     }
 
-    get field() {
-        return this.#field;
-    }
-
     toString() {
         return "Strings(field: " + this.field + ")";
+    }
+
+    get field() {
+        return this.#field;
     }
 }

@@ -12,11 +12,11 @@ export class Ints extends BaseModel {
         return new Ints(this.field);
     }
 
-    get field() {
-        return this.#field;
-    }
-
     toString() {
         return "Ints(field: " + this.field + ")";
+    }
+
+    get field() {
+        return this.#field;
     }
 }

@@ -1,6 +1,6 @@
 import { TempCacheService } from "../../named_service/temp_cache_service.js";
 
-export async function main() {
+async function main() {
     const tempCacheService = TempCacheService.instance;
     const key = "key";
     tempCacheService.updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(key,"One");
@@ -19,10 +19,11 @@ export async function main() {
     tempCacheService.listenStreamFromKeyTempCacheAndCallbackParameterOne(key,(data)=> {
         document.getElementById("txt").innerText += "\nListenThree: " + data;
     });
-    // EXPECTED OUTPUT:
-    //
-    // GetFromKeyTempCacheParameterTempCache: One
-    // Listen: Two
-    // Listen: Three
-    // ListenTwo: Three
 }
+main();
+// EXPECTED OUTPUT:
+//
+// GetFromKeyTempCacheParameterTempCache: One
+// Listen: Two
+// Listen: Three
+// ListenTwo: Three
