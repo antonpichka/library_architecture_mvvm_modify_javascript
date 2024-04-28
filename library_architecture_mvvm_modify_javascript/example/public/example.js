@@ -103,10 +103,6 @@ class HttpService {
 class GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService {
     #httpService = HttpService.instance;
 
-    get _httpService() {
-        return this.#httpService;
-    }
-
     async getIPAddressWhereJsonipAPIParameterHttpService() {
         try {
             const response = await fetch("https://jsonip.com/", {
@@ -128,6 +124,10 @@ class GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService {
             }
             return Result.exception(new LocalException("GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService",EnumGuilty.device,KeysExceptionUtility.uNKNOWN,exception.toString()));
         }
+    }
+
+    get _httpService() {
+        return this.#httpService;
     }
 }
 
