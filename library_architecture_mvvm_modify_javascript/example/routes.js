@@ -5,8 +5,8 @@ router.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
 
-router.get("/test", (req, res) => {
-  res.sendFile(__dirname + "/public/test.html");
+router.get("/other", (req, res) => {
+  res.sendFile(__dirname + "/public/other.html");
 });
 
 module.exports = router;

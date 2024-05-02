@@ -2,10 +2,18 @@
   "name": "example",
   "version": "0.0.1",
   "description": "example for LAMMJS",
+  "private": true,
   "scripts": {
+    "build": "webpack",
     "start": "node app.js"
   },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "library_architecture_mvvm_modify_javascript": "file:..",
+    "lodash": "^4.17.21"
   }
 }

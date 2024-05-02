@@ -1,6 +1,7 @@
 # Auto generated files
 [Dd]ebug/
 [Rr]elease/
+dist/
 build/
 node_modules/
 package-lock.json

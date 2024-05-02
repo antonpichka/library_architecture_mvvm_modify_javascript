@@ -1,12 +1,30 @@
 {
   "name": "library_architecture_mvvm_modify_javascript",
-  "version": "1.0.1",
-  "description": "MVVM Modify for Javascript but you can also port to another language",
+  "version": "1.0.2",
+  "description": "MVVM Modify for Javascript/Typescript but you can also port to another language",
+  "source": "index.ts",
+  "main": "dist/cjs/index.js",
+  "types": "dist/cjs/index.d.ts",
+  "scripts": {
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
   "keywords": [
     "LAMM",
     "MVVM"
   ],
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/antonpichka/library_architecture_mvvm_modify_javascript.git",
@@ -14,11 +32,15 @@
   },
   "license": "MIT",
   "files": [
-    "LICENSE",
-    "README.md",
-    ".gitignore",
+    "dist/",
+    "example/",
     "src/",
-    "index.js",
-    "example/"
+    ".gitignore",
+    "index.ts",
+    "LICENSE",
+    "tsconfig.base.json",
+    "tsconfig.cjs.json",
+    "tsconfig.esm.json",
+    "README.md"
   ]
 }

@@ -2,8 +2,8 @@ const express = require("express");
 const app = express();
 const routes = require("./routes");
 
-app.use(express.static(__dirname + "/public/"));
-app.use(express.static("../"));
+app.use("/public",express.static(__dirname + "/public/"));
+app.use("/dist",express.static(__dirname + "/dist/"));
 app.use("/",routes);
 
 app.use((req, res, next) => {

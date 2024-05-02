@@ -11,28 +11,28 @@ export class BaseModelWNamedWNamedWNamedIterator {
         this.#listModelIterator = new Array();
     }
 
+    get current() {
+        throw new LocalException("BaseModelWNamedWNamedWNamedIterator",EnumGuilty.developer,"BaseModelWNamedWNamedWNamedIteratorQQCurrent","Needs extends and must return type 'BaseModel'");
+    } 
+
     getSortedListModelFromNewListModelParameterListModelIterator(newListModel) {
         if(newListModel.length <= 0) {
             return new Array();
         }
         this._listModelIterator.push(...newListModel);
         const newListModelFIRST = new Array();
-        while(this.#moveNext()) {
-            const newModel = this._current;
+        while(this.moveNext()) {
+            const newModel = this.current;
             newListModelFIRST.push(newModel);
         }
         return newListModelFIRST;
     }
 
-    get _current() {
-        throw new LocalException("BaseModelWNamedWNamedWNamedIterator",EnumGuilty.developer,"BaseModelWNamedWNamedWNamedIteratorQQCurrent","Needs extends and must return type 'BaseModel'");
-    } 
-
     get _listModelIterator() {
         return this.#listModelIterator;
     }
 
-    #moveNext() {
+    moveNext() {
         return this._listModelIterator.length > 0;
     }
 }

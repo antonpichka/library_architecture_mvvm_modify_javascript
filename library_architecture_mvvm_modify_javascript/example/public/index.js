@@ -1,4 +1,4 @@
-import { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, BaseNamedViewModel, DefaultStreamWState, debugPrint } from "../../index.js";
+import { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, BaseNamedViewModel, DefaultStreamWState, debugPrint } from "library_architecture_mvvm_modify_javascript";
 
 class KeysHttpServiceUtility {
     /* IPAddress */
