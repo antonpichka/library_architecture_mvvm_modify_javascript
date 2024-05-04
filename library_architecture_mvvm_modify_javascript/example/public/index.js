@@ -112,7 +112,7 @@ class GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService {
                 }
             });
             if(response.status != 200) {
-                throw new NetworkException.fromKeyAndStatusCode("GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService",response.status.toString(),response.status);
+                throw NetworkException.fromKeyAndStatusCode("GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService",response.status.toString(),response.status);
             }
             const json = await response.json();
             const map = new Map(Object.entries(json));
