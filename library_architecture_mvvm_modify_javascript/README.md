@@ -12,7 +12,7 @@
 
 ## Example
 
-- [Small project](https://github.com/antonpichka/library_architecture_mvvm_modify_javascript/tree/main/library_architecture_mvvm_modify_javascript/example/public/index.js)
+- [Small project](https://github.com/antonpichka/library_architecture_mvvm_modify_javascript/blob/main/library_architecture_mvvm_modify_javascript/example/index.ts)
 
 ## Template For LAMM
 
