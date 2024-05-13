@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.debugPrintException = exports.debugPrint = exports.Result = exports.ExceptionController = exports.DefaultStreamWState = exports.BaseNamedStreamWState = exports.DefaultState = exports.BaseNamedState = exports.NetworkException = exports.LocalException = exports.EnumGuilty = exports.BaseException = exports.TempCacheService = exports.BaseNamedViewModelCutDown = exports.BaseNamedViewModel = exports.Strings = exports.ListStrings = exports.ListInts = exports.ListDoubles = exports.ListDatesTimes = exports.ListBools = exports.Ints = exports.Doubles = exports.DatesTimes = exports.Bools = exports.BaseModel = exports.BaseListModel = exports.BaseModelWNamedWNamedWNamedIterator = exports.BaseDataForNamed = void 0;
+exports.debugPrintException = exports.debugPrint = exports.Result = exports.ExceptionController = exports.RWTMode = exports.NamedCallback = exports.EnumRWTMode = exports.TempCacheService = exports.DefaultStreamWState = exports.BaseNamedStreamWState = exports.DefaultState = exports.BaseNamedState = exports.BaseModel = exports.BaseListModel = exports.BaseModelWNamedWNamedWNamedIterator = exports.NetworkException = exports.LocalException = exports.EnumGuilty = exports.BaseException = exports.BaseDataForNamed = void 0;
 class BaseDataForNamed {
     constructor(isLoading) {
         this.isLoading = isLoading;
@@ -8,339 +8,6 @@ class BaseDataForNamed {
     }
 }
 exports.BaseDataForNamed = BaseDataForNamed;
-class BaseModelWNamedWNamedWNamedIterator {
-    constructor() {
-        this.listModelIterator = new Array();
-    }
-    getSortedListModelFromNewListModelParameterListModelIterator(newListModel) {
-        if (newListModel.length <= 0) {
-            return new Array();
-        }
-        this.listModelIterator.push(...newListModel);
-        const newListModelFIRST = new Array();
-        while (this.moveNext()) {
-            const newModel = this.current;
-            newListModelFIRST.push(newModel);
-        }
-        return newListModelFIRST;
-    }
-    moveNext() {
-        return this.listModelIterator.length > 0;
-    }
-}
-exports.BaseModelWNamedWNamedWNamedIterator = BaseModelWNamedWNamedWNamedIterator;
-class BaseListModel {
-    constructor(listModel) {
-        this.listModel = listModel;
-    }
-    sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(modelWNamedWNamedWNamedIterator) {
-        const sortedListModelFromNewListModelParameterListModelIterator = modelWNamedWNamedWNamedIterator.getSortedListModelFromNewListModelParameterListModelIterator(this.listModel);
-        this.listModel.length > 0 ? this.listModel.splice(0, this.listModel.length) : null;
-        sortedListModelFromNewListModelParameterListModelIterator.length > 0 ? this.listModel.push(...sortedListModelFromNewListModelParameterListModelIterator) : null;
-    }
-    insertFromNewModelParameterListModel(newModel) {
-        this.listModel.push(newModel);
-    }
-    updateFromNewModelParameterListModel(newModel) {
-        const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == newModel.uniqueId);
-        this.listModel.splice(findIndex, 1, newModel);
-    }
-    deleteFromUniqueIdByModelParameterListModel(uniqueIdByModel) {
-        const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == uniqueIdByModel);
-        this.listModel.splice(findIndex, 1);
-    }
-    insertListFromNewListModelParameterListModel(newListModel) {
-        this.listModel.push(...newListModel);
-    }
-    updateListFromNewListModelParameterListModel(newListModel) {
-        for (const newItemModel of newListModel) {
-            const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == newItemModel.uniqueId);
-            this.listModel.splice(findIndex, 1, newItemModel);
-        }
-    }
-    deleteListFromListUniqueIdByModelParameterListModel(listUniqueIdByModel) {
-        for (const itemUniqueIdByModel of listUniqueIdByModel) {
-            const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == itemUniqueIdByModel);
-            this.listModel.splice(findIndex, 1);
-        }
-    }
-}
-exports.BaseListModel = BaseListModel;
-class BaseModel {
-    constructor(uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-}
-exports.BaseModel = BaseModel;
-class Bools extends BaseModel {
-    constructor(isField) {
-        super("" + isField + "");
-        this.isField = isField;
-    }
-    get getClone() {
-        return new Bools(this.isField);
-    }
-    toString() {
-        return "Bools(isField: " + this.isField + ")";
-    }
-}
-exports.Bools = Bools;
-class DatesTimes extends BaseModel {
-    constructor(dateTime) {
-        super(dateTime.toString());
-        this.dateTime = dateTime;
-    }
-    get getClone() {
-        return new DatesTimes(this.dateTime);
-    }
-    toString() {
-        return "DatesTimes(dateTime: " + this.dateTime.toString() + ")";
-    }
-}
-exports.DatesTimes = DatesTimes;
-class Doubles extends BaseModel {
-    constructor(field) {
-        super("" + field + "");
-        this.field = field;
-    }
-    get getClone() {
-        return new Doubles(this.field);
-    }
-    toString() {
-        return "Doubles(field: " + this.field + ")";
-    }
-}
-exports.Doubles = Doubles;
-class Ints extends BaseModel {
-    constructor(field) {
-        super("" + field + "");
-        this.field = field;
-    }
-    get getClone() {
-        return new Ints(this.field);
-    }
-    toString() {
-        return "Ints(field: " + this.field + ")";
-    }
-}
-exports.Ints = Ints;
-class ListBools extends BaseListModel {
-    constructor(listModel) {
-        super(listModel);
-    }
-    get getClone() {
-        const newListModel = new Array();
-        for (const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone);
-        }
-        return new ListBools(newListModel);
-    }
-    toString() {
-        let strListModel = "\n";
-        for (const itemModel of this.listModel) {
-            strListModel += itemModel.toString() + ",\n";
-        }
-        return "ListBools(listModel: [" + strListModel + "])";
-    }
-}
-exports.ListBools = ListBools;
-class ListDatesTimes extends BaseListModel {
-    constructor(listModel) {
-        super(listModel);
-    }
-    get getClone() {
-        const newListModel = new Array();
-        for (const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone);
-        }
-        return new ListDatesTimes(newListModel);
-    }
-    toString() {
-        let strListModel = "\n";
-        for (const itemModel of this.listModel) {
-            strListModel += itemModel.toString() + ",\n";
-        }
-        return "ListDatesTimes(listModel: [" + strListModel + "])";
-    }
-}
-exports.ListDatesTimes = ListDatesTimes;
-class ListDoubles extends BaseListModel {
-    constructor(listModel) {
-        super(listModel);
-    }
-    get getClone() {
-        const newListModel = new Array();
-        for (const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone);
-        }
-        return new ListDoubles(newListModel);
-    }
-    toString() {
-        let strListModel = "\n";
-        for (const itemModel of this.listModel) {
-            strListModel += itemModel.toString() + ",\n";
-        }
-        return "ListDoubles(listModel: [" + strListModel + "])";
-    }
-}
-exports.ListDoubles = ListDoubles;
-class ListInts extends BaseListModel {
-    constructor(listModel) {
-        super(listModel);
-    }
-    get getClone() {
-        const newListModel = new Array();
-        for (const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone);
-        }
-        return new ListInts(newListModel);
-    }
-    toString() {
-        let strListModel = "\n";
-        for (const itemModel of this.listModel) {
-            strListModel += itemModel.toString() + ",\n";
-        }
-        return "ListInts(listModel: [" + strListModel + "])";
-    }
-}
-exports.ListInts = ListInts;
-class ListStrings extends BaseListModel {
-    constructor(listModel) {
-        super(listModel);
-    }
-    get getClone() {
-        const newListModel = new Array();
-        for (const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone);
-        }
-        return new ListStrings(newListModel);
-    }
-    toString() {
-        let strListModel = "\n";
-        for (const itemModel of this.listModel) {
-            strListModel += itemModel.toString() + ",\n";
-        }
-        return "ListStrings(listModel: [" + strListModel + "])";
-    }
-}
-exports.ListStrings = ListStrings;
-class Strings extends BaseModel {
-    constructor(field) {
-        super("" + field + "");
-        this.field = field;
-    }
-    get getClone() {
-        return new Strings(this.field);
-    }
-    toString() {
-        return "Strings(field: " + this.field + ")";
-    }
-}
-exports.Strings = Strings;
-// OperationEEModel(EEWhereNamed)[EEFromNamed]EEParameterNamedService
-// NamedUtility
-class BaseNamedViewModel {
-    constructor(namedStreamWState) {
-        this.namedStreamWState = namedStreamWState;
-    }
-    dispose() {
-        this.namedStreamWState.dispose();
-    }
-    get getDataForNamedParameterNamedStreamWState() {
-        return this.namedStreamWState.getDataForNamed;
-    }
-    listenStreamDataForNamedFromCallbackParameterNamedStreamWState(callback) {
-        this.namedStreamWState.listenStreamDataForNamedFromCallback(callback);
-    }
-    notifyStreamDataForNamedParameterNamedStreamWState() {
-        this.namedStreamWState.notifyStreamDataForNamed();
-    }
-}
-exports.BaseNamedViewModel = BaseNamedViewModel;
-// OperationEEModel(EEWhereNamed)[EEFromNamed]EEParameterNamedService
-// NamedUtility
-class BaseNamedViewModelCutDown {
-    constructor(namedState) {
-        this.namedState = namedState;
-    }
-    dispose() {
-        this.namedState.dispose();
-    }
-    get getDataForNamedParameterNamedState() {
-        return this.namedState.getDataForNamed;
-    }
-}
-exports.BaseNamedViewModelCutDown = BaseNamedViewModelCutDown;
-class TempCacheService {
-    constructor() {
-        this.tempCache = new Map();
-        this.tempCacheWListAction = new Map();
-    }
-    static clearTempCacheParmeterInstance() {
-        const tempCache = this.instance.tempCache;
-        tempCache.clear();
-    }
-    static closeStreamFromKeyTempCacheParmeterInstance(keyTempCache) {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        if (!tempCacheWListAction.has(keyTempCache)) {
-            return;
-        }
-        const get = tempCacheWListAction.get(keyTempCache);
-        get === null || get === void 0 ? void 0 : get.splice(0, get.length);
-    }
-    static closeStreamFromListKeyTempCacheParmeterInstance(listKeyTempCache) {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        for (const itemKeyTempCache of listKeyTempCache) {
-            if (!tempCacheWListAction.has(itemKeyTempCache)) {
-                return;
-            }
-            const get = tempCacheWListAction.get(itemKeyTempCache);
-            get === null || get === void 0 ? void 0 : get.splice(0, get.length);
-        }
-    }
-    static closeStreamsParameterInstance() {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        for (const [, value] of tempCacheWListAction) {
-            value.splice(0, value.length);
-        }
-    }
-    getFromKeyTempCacheParameterTempCache(keyTempCache) {
-        const tempCache = this.tempCache;
-        if (!tempCache.has(keyTempCache)) {
-            throw new LocalException("TempCacheService", EnumGuilty.developer, keyTempCache, "No exists key");
-        }
-        return tempCache.get(keyTempCache);
-    }
-    listenStreamFromKeyTempCacheAndCallbackParameterOne(keyTempCache, callback) {
-        var _a, _b;
-        const tempCacheWListAction = this.tempCacheWListAction;
-        if (!tempCacheWListAction.has(keyTempCache)) {
-            tempCacheWListAction.set(keyTempCache, new Array());
-            (_a = tempCacheWListAction.get(keyTempCache)) === null || _a === void 0 ? void 0 : _a.push(callback);
-            return;
-        }
-        (_b = tempCacheWListAction.get(keyTempCache)) === null || _b === void 0 ? void 0 : _b.push(callback);
-    }
-    updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value) {
-        this.tempCache.set(keyTempCache, value);
-    }
-    updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value) {
-        this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value);
-        const tempCacheWListAction = this.tempCacheWListAction;
-        if (!tempCacheWListAction.has(keyTempCache)) {
-            return;
-        }
-        const get = tempCacheWListAction.get(keyTempCache);
-        for (const itemGet of get) {
-            itemGet(value);
-        }
-    }
-    deleteFromKeyTempCacheParameterTempCache(keyTempCache) {
-        this.tempCache.delete(keyTempCache);
-    }
-}
-exports.TempCacheService = TempCacheService;
-TempCacheService.instance = new TempCacheService();
 class BaseException {
     constructor(thisClass, exceptionClass, key) {
         this.thisClass = thisClass;
@@ -471,6 +138,70 @@ class NetworkException extends BaseException {
     }
 }
 exports.NetworkException = NetworkException;
+class BaseModelWNamedWNamedWNamedIterator {
+    constructor() {
+        this.listModelIterator = new Array();
+    }
+    getSortedListModelFromNewListModelParameterListModelIterator(newListModel) {
+        if (newListModel.length <= 0) {
+            return new Array();
+        }
+        this.listModelIterator.push(...newListModel);
+        const newListModelFIRST = new Array();
+        while (this.moveNext()) {
+            const newModel = this.current;
+            newListModelFIRST.push(newModel);
+        }
+        return newListModelFIRST;
+    }
+    moveNext() {
+        return this.listModelIterator.length > 0;
+    }
+}
+exports.BaseModelWNamedWNamedWNamedIterator = BaseModelWNamedWNamedWNamedIterator;
+class BaseListModel {
+    constructor(listModel) {
+        this.listModel = listModel;
+    }
+    sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(modelWNamedWNamedWNamedIterator) {
+        const sortedListModelFromNewListModelParameterListModelIterator = modelWNamedWNamedWNamedIterator.getSortedListModelFromNewListModelParameterListModelIterator(this.listModel);
+        this.listModel.length > 0 ? this.listModel.splice(0, this.listModel.length) : null;
+        sortedListModelFromNewListModelParameterListModelIterator.length > 0 ? this.listModel.push(...sortedListModelFromNewListModelParameterListModelIterator) : null;
+    }
+    insertFromNewModelParameterListModel(newModel) {
+        this.listModel.push(newModel);
+    }
+    updateFromNewModelParameterListModel(newModel) {
+        const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == newModel.uniqueId);
+        this.listModel.splice(findIndex, 1, newModel);
+    }
+    deleteFromUniqueIdByModelParameterListModel(uniqueIdByModel) {
+        const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == uniqueIdByModel);
+        this.listModel.splice(findIndex, 1);
+    }
+    insertListFromNewListModelParameterListModel(newListModel) {
+        this.listModel.push(...newListModel);
+    }
+    updateListFromNewListModelParameterListModel(newListModel) {
+        for (const newItemModel of newListModel) {
+            const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == newItemModel.uniqueId);
+            this.listModel.splice(findIndex, 1, newItemModel);
+        }
+    }
+    deleteListFromListUniqueIdByModelParameterListModel(listUniqueIdByModel) {
+        for (const itemUniqueIdByModel of listUniqueIdByModel) {
+            const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == itemUniqueIdByModel);
+            this.listModel.splice(findIndex, 1);
+        }
+    }
+}
+exports.BaseListModel = BaseListModel;
+class BaseModel {
+    constructor(uniqueId) {
+        this.uniqueId = uniqueId;
+    }
+}
+exports.BaseModel = BaseModel;
 class BaseNamedState {
     constructor() {
     }
@@ -535,6 +266,116 @@ class DefaultStreamWState extends BaseNamedStreamWState {
     }
 }
 exports.DefaultStreamWState = DefaultStreamWState;
+class TempCacheService {
+    constructor() {
+        this.tempCache = new Map();
+        this.tempCacheWListAction = new Map();
+    }
+    static clearTempCacheParmeterInstance() {
+        const tempCache = this.instance.tempCache;
+        tempCache.clear();
+    }
+    static closeStreamFromKeyTempCacheParmeterInstance(keyTempCache) {
+        const tempCacheWListAction = this.instance.tempCacheWListAction;
+        if (!tempCacheWListAction.has(keyTempCache)) {
+            return;
+        }
+        const get = tempCacheWListAction.get(keyTempCache);
+        get === null || get === void 0 ? void 0 : get.splice(0, get.length);
+    }
+    static closeStreamFromListKeyTempCacheParmeterInstance(listKeyTempCache) {
+        const tempCacheWListAction = this.instance.tempCacheWListAction;
+        for (const itemKeyTempCache of listKeyTempCache) {
+            if (!tempCacheWListAction.has(itemKeyTempCache)) {
+                return;
+            }
+            const get = tempCacheWListAction.get(itemKeyTempCache);
+            get === null || get === void 0 ? void 0 : get.splice(0, get.length);
+        }
+    }
+    static closeStreamsParameterInstance() {
+        const tempCacheWListAction = this.instance.tempCacheWListAction;
+        for (const [, value] of tempCacheWListAction) {
+            value.splice(0, value.length);
+        }
+    }
+    getFromKeyTempCacheParameterTempCache(keyTempCache) {
+        const tempCache = this.tempCache;
+        if (!tempCache.has(keyTempCache)) {
+            throw new LocalException("TempCacheService", EnumGuilty.developer, keyTempCache, "No exists key");
+        }
+        return tempCache.get(keyTempCache);
+    }
+    listenStreamFromKeyTempCacheAndCallbackParameterOne(keyTempCache, callback) {
+        var _a, _b;
+        const tempCacheWListAction = this.tempCacheWListAction;
+        if (!tempCacheWListAction.has(keyTempCache)) {
+            tempCacheWListAction.set(keyTempCache, new Array());
+            (_a = tempCacheWListAction.get(keyTempCache)) === null || _a === void 0 ? void 0 : _a.push(callback);
+            return;
+        }
+        (_b = tempCacheWListAction.get(keyTempCache)) === null || _b === void 0 ? void 0 : _b.push(callback);
+    }
+    updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value) {
+        this.tempCache.set(keyTempCache, value);
+    }
+    updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value) {
+        this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value);
+        const tempCacheWListAction = this.tempCacheWListAction;
+        if (!tempCacheWListAction.has(keyTempCache)) {
+            return;
+        }
+        const get = tempCacheWListAction.get(keyTempCache);
+        for (const itemGet of get) {
+            itemGet(value);
+        }
+    }
+    deleteFromKeyTempCacheParameterTempCache(keyTempCache) {
+        this.tempCache.delete(keyTempCache);
+    }
+}
+exports.TempCacheService = TempCacheService;
+TempCacheService.instance = new TempCacheService();
+var EnumRWTMode;
+(function (EnumRWTMode) {
+    EnumRWTMode[EnumRWTMode["release"] = 0] = "release";
+    EnumRWTMode[EnumRWTMode["test"] = 1] = "test";
+})(EnumRWTMode || (exports.EnumRWTMode = EnumRWTMode = {}));
+class NamedCallback {
+    constructor(name, callback) {
+        this.name = name;
+        this.callback = callback;
+    }
+}
+exports.NamedCallback = NamedCallback;
+class RWTMode {
+    constructor(enumRWTMode, listNamedCallbackWRelease, listNamedCallbackWTest) {
+        this.enumRWTMode = enumRWTMode;
+        this.mapStringWNamedCallbackWRelease = RWTMode.getMapStringWNamedCallbackFromListNamedCallback(listNamedCallbackWRelease);
+        this.mapStringWNamedCallbackWTest = RWTMode.getMapStringWNamedCallbackFromListNamedCallback(listNamedCallbackWTest);
+    }
+    static getMapStringWNamedCallbackFromListNamedCallback(listNamedCallback) {
+        const mapStringWNamedCallback = new Map();
+        for (const itemNamedCallback of listNamedCallback) {
+            mapStringWNamedCallback.set(itemNamedCallback.name, itemNamedCallback);
+        }
+        return mapStringWNamedCallback;
+    }
+    getNamedCallbackFromName(name) {
+        const mapStringWNamedCallbackWhereSelectModParametersThree = this.getMapStringWNamedCallbackWhereSelectModParametersThree;
+        if (!mapStringWNamedCallbackWhereSelectModParametersThree.has(name)) {
+            throw new LocalException("RWTMode", EnumGuilty.developer, "RWTModeQQGetNamedCallbackFromName", "no exists key: " + name);
+        }
+        return mapStringWNamedCallbackWhereSelectModParametersThree.get(name);
+    }
+    get getMapStringWNamedCallbackWhereSelectModParametersThree() {
+        if (this.enumRWTMode == EnumRWTMode.release) {
+            return this.mapStringWNamedCallbackWRelease;
+        }
+        return this.mapStringWNamedCallbackWTest;
+    }
+}
+exports.RWTMode = RWTMode;
 class ExceptionController {
     constructor(exception) {
         this.exception = exception;

@@ -6,5 +6,5 @@
       "target": "ES6",
       "outDir": "dist/cjs"
     },
-    "include": ["**/*.ts"]
+    "include": ["index.ts"]
   }

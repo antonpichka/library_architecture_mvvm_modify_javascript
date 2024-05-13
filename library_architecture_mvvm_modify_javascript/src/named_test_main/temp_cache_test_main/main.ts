@@ -1,23 +1,23 @@
-import { TempCacheService } from "../../named_service/temp_cache_service.js";
+import { TempCacheService, debugPrint } from "library_architecture_mvvm_modify_javascript";
 
 async function main() {
     const tempCacheService = TempCacheService.instance;
     const key = "key";
     tempCacheService.updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(key,"One");
     const getFromKeyTempCacheParameterTempCache = tempCacheService.getFromKeyTempCacheParameterTempCache(key);
-    document.getElementById("txt").innerText = "\nGetFromKeyTempCacheParameterTempCache: " + getFromKeyTempCacheParameterTempCache;
+    debugPrint("GetFromKeyTempCacheParameterTempCache: " + getFromKeyTempCacheParameterTempCache);
     tempCacheService.listenStreamFromKeyTempCacheAndCallbackParameterOne(key,(data)=> {
-        document.getElementById("txt").innerText += "\nListen: " + data;
+        debugPrint("Listen: " + data);
     });
     await new Promise(resolve => setTimeout(resolve,1000));
     tempCacheService.updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(key,"Two");
     tempCacheService.listenStreamFromKeyTempCacheAndCallbackParameterOne(key,(data)=> {
-        document.getElementById("txt").innerText += "\nListenTwo: " + data;
+        debugPrint("ListenTwo: " + data);
     });
     await new Promise(resolve => setTimeout(resolve,1000));
     tempCacheService.updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(key,"Three");
     tempCacheService.listenStreamFromKeyTempCacheAndCallbackParameterOne(key,(data)=> {
-        document.getElementById("txt").innerText += "\nListenThree: " + data;
+        debugPrint("ListenThree: " + data);
     });
 }
 main();

@@ -1,5 +1,5 @@
-import { LocalException } from "../../utility/base_exception/local_exception.js";
-import { EnumGuilty } from "../../utility/base_exception/enum_guilty.js";
+import { LocalException } from "../../base_exception/local_exception.js";
+import { EnumGuilty } from "../../base_exception/enum_guilty.js";
 
 export class BaseModelWNamedWNamedWNamedIterator {
     #listModelIterator;

@@ -10,417 +10,6 @@ export abstract class BaseDataForNamed<T> {
     public abstract get getEnumDataForNamed(): T;
 }
 
-export abstract class BaseModelWNamedWNamedWNamedIterator<T extends BaseModel> implements IIterator<T> {
-    protected readonly listModelIterator: Array<T>;
-
-    protected constructor() {
-        this.listModelIterator = new Array<T>();
-    }
-
-    public abstract get current(): T;
-
-    public getSortedListModelFromNewListModelParameterListModelIterator(newListModel: Array<T>) {
-        if(newListModel.length <= 0) {
-            return new Array<T>();
-        }
-        this.listModelIterator.push(...newListModel);
-        const newListModelFIRST = new Array<T>();
-        while(this.moveNext()) {
-            const newModel = this.current;
-            newListModelFIRST.push(newModel);
-        }
-        return newListModelFIRST;
-    }
-
-    public moveNext(): boolean {
-        return this.listModelIterator.length > 0;
-    }
-}
-
-export abstract class BaseListModel<T extends BaseModel> {
-    public readonly listModel: Array<T>;
-
-    protected constructor(listModel: Array<T>) {
-        this.listModel = listModel;
-    }
-
-    public abstract get getClone(): BaseListModel<T>;
-
-    public sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(modelWNamedWNamedWNamedIterator: BaseModelWNamedWNamedWNamedIterator<T>): void {
-        const sortedListModelFromNewListModelParameterListModelIterator = modelWNamedWNamedWNamedIterator.getSortedListModelFromNewListModelParameterListModelIterator(this.listModel);
-        this.listModel.length > 0 ? this.listModel.splice(0,this.listModel.length) : null; 
-        sortedListModelFromNewListModelParameterListModelIterator.length > 0 ? this.listModel.push(...sortedListModelFromNewListModelParameterListModelIterator) : null;
-    }
-
-    public insertFromNewModelParameterListModel(newModel: T): void {
-        this.listModel.push(newModel);
-    }
-
-    public updateFromNewModelParameterListModel(newModel: T): void {
-        const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == newModel.uniqueId);
-        this.listModel.splice(findIndex,1,newModel);
-    }
-
-    public deleteFromUniqueIdByModelParameterListModel(uniqueIdByModel: string): void {
-        const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == uniqueIdByModel);
-        this.listModel.splice(findIndex,1);
-    }
-
-    public insertListFromNewListModelParameterListModel(newListModel: Array<T>): void {
-        this.listModel.push(...newListModel);
-    }
-
-    public updateListFromNewListModelParameterListModel(newListModel: Array<T>): void {
-        for(const newItemModel of newListModel) {
-            const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == newItemModel.uniqueId);
-            this.listModel.splice(findIndex,1,newItemModel);
-        }
-    }
-
-    public deleteListFromListUniqueIdByModelParameterListModel(listUniqueIdByModel: Array<string>) {
-        for(const itemUniqueIdByModel of listUniqueIdByModel) {
-            const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == itemUniqueIdByModel);
-            this.listModel.splice(findIndex,1);
-        }
-    }
-}
-
-export abstract class BaseModel {
-    public readonly uniqueId: string;
-    
-    protected constructor(uniqueId: string) {
-        this.uniqueId = uniqueId;
-    }
-
-    public abstract get getClone(): BaseModel;
-}
-
-export class Bools extends BaseModel {
-    public readonly isField: boolean;
-
-    public constructor(isField: boolean) {
-        super("" + isField + "");
-        this.isField = isField;
-    }
-
-    public override get getClone(): Bools {
-        return new Bools(this.isField);
-    }
-
-    public override toString(): string {
-        return "Bools(isField: " + this.isField + ")";
-    }
-}
-
-export class DatesTimes extends BaseModel {
-    public readonly dateTime: Date;
-
-    public constructor(dateTime: Date) {
-        super(dateTime.toString());
-        this.dateTime = dateTime;
-    }
-
-    public override get getClone(): DatesTimes {
-        return new DatesTimes(this.dateTime);
-    }
-
-    public override toString(): string {
-        return "DatesTimes(dateTime: " + this.dateTime.toString() + ")";
-    }
-}
-
-export class Doubles extends BaseModel {
-    public readonly field: number;
-
-    public constructor(field: number) {
-        super("" + field + "");
-        this.field = field;
-    }
-
-    public override get getClone(): Doubles {
-        return new Doubles(this.field);
-    }
-
-    public override toString(): string {
-        return "Doubles(field: " + this.field + ")";
-    }
-}
-
-export class Ints extends BaseModel {
-    public readonly field: number;
-
-    public constructor(field: number) {
-        super("" + field + "");
-        this.field = field;
-    }
-
-    public override get getClone(): Ints {
-        return new Ints(this.field);
-    }
-
-    public override toString(): string {
-        return "Ints(field: " + this.field + ")";
-    }
-}
-
-export class ListBools<T extends Bools> extends BaseListModel<T> {
-    public constructor(listModel: Array<T>) {
-        super(listModel);
-    }
-
-    public override get getClone(): ListBools<T> {
-        const newListModel = new Array<T>();
-        for(const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone as T);
-        }
-        return new ListBools(newListModel);
-    }
-
-    public override toString(): string {
-        let strListModel = "\n";
-        for(const itemModel of this.listModel) {
-            strListModel += itemModel.toString() + ",\n";
-        }
-        return "ListBools(listModel: [" + strListModel + "])";
-    }
-}
-
-export class ListDatesTimes<T extends DatesTimes> extends BaseListModel<T> {
-    public constructor(listModel: Array<T>) {
-        super(listModel);
-    }
-
-    public override get getClone(): ListDatesTimes<T> {
-        const newListModel = new Array<T>();
-        for(const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone as T);
-        }
-        return new ListDatesTimes(newListModel);
-    }
-
-    public override toString(): string {
-        let strListModel = "\n";
-        for(const itemModel of this.listModel) {
-            strListModel += itemModel.toString() + ",\n";
-        }
-        return "ListDatesTimes(listModel: [" + strListModel + "])";
-    }
-}
-
-export class ListDoubles<T extends Doubles> extends BaseListModel<T> {
-    public constructor(listModel: Array<T>) {
-        super(listModel);
-    }
-
-    public override get getClone(): ListDoubles<T> {
-        const newListModel = new Array<T>();
-        for(const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone as T);
-        }
-        return new ListDoubles(newListModel);
-    }
-
-    public override toString(): string {
-        let strListModel = "\n";
-        for(const itemModel of this.listModel) {
-            strListModel += itemModel.toString() + ",\n";
-        }
-        return "ListDoubles(listModel: [" + strListModel + "])";
-    }
-}
-
-export class ListInts<T extends Ints> extends BaseListModel<T> {
-    public constructor(listModel: Array<T>) {
-        super(listModel);
-    }
-
-    public override get getClone(): ListInts<T> {
-        const newListModel = new Array<T>();
-        for(const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone as T);
-        }
-        return new ListInts(newListModel);
-    }
-
-    public override toString(): string {
-        let strListModel = "\n";
-        for(const itemModel of this.listModel) {
-            strListModel += itemModel.toString() + ",\n";
-        }
-        return "ListInts(listModel: [" + strListModel + "])";
-    }
-}
-
-export class ListStrings<T extends Strings> extends BaseListModel<T> {
-    public constructor(listModel: Array<T>) {
-        super(listModel);
-    }
-
-    public override get getClone(): ListStrings<T> {
-        const newListModel = new Array<T>();
-        for(const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone as T);
-        }
-        return new ListStrings(newListModel);
-    }
-
-    public override toString(): string {
-        let strListModel = "\n";
-        for(const itemModel of this.listModel) {
-            strListModel += itemModel.toString() + ",\n";
-        }
-        return "ListStrings(listModel: [" + strListModel + "])";
-    }
-}
-
-export class Strings extends BaseModel {
-    public readonly field: string;
-
-    constructor(field: string) {
-        super("" + field + "");
-        this.field = field;
-    }
-
-    public override get getClone(): Strings {
-        return new Strings(this.field);
-    }
-
-    public override toString(): string {
-        return "Strings(field: " + this.field + ")";
-    }
-}
-
-// OperationEEModel(EEWhereNamed)[EEFromNamed]EEParameterNamedService
-// NamedUtility
-
-export abstract class BaseNamedViewModel<T extends BaseDataForNamed<any>,Y extends BaseNamedStreamWState<T>> implements IDispose {
-    protected readonly namedStreamWState: Y;
-
-    protected constructor(namedStreamWState: Y) {
-        this.namedStreamWState = namedStreamWState;
-    }
-
-    public abstract init(): Promise<string>;
-
-    public dispose(): void {
-        this.namedStreamWState.dispose();
-    }
-
-    public get getDataForNamedParameterNamedStreamWState(): T {
-        return this.namedStreamWState.getDataForNamed;       
-    }
-
-    public listenStreamDataForNamedFromCallbackParameterNamedStreamWState(callback: (data: T) => void): void {
-        this.namedStreamWState.listenStreamDataForNamedFromCallback(callback);
-    }
-
-    public notifyStreamDataForNamedParameterNamedStreamWState(): void {
-        this.namedStreamWState.notifyStreamDataForNamed();
-    }
-}
-
-// OperationEEModel(EEWhereNamed)[EEFromNamed]EEParameterNamedService
-// NamedUtility
-
-export abstract class BaseNamedViewModelCutDown<T extends BaseDataForNamed<any>,Y extends BaseNamedState<T>> implements IDispose {
-    protected readonly namedState: Y;
-
-    protected constructor(namedState: Y) {
-        this.namedState = namedState;
-    }
-
-    public abstract init(): Promise<string>;
-
-    public dispose(): void {
-        this.namedState.dispose();
-    }
-
-    public get getDataForNamedParameterNamedState(): T {
-        return this.namedState.getDataForNamed;
-    }
-}
-
-export class TempCacheService {
-    public static readonly instance = new TempCacheService();
-    private readonly tempCache: Map<string,any>;
-    private readonly tempCacheWListAction: Map<string,Array<(data: any) => void>>;
-
-    private constructor() {
-        this.tempCache = new Map<string,any>();
-        this.tempCacheWListAction = new Map<string,Array<(data: any) => void>>();
-    }
-
-    public static clearTempCacheParmeterInstance(): void {
-        const tempCache = this.instance.tempCache;
-        tempCache.clear();
-    }
-
-    public static closeStreamFromKeyTempCacheParmeterInstance(keyTempCache: string): void {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        if(!tempCacheWListAction.has(keyTempCache)) {
-            return;
-        }
-        const get = tempCacheWListAction.get(keyTempCache);
-        get?.splice(0,get.length);
-    }
-
-    public static closeStreamFromListKeyTempCacheParmeterInstance(listKeyTempCache: Array<string>): void {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        for(const itemKeyTempCache of listKeyTempCache) {
-            if(!tempCacheWListAction.has(itemKeyTempCache)) {
-                return;
-            }
-            const get = tempCacheWListAction.get(itemKeyTempCache);
-            get?.splice(0,get.length);
-        }
-    }
-
-    public static closeStreamsParameterInstance(): void {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        for(const [,value] of tempCacheWListAction) {
-            value.splice(0,value.length);
-        }
-    }
-    
-    public getFromKeyTempCacheParameterTempCache(keyTempCache: string): any {
-        const tempCache = this.tempCache;
-        if(!tempCache.has(keyTempCache)) {
-            throw new LocalException("TempCacheService",EnumGuilty.developer,keyTempCache,"No exists key");
-        }
-        return tempCache.get(keyTempCache);
-    }
-
-    public listenStreamFromKeyTempCacheAndCallbackParameterOne(keyTempCache: string,callback: (data: any) => void): void {
-        const tempCacheWListAction = this.tempCacheWListAction;
-        if(!tempCacheWListAction.has(keyTempCache)) {
-            tempCacheWListAction.set(keyTempCache,new Array<(data: any) => void>());
-            tempCacheWListAction.get(keyTempCache)?.push(callback);
-            return;
-        }
-        tempCacheWListAction.get(keyTempCache)?.push(callback);
-    }
-
-    public updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache: string,value: any): void {
-        this.tempCache.set(keyTempCache,value);
-    }
-
-    public updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(keyTempCache: string,value: any): void {
-        this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache,value);
-        const tempCacheWListAction = this.tempCacheWListAction;
-        if(!tempCacheWListAction.has(keyTempCache)) {
-            return;
-        }
-        const get = tempCacheWListAction.get(keyTempCache)!;
-        for(const itemGet of get) {
-            itemGet(value);
-        }
-    }
-
-    public deleteFromKeyTempCacheParameterTempCache(keyTempCache: string): void {
-        this.tempCache.delete(keyTempCache);
-    }
-}
-
 export abstract class BaseException {
     public readonly key: string;
     private readonly thisClass: string;
@@ -567,6 +156,91 @@ export class NetworkException extends BaseException {
     }
 }
 
+export abstract class BaseModelWNamedWNamedWNamedIterator<T extends BaseModel> implements IIterator<T> {
+    protected readonly listModelIterator: Array<T>;
+
+    protected constructor() {
+        this.listModelIterator = new Array<T>();
+    }
+
+    public abstract get current(): T;
+
+    public getSortedListModelFromNewListModelParameterListModelIterator(newListModel: Array<T>) {
+        if(newListModel.length <= 0) {
+            return new Array<T>();
+        }
+        this.listModelIterator.push(...newListModel);
+        const newListModelFIRST = new Array<T>();
+        while(this.moveNext()) {
+            const newModel = this.current;
+            newListModelFIRST.push(newModel);
+        }
+        return newListModelFIRST;
+    }
+
+    public moveNext(): boolean {
+        return this.listModelIterator.length > 0;
+    }
+}
+
+export abstract class BaseListModel<T extends BaseModel> {
+    public readonly listModel: Array<T>;
+
+    protected constructor(listModel: Array<T>) {
+        this.listModel = listModel;
+    }
+
+    public abstract get getClone(): BaseListModel<T>;
+
+    public sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(modelWNamedWNamedWNamedIterator: BaseModelWNamedWNamedWNamedIterator<T>): void {
+        const sortedListModelFromNewListModelParameterListModelIterator = modelWNamedWNamedWNamedIterator.getSortedListModelFromNewListModelParameterListModelIterator(this.listModel);
+        this.listModel.length > 0 ? this.listModel.splice(0,this.listModel.length) : null; 
+        sortedListModelFromNewListModelParameterListModelIterator.length > 0 ? this.listModel.push(...sortedListModelFromNewListModelParameterListModelIterator) : null;
+    }
+
+    public insertFromNewModelParameterListModel(newModel: T): void {
+        this.listModel.push(newModel);
+    }
+
+    public updateFromNewModelParameterListModel(newModel: T): void {
+        const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == newModel.uniqueId);
+        this.listModel.splice(findIndex,1,newModel);
+    }
+
+    public deleteFromUniqueIdByModelParameterListModel(uniqueIdByModel: string): void {
+        const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == uniqueIdByModel);
+        this.listModel.splice(findIndex,1);
+    }
+
+    public insertListFromNewListModelParameterListModel(newListModel: Array<T>): void {
+        this.listModel.push(...newListModel);
+    }
+
+    public updateListFromNewListModelParameterListModel(newListModel: Array<T>): void {
+        for(const newItemModel of newListModel) {
+            const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == newItemModel.uniqueId);
+            this.listModel.splice(findIndex,1,newItemModel);
+        }
+    }
+
+    public deleteListFromListUniqueIdByModelParameterListModel(listUniqueIdByModel: Array<string>) {
+        for(const itemUniqueIdByModel of listUniqueIdByModel) {
+            const findIndex = this.listModel.findIndex((itemModel) => itemModel.uniqueId == itemUniqueIdByModel);
+            this.listModel.splice(findIndex,1);
+        }
+    }
+}
+
+export abstract class BaseModel {
+    public readonly uniqueId: string;
+    
+    protected constructor(uniqueId: string) {
+        this.uniqueId = uniqueId;
+    }
+
+    public abstract get getClone(): BaseModel;
+}
+
 export abstract class BaseNamedState<T extends BaseDataForNamed<any>> implements IDispose {
     protected constructor() {
     }
@@ -651,6 +325,137 @@ export class DefaultStreamWState<T extends BaseDataForNamed<any>> extends BaseNa
             throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQNotifyStreamDataForNamed","Stream has no listener");
         }
         this.callback(this.dataForNamed);
+    }
+}
+
+export class TempCacheService {
+    public static readonly instance = new TempCacheService();
+    private readonly tempCache: Map<string,any>;
+    private readonly tempCacheWListAction: Map<string,Array<(data: any) => void>>;
+
+    private constructor() {
+        this.tempCache = new Map<string,any>();
+        this.tempCacheWListAction = new Map<string,Array<(data: any) => void>>();
+    }
+
+    public static clearTempCacheParmeterInstance(): void {
+        const tempCache = this.instance.tempCache;
+        tempCache.clear();
+    }
+
+    public static closeStreamFromKeyTempCacheParmeterInstance(keyTempCache: string): void {
+        const tempCacheWListAction = this.instance.tempCacheWListAction;
+        if(!tempCacheWListAction.has(keyTempCache)) {
+            return;
+        }
+        const get = tempCacheWListAction.get(keyTempCache);
+        get?.splice(0,get.length);
+    }
+
+    public static closeStreamFromListKeyTempCacheParmeterInstance(listKeyTempCache: Array<string>): void {
+        const tempCacheWListAction = this.instance.tempCacheWListAction;
+        for(const itemKeyTempCache of listKeyTempCache) {
+            if(!tempCacheWListAction.has(itemKeyTempCache)) {
+                return;
+            }
+            const get = tempCacheWListAction.get(itemKeyTempCache);
+            get?.splice(0,get.length);
+        }
+    }
+
+    public static closeStreamsParameterInstance(): void {
+        const tempCacheWListAction = this.instance.tempCacheWListAction;
+        for(const [,value] of tempCacheWListAction) {
+            value.splice(0,value.length);
+        }
+    }
+    
+    public getFromKeyTempCacheParameterTempCache(keyTempCache: string): any {
+        const tempCache = this.tempCache;
+        if(!tempCache.has(keyTempCache)) {
+            throw new LocalException("TempCacheService",EnumGuilty.developer,keyTempCache,"No exists key");
+        }
+        return tempCache.get(keyTempCache);
+    }
+
+    public listenStreamFromKeyTempCacheAndCallbackParameterOne(keyTempCache: string,callback: (data: any) => void): void {
+        const tempCacheWListAction = this.tempCacheWListAction;
+        if(!tempCacheWListAction.has(keyTempCache)) {
+            tempCacheWListAction.set(keyTempCache,new Array<(data: any) => void>());
+            tempCacheWListAction.get(keyTempCache)?.push(callback);
+            return;
+        }
+        tempCacheWListAction.get(keyTempCache)?.push(callback);
+    }
+
+    public updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache: string,value: any): void {
+        this.tempCache.set(keyTempCache,value);
+    }
+
+    public updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(keyTempCache: string,value: any): void {
+        this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache,value);
+        const tempCacheWListAction = this.tempCacheWListAction;
+        if(!tempCacheWListAction.has(keyTempCache)) {
+            return;
+        }
+        const get = tempCacheWListAction.get(keyTempCache)!;
+        for(const itemGet of get) {
+            itemGet(value);
+        }
+    }
+
+    public deleteFromKeyTempCacheParameterTempCache(keyTempCache: string): void {
+        this.tempCache.delete(keyTempCache);
+    }
+}
+
+export enum EnumRWTMode {
+    release,
+    test
+}
+
+export class NamedCallback {
+    public readonly name: string;
+    public readonly callback: any;
+
+    public constructor(name: string, callback: any) {
+        this.name = name;
+        this.callback = callback;
+    }
+}
+
+export class RWTMode {
+    private readonly enumRWTMode: EnumRWTMode;
+    private readonly mapStringWNamedCallbackWRelease: Map<string,NamedCallback>;
+    private readonly mapStringWNamedCallbackWTest: Map<string,NamedCallback>;
+
+    public constructor(enumRWTMode: EnumRWTMode, listNamedCallbackWRelease: Array<NamedCallback>, listNamedCallbackWTest: Array<NamedCallback>) {
+        this.enumRWTMode = enumRWTMode;
+        this.mapStringWNamedCallbackWRelease = RWTMode.getMapStringWNamedCallbackFromListNamedCallback(listNamedCallbackWRelease);
+        this.mapStringWNamedCallbackWTest = RWTMode.getMapStringWNamedCallbackFromListNamedCallback(listNamedCallbackWTest);
+    }
+
+    private static getMapStringWNamedCallbackFromListNamedCallback(listNamedCallback: Array<NamedCallback>): Map<string,NamedCallback> {
+        const mapStringWNamedCallback = new Map<string,NamedCallback>();
+        for(const itemNamedCallback of listNamedCallback) {
+            mapStringWNamedCallback.set(itemNamedCallback.name,itemNamedCallback);
+        }
+        return mapStringWNamedCallback;
+    }
+
+    public getNamedCallbackFromName(name: string): NamedCallback {
+        const mapStringWNamedCallbackWhereSelectModParametersThree = this.getMapStringWNamedCallbackWhereSelectModParametersThree;
+        if(!mapStringWNamedCallbackWhereSelectModParametersThree.has(name)) {
+            throw new LocalException("RWTMode",EnumGuilty.developer,"RWTModeQQGetNamedCallbackFromName","no exists key: " + name);
+        }
+        return mapStringWNamedCallbackWhereSelectModParametersThree.get(name)!;
+    }
+
+    private get getMapStringWNamedCallbackWhereSelectModParametersThree(): Map<string,NamedCallback> {
+        if(this.enumRWTMode == EnumRWTMode.release) {
+            return this.mapStringWNamedCallbackWRelease;
+        }
+        return this.mapStringWNamedCallbackWTest;
     }
 }
 
