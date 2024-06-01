@@ -131,6 +131,12 @@ export class NetworkException extends BaseException {
             "descriptionStatusCode (optional): " + this.descriptionStatusCode + ")";
     }
 }
+export class CurrentModelWIndex {
+    constructor(currentModel, index) {
+        this.currentModel = currentModel;
+        this.index = index;
+    }
+}
 export class BaseModelWNamedWNamedWNamedIterator {
     constructor() {
         this.listModelIterator = new Array();
@@ -141,14 +147,12 @@ export class BaseModelWNamedWNamedWNamedIterator {
         }
         this.listModelIterator.push(...newListModel);
         const newListModelFIRST = new Array();
-        while (this.moveNext()) {
-            const newModel = this.current;
-            newListModelFIRST.push(newModel);
+        while (this.listModelIterator.length > 0) {
+            const currentModelWIndex = this.currentModelWIndex;
+            this.listModelIterator.splice(currentModelWIndex.index, 1);
+            newListModelFIRST.push(currentModelWIndex.currentModel);
         }
         return newListModelFIRST;
-    }
-    moveNext() {
-        return this.listModelIterator.length > 0;
     }
 }
 export class BaseListModel {
@@ -305,7 +309,7 @@ export class TempCacheService {
     updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value) {
         this.tempCache.set(keyTempCache, value);
     }
-    updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value) {
+    updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterOne(keyTempCache, value) {
         this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value);
         const tempCacheWListAction = this.tempCacheWListAction;
         if (!tempCacheWListAction.has(keyTempCache)) {
@@ -375,6 +379,12 @@ export class ExceptionController {
     }
     isWhereNotEqualsNullParameterException() {
         return this.exception != null;
+    }
+    toString() {
+        if (this.exception == null) {
+            return "ExceptionController(exception: null)";
+        }
+        return "ExceptionController(exception: " + this.exception + ")";
     }
 }
 export class Result {

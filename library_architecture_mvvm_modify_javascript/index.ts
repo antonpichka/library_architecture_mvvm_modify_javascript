@@ -8,6 +8,8 @@ export abstract class BaseDataForNamed<T> {
     }
 
     public abstract get getEnumDataForNamed(): T;
+
+    public abstract toString(): string;
 }
 
 export abstract class BaseException {
@@ -20,6 +22,8 @@ export abstract class BaseException {
         this.exceptionClass = exceptionClass;
         this.key = key;
     }
+
+    public abstract toString(): string;
        
     /// Call this method in the descendant constructor as the last line
     protected debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass(): void {
@@ -156,14 +160,24 @@ export class NetworkException extends BaseException {
     }
 }
 
-export abstract class BaseModelWNamedWNamedWNamedIterator<T extends BaseModel> implements IIterator<T> {
+export class CurrentModelWIndex<T extends BaseModel> {
+    public readonly currentModel: T;
+    public readonly index: number;
+
+    public constructor(currentModel: T, index: number) {
+        this.currentModel = currentModel;
+        this.index = index;
+    }
+}
+
+export abstract class BaseModelWNamedWNamedWNamedIterator<T extends BaseModel> {
     protected readonly listModelIterator: Array<T>;
 
     protected constructor() {
         this.listModelIterator = new Array<T>();
     }
 
-    public abstract get current(): T;
+    protected abstract get currentModelWIndex(): CurrentModelWIndex<T>;
 
     public getSortedListModelFromNewListModelParameterListModelIterator(newListModel: Array<T>) {
         if(newListModel.length <= 0) {
@@ -171,16 +185,13 @@ export abstract class BaseModelWNamedWNamedWNamedIterator<T extends BaseModel> i
         }
         this.listModelIterator.push(...newListModel);
         const newListModelFIRST = new Array<T>();
-        while(this.moveNext()) {
-            const newModel = this.current;
-            newListModelFIRST.push(newModel);
+        while(this.listModelIterator.length > 0) {
+            const currentModelWIndex = this.currentModelWIndex;
+            this.listModelIterator.splice(currentModelWIndex.index,1);
+            newListModelFIRST.push(currentModelWIndex.currentModel);
         }
         return newListModelFIRST;
-    }
-
-    public moveNext(): boolean {
-        return this.listModelIterator.length > 0;
-    }
+    }   
 }
 
 export abstract class BaseListModel<T extends BaseModel> {
@@ -191,6 +202,8 @@ export abstract class BaseListModel<T extends BaseModel> {
     }
 
     public abstract get getClone(): BaseListModel<T>;
+
+    public abstract toString(): string;
 
     public sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(modelWNamedWNamedWNamedIterator: BaseModelWNamedWNamedWNamedIterator<T>): void {
         const sortedListModelFromNewListModelParameterListModelIterator = modelWNamedWNamedWNamedIterator.getSortedListModelFromNewListModelParameterListModelIterator(this.listModel);
@@ -239,6 +252,8 @@ export abstract class BaseModel {
     }
 
     public abstract get getClone(): BaseModel;
+
+    public abstract toString(): string;
 }
 
 export abstract class BaseNamedState<T extends BaseDataForNamed<any>> implements IDispose {
@@ -392,7 +407,7 @@ export class TempCacheService {
         this.tempCache.set(keyTempCache,value);
     }
 
-    public updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(keyTempCache: string,value: any): void {
+    public updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterOne(keyTempCache: string,value: any): void {
         this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache,value);
         const tempCacheWListAction = this.tempCacheWListAction;
         if(!tempCacheWListAction.has(keyTempCache)) {
@@ -481,15 +496,17 @@ export class ExceptionController {
     public isWhereNotEqualsNullParameterException(): boolean {
         return this.exception != null;
     }
+
+    public toString(): string {
+        if(this.exception == null) {
+            return "ExceptionController(exception: null)";
+        }
+        return "ExceptionController(exception: " + this.exception + ")";
+    }
 }
 
 export interface IDispose {
     dispose(): void;
-}
-
-export interface IIterator<T> {
-    get current(): T;
-    moveNext(): boolean;
 }
 
 export class Result {

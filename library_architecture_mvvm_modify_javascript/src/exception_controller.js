@@ -21,4 +21,11 @@ export class ExceptionController {
     isWhereNotEqualsNullParameterException() {
         return this.#exception != null;
     }
+
+    toString() {
+        if(this.#exception == null) {
+            return "ExceptionController(exception: null)";
+        }
+        return "ExceptionController(exception: " + this.#exception + ")";
+    }
 }

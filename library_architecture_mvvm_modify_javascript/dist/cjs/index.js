@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.debugPrintException = exports.debugPrint = exports.Result = exports.ExceptionController = exports.RWTMode = exports.NamedCallback = exports.EnumRWTMode = exports.TempCacheService = exports.DefaultStreamWState = exports.BaseNamedStreamWState = exports.DefaultState = exports.BaseNamedState = exports.BaseModel = exports.BaseListModel = exports.BaseModelWNamedWNamedWNamedIterator = exports.NetworkException = exports.LocalException = exports.EnumGuilty = exports.BaseException = exports.BaseDataForNamed = void 0;
+exports.debugPrintException = exports.debugPrint = exports.Result = exports.ExceptionController = exports.RWTMode = exports.NamedCallback = exports.EnumRWTMode = exports.TempCacheService = exports.DefaultStreamWState = exports.BaseNamedStreamWState = exports.DefaultState = exports.BaseNamedState = exports.BaseModel = exports.BaseListModel = exports.BaseModelWNamedWNamedWNamedIterator = exports.CurrentModelWIndex = exports.NetworkException = exports.LocalException = exports.EnumGuilty = exports.BaseException = exports.BaseDataForNamed = void 0;
 class BaseDataForNamed {
     constructor(isLoading) {
         this.isLoading = isLoading;
@@ -138,6 +138,13 @@ class NetworkException extends BaseException {
     }
 }
 exports.NetworkException = NetworkException;
+class CurrentModelWIndex {
+    constructor(currentModel, index) {
+        this.currentModel = currentModel;
+        this.index = index;
+    }
+}
+exports.CurrentModelWIndex = CurrentModelWIndex;
 class BaseModelWNamedWNamedWNamedIterator {
     constructor() {
         this.listModelIterator = new Array();
@@ -148,14 +155,12 @@ class BaseModelWNamedWNamedWNamedIterator {
         }
         this.listModelIterator.push(...newListModel);
         const newListModelFIRST = new Array();
-        while (this.moveNext()) {
-            const newModel = this.current;
-            newListModelFIRST.push(newModel);
+        while (this.listModelIterator.length > 0) {
+            const currentModelWIndex = this.currentModelWIndex;
+            this.listModelIterator.splice(currentModelWIndex.index, 1);
+            newListModelFIRST.push(currentModelWIndex.currentModel);
         }
         return newListModelFIRST;
-    }
-    moveNext() {
-        return this.listModelIterator.length > 0;
     }
 }
 exports.BaseModelWNamedWNamedWNamedIterator = BaseModelWNamedWNamedWNamedIterator;
@@ -319,7 +324,7 @@ class TempCacheService {
     updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value) {
         this.tempCache.set(keyTempCache, value);
     }
-    updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value) {
+    updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterOne(keyTempCache, value) {
         this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value);
         const tempCacheWListAction = this.tempCacheWListAction;
         if (!tempCacheWListAction.has(keyTempCache)) {
@@ -392,6 +397,12 @@ class ExceptionController {
     }
     isWhereNotEqualsNullParameterException() {
         return this.exception != null;
+    }
+    toString() {
+        if (this.exception == null) {
+            return "ExceptionController(exception: null)";
+        }
+        return "ExceptionController(exception: " + this.exception + ")";
     }
 }
 exports.ExceptionController = ExceptionController;

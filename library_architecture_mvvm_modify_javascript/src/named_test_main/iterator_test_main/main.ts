@@ -1,4 +1,4 @@
-import { BaseModel, BaseListModel, BaseModelWNamedWNamedWNamedIterator, debugPrint } from "library_architecture_mvvm_modify_javascript";
+import { BaseModel, BaseListModel, BaseModelWNamedWNamedWNamedIterator, debugPrint, CurrentModelWIndex } from "library_architecture_mvvm_modify_javascript";
 
 class UserBalance extends BaseModel {
     public readonly username: string;
@@ -36,7 +36,7 @@ class ListUserBalance<T extends UserBalance> extends BaseListModel<T> {
     public override toString(): string {
         let strListModel = "\n";
         for(const itemModel of this.listModel) {
-            strListModel += itemModel.toString() + ",\n";
+            strListModel += itemModel + ",\n";
         }
         return "ListUserBalance(listModel: [" + strListModel + "])";
     }
@@ -47,11 +47,10 @@ class UserBalanceWOrderByDescWMoneyIterator<T extends UserBalance> extends BaseM
         super();
     }
 
-    public override get current(): T {
+    protected override get currentModelWIndex(): CurrentModelWIndex<T> {
         let clone = this.listModelIterator[0].getClone as T;
         if(this.listModelIterator.length <= 1) {
-            this.listModelIterator.splice(0,1);
-            return clone;
+            return new CurrentModelWIndex<T>(clone,0)
         }
         let indexRemove = 0;
         for(let i = 1; i < this.listModelIterator.length; i++) {
@@ -62,8 +61,7 @@ class UserBalanceWOrderByDescWMoneyIterator<T extends UserBalance> extends BaseM
                 continue;
             }
         }
-        this.listModelIterator.splice(indexRemove,1);
-        return clone;
+        return new CurrentModelWIndex<T>(clone,indexRemove)
     }
 }
 const listUserBalance = new ListUserBalance<UserBalance>(new Array<UserBalance>());
@@ -81,7 +79,10 @@ listUserBalance.sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(use
 debugPrint("After: " + listUserBalance); // 10, 7, 5, 3, 1, -1
 listUserBalance.updateFromNewModelParameterListModel(new UserBalance("Duramichi", 15));
 listUserBalance.sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(userBalanceWOrderByDescWMoneyIterator);
-debugPrint("After (Two): " + listUserBalance); // 15, 10, 7, 3, 1, -1
+debugPrint("After(Two): " + listUserBalance); // 15, 10, 7, 3, 1, -1
+listUserBalance.deleteFromUniqueIdByModelParameterListModel("Mitsuya")
+listUserBalance.sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(userBalanceWOrderByDescWMoneyIterator);
+debugPrint("After(Three): " + listUserBalance); // 15, 7, 3, 1, -1
 // EXPECTED OUTPUT:
 //
 // Before: ListUserBalance(listModel: [
@@ -100,9 +101,16 @@ debugPrint("After (Two): " + listUserBalance); // 15, 10, 7, 3, 1, -1
 // UserBalance(username: Freddy, money: 1),
 // UserBalance(username: Sexy, money: -1),
 // ])
-// After (Two): ListUserBalance(listModel: [
+// After(Two): ListUserBalance(listModel: [
 // UserBalance(username: Duramichi, money: 15),
 // UserBalance(username: Mitsuya, money: 10),
+// UserBalance(username: Hook, money: 7),
+// UserBalance(username: Jone, money: 3),
+// UserBalance(username: Freddy, money: 1),
+// UserBalance(username: Sexy, money: -1),
+// ])
+// After(Three): ListUserBalance(listModel: [
+// UserBalance(username: Duramichi, money: 15),
 // UserBalance(username: Hook, money: 7),
 // UserBalance(username: Jone, money: 3),
 // UserBalance(username: Freddy, money: 1),

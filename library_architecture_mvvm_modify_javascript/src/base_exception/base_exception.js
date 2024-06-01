@@ -17,7 +17,7 @@ export class BaseException {
     }
     
     toString() {
-        throw new Error("BaseException,EnumGuilty.developer,BaseExceptionQQToString,Needs extends and must return type 'String'");
+        throw new Error("BaseException,EnumGuilty.developer,BaseExceptionQQToString,Needs extends and must return type 'string'");
     }
 
     get key() {

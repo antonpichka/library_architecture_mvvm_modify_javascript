@@ -17,4 +17,8 @@ export class BaseDataForNamed {
     get getEnumDataForNamed() {
         throw new LocalException("BaseDataForNamed",EnumGuilty.developer,"BaseDataForNamedQQGetEnumDataForNamed","Needs extends and must return type 'Enum'");
     }
+
+    toString() {
+        throw new LocalException("BaseDataForNamed",EnumGuilty.developer,"BaseDataForNamedQQToString","Needs extends and must return type 'string'");
+    }
 }

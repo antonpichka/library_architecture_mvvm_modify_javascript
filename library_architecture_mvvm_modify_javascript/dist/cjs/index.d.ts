@@ -3,12 +3,14 @@ export declare abstract class BaseDataForNamed<T> {
     exceptionController: ExceptionController;
     protected constructor(isLoading: boolean);
     abstract get getEnumDataForNamed(): T;
+    abstract toString(): string;
 }
 export declare abstract class BaseException {
     readonly key: string;
     private readonly thisClass;
     private readonly exceptionClass;
     protected constructor(thisClass: string, exceptionClass: string, key: string);
+    abstract toString(): string;
     protected debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass(): void;
 }
 export declare enum EnumGuilty {
@@ -30,17 +32,22 @@ export declare class NetworkException extends BaseException {
     static fromKeyAndStatusCode(thisClass: string, key: string, statusCode: number): NetworkException;
     toString(): string;
 }
-export declare abstract class BaseModelWNamedWNamedWNamedIterator<T extends BaseModel> implements IIterator<T> {
+export declare class CurrentModelWIndex<T extends BaseModel> {
+    readonly currentModel: T;
+    readonly index: number;
+    constructor(currentModel: T, index: number);
+}
+export declare abstract class BaseModelWNamedWNamedWNamedIterator<T extends BaseModel> {
     protected readonly listModelIterator: Array<T>;
     protected constructor();
-    abstract get current(): T;
+    protected abstract get currentModelWIndex(): CurrentModelWIndex<T>;
     getSortedListModelFromNewListModelParameterListModelIterator(newListModel: Array<T>): T[];
-    moveNext(): boolean;
 }
 export declare abstract class BaseListModel<T extends BaseModel> {
     readonly listModel: Array<T>;
     protected constructor(listModel: Array<T>);
     abstract get getClone(): BaseListModel<T>;
+    abstract toString(): string;
     sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(modelWNamedWNamedWNamedIterator: BaseModelWNamedWNamedWNamedIterator<T>): void;
     insertFromNewModelParameterListModel(newModel: T): void;
     updateFromNewModelParameterListModel(newModel: T): void;
@@ -53,6 +60,7 @@ export declare abstract class BaseModel {
     readonly uniqueId: string;
     protected constructor(uniqueId: string);
     abstract get getClone(): BaseModel;
+    abstract toString(): string;
 }
 export declare abstract class BaseNamedState<T extends BaseDataForNamed<any>> implements IDispose {
     protected constructor();
@@ -95,7 +103,7 @@ export declare class TempCacheService {
     getFromKeyTempCacheParameterTempCache(keyTempCache: string): any;
     listenStreamFromKeyTempCacheAndCallbackParameterOne(keyTempCache: string, callback: (data: any) => void): void;
     updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache: string, value: any): void;
-    updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterTempCache(keyTempCache: string, value: any): void;
+    updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterOne(keyTempCache: string, value: any): void;
     deleteFromKeyTempCacheParameterTempCache(keyTempCache: string): void;
 }
 export declare enum EnumRWTMode {
@@ -123,13 +131,10 @@ export declare class ExceptionController {
     static exception(exception: BaseException | null): ExceptionController;
     get getKeyParameterException(): string;
     isWhereNotEqualsNullParameterException(): boolean;
+    toString(): string;
 }
 export interface IDispose {
     dispose(): void;
-}
-export interface IIterator<T> {
-    get current(): T;
-    moveNext(): boolean;
 }
 export declare class Result {
     readonly parameter: any | null;

@@ -18,4 +18,8 @@ export class BaseModel {
     get uniqueId() {
         return this.#uniqueId;
     }
+
+    toString() {
+        throw new LocalException("BaseModel",EnumGuilty.developer,"BaseModelQQToString","Needs extends and must return type 'string'");
+    }
 }

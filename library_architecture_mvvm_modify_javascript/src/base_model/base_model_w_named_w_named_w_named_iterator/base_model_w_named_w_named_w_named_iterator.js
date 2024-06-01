@@ -11,8 +11,8 @@ export class BaseModelWNamedWNamedWNamedIterator {
         this.#listModelIterator = new Array();
     }
 
-    get current() {
-        throw new LocalException("BaseModelWNamedWNamedWNamedIterator",EnumGuilty.developer,"BaseModelWNamedWNamedWNamedIteratorQQCurrent","Needs extends and must return type 'BaseModel'");
+    get _currentModelWIndex() {
+        throw new LocalException("BaseModelWNamedWNamedWNamedIterator",EnumGuilty.developer,"BaseModelWNamedWNamedWNamedIteratorQQCurrentModelWIndex","Needs extends and must return type 'CurrentModelWIndex'");
     } 
 
     getSortedListModelFromNewListModelParameterListModelIterator(newListModel) {
@@ -21,18 +21,15 @@ export class BaseModelWNamedWNamedWNamedIterator {
         }
         this._listModelIterator.push(...newListModel);
         const newListModelFIRST = new Array();
-        while(this.moveNext()) {
-            const newModel = this.current;
-            newListModelFIRST.push(newModel);
+        while(this._listModelIterator.length > 0) {
+            const currentModelWIndex = this._currentModelWIndex;
+            this._listModelIterator.splice(currentModelWIndex.index,1);
+            newListModelFIRST.push(currentModelWIndex.currentModel);
         }
         return newListModelFIRST;
     }
 
     get _listModelIterator() {
         return this.#listModelIterator;
-    }
-
-    moveNext() {
-        return this._listModelIterator.length > 0;
     }
 }

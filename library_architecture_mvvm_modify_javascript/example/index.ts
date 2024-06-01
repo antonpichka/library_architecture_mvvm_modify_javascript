@@ -122,6 +122,12 @@ class DataForMainVM extends BaseDataForNamed<EnumDataForMainVM> {
         }
         return EnumDataForMainVM.success;
     }
+
+    public override toString(): string {
+        return "DataForMainVM(isLoading: " + this.isLoading + ", " 
+            + "exceptionController: " + this.exceptionController + ", " 
+            + "iPAddress: " + this.iPAddress + ")";
+    }
 }
 
 class MainVM {
@@ -138,37 +144,25 @@ class MainVM {
         this.rwtMode = new RWTMode(
             EnumRWTMode.release,
             [
-                new NamedCallback("init",async () => {
-                    const getIPAddressWhereJsonipAPIParameterHttpService = await this.getEEIPAddressEEWhereJsonipAPIEEParameterHttpService.getIPAddressWhereJsonipAPIParameterHttpService();
-                    if(getIPAddressWhereJsonipAPIParameterHttpService.exceptionController.isWhereNotEqualsNullParameterException()) {
-                        return this.firstQQInitQQGetIPAddressWhereJsonipAPIParameterHttpService(getIPAddressWhereJsonipAPIParameterHttpService.exceptionController);
-                    }
-                    this.namedStreamWState.getDataForNamed.isLoading = false;
-                    this.namedStreamWState.getDataForNamed.iPAddress = getIPAddressWhereJsonipAPIParameterHttpService.parameter.getClone;
-                    return KeysSuccessUtility.sUCCESS;
-                }),
+                new NamedCallback("init",this.initReleaseCallback),
             ],
             [
-                new NamedCallback("init",async () => {
-                    // Simulation get "IPAddress"
-                    const iPAddress = new IPAddress("121.121.12.12");
-                    await new Promise(resolve => setTimeout(resolve,1000));
-                    this.namedStreamWState.getDataForNamed.isLoading = false;
-                    this.namedStreamWState.getDataForNamed.iPAddress = iPAddress.getClone;
-                    return KeysSuccessUtility.sUCCESS;
-                }),
+                new NamedCallback("init",this.initTestCallback),
             ]
         );
-        this.init();
     }
 
-    private async init(): Promise<void> {
-        this.namedStreamWState.listenStreamDataForNamedFromCallback((data) => {
+    public async init(): Promise<void> {
+        this.namedStreamWState.listenStreamDataForNamedFromCallback((_data) => {
             this.build();
         });
         const result = await this.rwtMode.getNamedCallbackFromName("init").callback();
         debugPrint("MainVM: " + result);
         this.namedStreamWState.notifyStreamDataForNamed();
+    }
+
+    public dispose(): void {
+        this.namedStreamWState.dispose();
     }
 
     private build(): void {
@@ -188,13 +182,38 @@ class MainVM {
         }
     }
 
-    private async firstQQInitQQGetIPAddressWhereJsonipAPIParameterHttpService(exceptionController: ExceptionController): Promise<string> {
+    private initReleaseCallback = async (): Promise<string> => {
+        const getIPAddressWhereJsonipAPIParameterHttpService = await this.getEEIPAddressEEWhereJsonipAPIEEParameterHttpService.getIPAddressWhereJsonipAPIParameterHttpService();
+        if(getIPAddressWhereJsonipAPIParameterHttpService.exceptionController.isWhereNotEqualsNullParameterException()) {
+            return this.firstQQInitReleaseCallbackQQGetIPAddressWhereJsonipAPIParameterHttpService(getIPAddressWhereJsonipAPIParameterHttpService.exceptionController);
+        }
+        this.namedStreamWState.getDataForNamed.isLoading = false;
+        this.namedStreamWState.getDataForNamed.iPAddress = getIPAddressWhereJsonipAPIParameterHttpService.parameter.getClone;
+        return KeysSuccessUtility.sUCCESS;
+    }
+
+    private initTestCallback = async (): Promise<string> => {
+        // Simulation get "IPAddress"
+        const iPAddress = new IPAddress("121.121.12.12");
+        await new Promise(resolve => setTimeout(resolve,1000));
+        this.namedStreamWState.getDataForNamed.isLoading = false;
+        this.namedStreamWState.getDataForNamed.iPAddress = iPAddress.getClone;
+        return KeysSuccessUtility.sUCCESS;
+    }
+
+    private async firstQQInitReleaseCallbackQQGetIPAddressWhereJsonipAPIParameterHttpService(exceptionController: ExceptionController): Promise<string> {
         this.namedStreamWState.getDataForNamed.isLoading = false;
         this.namedStreamWState.getDataForNamed.exceptionController = exceptionController;
         return exceptionController.getKeyParameterException;
     }
 }
-new MainVM();
+
+async function main() {
+    const mainVM = new MainVM();
+    await mainVM.init();
+    mainVM.dispose();
+}
+main();
 // EXPECTED OUTPUT:
 //
 // MainVM: sUCCESS
