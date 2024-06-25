@@ -1,24 +1,17 @@
-import { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, ExceptionController, BaseNamedStreamWState, RWTMode, EnumRWTMode, NamedCallback } from "library_architecture_mvvm_modify_javascript";
+import { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, ExceptionController, BaseNamedStreamWState, BaseModelRepository, EnumRWTMode } from "library_architecture_mvvm_modify_javascript";
+
+class ReadyDataUtility {
+    public static readonly success = "success";
+    public static readonly unknown = "unknown";
+    public static readonly iPAPI = "https://jsonip.com/";
+
+    private constructor() {
+    }
+}
 
 class KeysHttpServiceUtility {
     /* IPAddress */
     public static readonly iPAddressQQIp = "ip";
-
-    private constructor() {
-    }
-}
-
-class KeysExceptionUtility {
-    /* UNKNOWN */
-    public static readonly uNKNOWN = "uNKNOWN";
-
-    private constructor() {
-    }
-}
-
-class KeysSuccessUtility {
-    /* SUCCESS */
-    public static readonly sUCCESS = "sUCCESS";
 
     private constructor() {
     }
@@ -72,31 +65,60 @@ class HttpService {
     }
 }
 
-class GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService {
+class IPAddressRepository<T extends IPAddress,Y extends ListIPAddress<T>> extends BaseModelRepository<T,Y> {
     protected readonly httpService = HttpService.instance;
 
-    public async getIPAddressWhereJsonipAPIParameterHttpService(): Promise<Result> {
+    public constructor(enumRWTMode: EnumRWTMode) {
+        super(enumRWTMode);
+    }
+
+    protected override getBaseModelFromMapAndListKeys(map: Map<string, any>, listKeys: string[]): T {
+        if(listKeys.length <= 0) {
+            return new IPAddress("") as T;
+        }
+        return new IPAddress(map.has(listKeys[0]) ? map.get(listKeys[0]) : "") as T;
+    }
+
+    protected override getBaseListModelFromListModel(listModel: T[]): Y {
+        return new ListIPAddress(listModel) as Y;
+    }
+
+    public async getIPAddressParameterHttpService(): Promise<Result> {
+        return this.getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(
+            this.getIPAddressParameterHttpServiceWReleaseCallback,
+            this.getIPAddressParameterHttpServiceWTestCallback)();
+    }
+    
+    private getIPAddressParameterHttpServiceWReleaseCallback = async (): Promise<Result> => {
         try {
-            const response = await fetch("https://jsonip.com/", {
+            const response = await fetch(ReadyDataUtility.iPAPI, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
             if(response.status != 200) {
-                throw NetworkException.fromKeyAndStatusCode("GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService",response.status.toString(),response.status);
+                throw NetworkException.fromKeyAndStatusCode("IPAddressRepository",response.status.toString(),response.status);
             }
             const json = await response.json();
             const map = new Map<string,any>(Object.entries(json));
-            const iPAddress = new IPAddress(map.get(KeysHttpServiceUtility.iPAddressQQIp) as string);
-            return Result.success(iPAddress);
+            return Result.success(this.getBaseModelFromMapAndListKeys(map,[KeysHttpServiceUtility.iPAddressQQIp]));
         } catch(exception) {
             if(exception instanceof NetworkException) {
                 return Result.exception(exception);
             }
-            return Result.exception(new LocalException("GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService",EnumGuilty.device,KeysExceptionUtility.uNKNOWN,exception.toString()));
+            return Result.exception(new LocalException("IPAddressRepository",EnumGuilty.device,ReadyDataUtility.unknown,exception.toString()));
         }
-    }
+    };
+
+    private getIPAddressParameterHttpServiceWTestCallback = async (): Promise<Result> => {
+        await new Promise(resolve => setTimeout(resolve,1000));
+        return Result.success(this.getBaseModelFromMapAndListKeys(
+            new Map<string,any>([
+                [KeysHttpServiceUtility.iPAddressQQIp,"121.121.12.12"]
+            ]),
+            [KeysHttpServiceUtility.iPAddressQQIp]));
+    };
 }
 
 enum EnumDataForMainVM {
@@ -131,33 +153,24 @@ class DataForMainVM extends BaseDataForNamed<EnumDataForMainVM> {
 }
 
 class MainVM {
-    // OperationEEModel(EEWhereNamed)[EEFromNamed]EEParameterNamedService
-    private readonly getEEIPAddressEEWhereJsonipAPIEEParameterHttpService = new GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService();
+    // ModelRepository
+    private readonly iPAddressRepository = new IPAddressRepository(EnumRWTMode.release);
+    
     // NamedUtility
     
-    // Main objects
+    // NamedStreamWState
     private readonly namedStreamWState: BaseNamedStreamWState<DataForMainVM>;
-    private readonly rwtMode: RWTMode;
 
     public constructor() {
         this.namedStreamWState = new DefaultStreamWState<DataForMainVM>(new DataForMainVM(true,new IPAddress("")));
-        this.rwtMode = new RWTMode(
-            EnumRWTMode.release,
-            [
-                new NamedCallback("init",this.initReleaseCallback),
-            ],
-            [
-                new NamedCallback("init",this.initTestCallback),
-            ]
-        );
     }
 
     public async init(): Promise<void> {
         this.namedStreamWState.listenStreamDataForNamedFromCallback((_data) => {
             this.build();
         });
-        const result = await this.rwtMode.getNamedCallbackFromName("init").callback();
-        debugPrint("MainVM: " + result);
+        const firstRequest = await this.firstRequest();
+        debugPrint("MainVM: " + firstRequest);
         this.namedStreamWState.notifyStreamDataForNamed();
     }
 
@@ -182,26 +195,17 @@ class MainVM {
         }
     }
 
-    private initReleaseCallback = async (): Promise<string> => {
-        const getIPAddressWhereJsonipAPIParameterHttpService = await this.getEEIPAddressEEWhereJsonipAPIEEParameterHttpService.getIPAddressWhereJsonipAPIParameterHttpService();
-        if(getIPAddressWhereJsonipAPIParameterHttpService.exceptionController.isWhereNotEqualsNullParameterException()) {
-            return this.firstQQInitReleaseCallbackQQGetIPAddressWhereJsonipAPIParameterHttpService(getIPAddressWhereJsonipAPIParameterHttpService.exceptionController);
+    private async firstRequest(): Promise<string> {
+        const getIPAddressParameterHttpService = await this.iPAddressRepository.getIPAddressParameterHttpService();
+        if(getIPAddressParameterHttpService.exceptionController.isWhereNotEqualsNullParameterException()) {
+            return this.firstQQFirstRequestQQGetIPAddressParameterHttpService(getIPAddressParameterHttpService.exceptionController);
         }
         this.namedStreamWState.getDataForNamed.isLoading = false;
-        this.namedStreamWState.getDataForNamed.iPAddress = getIPAddressWhereJsonipAPIParameterHttpService.parameter.getClone;
-        return KeysSuccessUtility.sUCCESS;
+        this.namedStreamWState.getDataForNamed.iPAddress = getIPAddressParameterHttpService.parameter.getClone;
+        return ReadyDataUtility.success;
     }
 
-    private initTestCallback = async (): Promise<string> => {
-        // Simulation get "IPAddress"
-        const iPAddress = new IPAddress("121.121.12.12");
-        await new Promise(resolve => setTimeout(resolve,1000));
-        this.namedStreamWState.getDataForNamed.isLoading = false;
-        this.namedStreamWState.getDataForNamed.iPAddress = iPAddress.getClone;
-        return KeysSuccessUtility.sUCCESS;
-    }
-
-    private async firstQQInitReleaseCallbackQQGetIPAddressWhereJsonipAPIParameterHttpService(exceptionController: ExceptionController): Promise<string> {
+    private async firstQQFirstRequestQQGetIPAddressParameterHttpService(exceptionController: ExceptionController): Promise<string> {
         this.namedStreamWState.getDataForNamed.isLoading = false;
         this.namedStreamWState.getDataForNamed.exceptionController = exceptionController;
         return exceptionController.getKeyParameterException;
@@ -216,7 +220,7 @@ async function main() {
 main();
 // EXPECTED OUTPUT:
 //
-// MainVM: sUCCESS
+// MainVM: success
 // Build: Success(IPAddress(ip: ${your_ip}))
 
 /// OR

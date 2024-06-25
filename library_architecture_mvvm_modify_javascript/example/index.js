@@ -1,4 +1,28 @@
-import { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, RWTMode, EnumRWTMode, NamedCallback } from "library_architecture_mvvm_modify_javascript";
+import { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, ExceptionController, BaseNamedStreamWState, BaseModelRepository, EnumRWTMode } from "library_architecture_mvvm_modify_javascript";
+
+class ReadyDataUtility {
+    static #success = "success";
+    static #unknown = "unknown";
+    static #iPAPI = "https://jsonip.com/";
+
+    constructor() {
+        if (new.target === ReadyDataUtility) {
+            throw new LocalException("ReadyDataUtility",EnumGuilty.developer,"ReadyDataUtilityQQConstructor","This class is static, there is no point in calling an object and inheritance");
+        }
+    }
+    
+    static get success() {
+        return this.#success;
+    }
+
+    static get unknown() {
+        return this.#unknown;
+    }
+
+    static get iPAPI() {
+        return this.#iPAPI;
+    }
+}
 
 class KeysHttpServiceUtility {
     /* IPAddress */
@@ -12,36 +36,6 @@ class KeysHttpServiceUtility {
 
     static get iPAddressQQIp() {
         return this.#iPAddressQQIp;
-    }
-}
-
-class KeysExceptionUtility {
-    /* UNKNOWN */
-    static #uNKNOWN = "uNKNOWN";
-
-    constructor() {
-        if (new.target === KeysExceptionUtility) {
-            throw new LocalException("KeysExceptionUtility",EnumGuilty.developer,"KeysExceptionUtilityQQConstructor","This class is static, there is no point in calling an object and inheritance");
-        }
-    }
-
-    static get uNKNOWN() {
-        return this.#uNKNOWN;
-    }
-}
-
-class KeysSuccessUtility {
-    /* SUCCESS */
-    static #sUCCESS = "sUCCESS";
-
-    constructor() {
-        if (new.target === KeysSuccessUtility) {
-            throw new LocalException("KeysSuccessUtility",EnumGuilty.developer,"KeysSuccessUtilityQQConstructor","This class is static, there is no point in calling an object and inheritance");
-        }
-    }
-
-    static get sUCCESS() {
-        return this.#sUCCESS;
     }
 }
 
@@ -100,35 +94,64 @@ class HttpService {
     }
 }
 
-class GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService {
+class IPAddressRepository extends BaseModelRepository {
     #httpService = HttpService.instance;
 
-    async getIPAddressWhereJsonipAPIParameterHttpService() {
+    constructor(enumRWTMode) {
+        super(enumRWTMode);
+    }
+
+    getBaseModelFromMapAndListKeys(map,listKeys) {
+        if(listKeys.length <= 0) {
+            return new IPAddress("");
+        }
+        return new IPAddress(map.has(listKeys[0]) ? map.get(listKeys[0]) : "");
+    }
+
+    getBaseListModelFromListModel(listModel) {
+        return new ListIPAddress(listModel);
+    }
+
+    async getIPAddressParameterHttpService() {
+        return this.getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(
+            this.#getIPAddressParameterHttpServiceWReleaseCallback,
+            this.#getIPAddressParameterHttpServiceWTestCallback)();
+    }
+
+    get _httpService() {
+        return this.#httpService;
+    }
+
+    #getIPAddressParameterHttpServiceWReleaseCallback = async () => {
         try {
-            const response = await fetch("https://jsonip.com/", {
+            const response = await fetch(ReadyDataUtility.iPAPI, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
             if(response.status != 200) {
-                throw NetworkException.fromKeyAndStatusCode("GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService",response.status.toString(),response.status);
+                throw NetworkException.fromKeyAndStatusCode("IPAddressRepository",response.status.toString(),response.status);
             }
             const json = await response.json();
             const map = new Map(Object.entries(json));
-            const iPAddress = new IPAddress(map.get(KeysHttpServiceUtility.iPAddressQQIp));
-            return Result.success(iPAddress);
+            return Result.success(this.getBaseModelFromMapAndListKeys(map,[KeysHttpServiceUtility.iPAddressQQIp]));
         } catch(exception) {
             if(exception instanceof NetworkException) {
                 return Result.exception(exception);
             }
-            return Result.exception(new LocalException("GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService",EnumGuilty.device,KeysExceptionUtility.uNKNOWN,exception.toString()));
+            return Result.exception(new LocalException("IPAddressRepository",EnumGuilty.device,ReadyDataUtility.unknown,exception.toString()));
         }
-    }
+    };
 
-    get _httpService() {
-        return this.#httpService;
-    }
+    #getIPAddressParameterHttpServiceWTestCallback = async () => {
+        await new Promise(resolve => setTimeout(resolve,1000));
+        return Result.success(this.getBaseModelFromMapAndListKeys(
+            new Map([
+                [KeysHttpServiceUtility.iPAddressQQIp,"121.121.12.12"]
+            ]),
+            [KeysHttpServiceUtility.iPAddressQQIp]));
+    };
 }
 
 const EnumDataForMainVM = {
@@ -163,33 +186,24 @@ class DataForMainVM extends BaseDataForNamed {
 }
 
 class MainVM {
-    // OperationEEModel(EEWhereNamed)[EEFromNamed]EEParameterNamedService
-    #getEEIPAddressEEWhereJsonipAPIEEParameterHttpService = new GetEEIPAddressEEWhereJsonipAPIEEParameterHttpService();
+    // ModelRepository
+    #iPAddressRepository = new IPAddressRepository(EnumRWTMode.release);
+    
     // NamedUtility
     
-    // Main objects
+    // NamedStreamWState
     #namedStreamWState;
-    #rwtMode;
 
     constructor() {
         this.#namedStreamWState = new DefaultStreamWState(new DataForMainVM(true,new IPAddress("")));
-        this.#rwtMode = new RWTMode(
-            EnumRWTMode.release,
-            [
-                new NamedCallback("init",this.#initReleaseCallback),
-            ],
-            [
-                new NamedCallback("init",this.#initTestCallback),
-            ]
-        );
     }
 
     async init() {
         this.#namedStreamWState.listenStreamDataForNamedFromCallback((_data) => {
             this.#build();
         });
-        const result = await this.#rwtMode.getNamedCallbackFromName("init").callback();
-        debugPrint("MainVM: " + result);
+        const firstRequest = await this.#firstRequest();
+        debugPrint("MainVM: " + firstRequest);
         this.#namedStreamWState.notifyStreamDataForNamed();
     }
 
@@ -214,26 +228,17 @@ class MainVM {
         }
     }
 
-    #initReleaseCallback = async () => {
-        const getIPAddressWhereJsonipAPIParameterHttpService = await this.#getEEIPAddressEEWhereJsonipAPIEEParameterHttpService.getIPAddressWhereJsonipAPIParameterHttpService();
-        if(getIPAddressWhereJsonipAPIParameterHttpService.exceptionController.isWhereNotEqualsNullParameterException()) {
-            return this.#firstQQInitReleaseCallbackQQGetIPAddressWhereJsonipAPIParameterHttpService(getIPAddressWhereJsonipAPIParameterHttpService.exceptionController);
+    async #firstRequest() {
+        const getIPAddressParameterHttpService = await this.#iPAddressRepository.getIPAddressParameterHttpService();
+        if(getIPAddressParameterHttpService.exceptionController.isWhereNotEqualsNullParameterException()) {
+            return this.#firstQQFirstRequestQQGetIPAddressParameterHttpService(getIPAddressParameterHttpService.exceptionController);
         }
         this.#namedStreamWState.getDataForNamed.isLoading = false;
-        this.#namedStreamWState.getDataForNamed.iPAddress = getIPAddressWhereJsonipAPIParameterHttpService.parameter.getClone;
-        return KeysSuccessUtility.sUCCESS;
+        this.#namedStreamWState.getDataForNamed.iPAddress = getIPAddressParameterHttpService.parameter.getClone;
+        return ReadyDataUtility.success;
     }
 
-    #initTestCallback = async () => {
-        // Simulation get "IPAddress"
-        const iPAddress = new IPAddress("121.121.12.12");
-        await new Promise(resolve => setTimeout(resolve,1000));
-        this.#namedStreamWState.getDataForNamed.isLoading = false;
-        this.#namedStreamWState.getDataForNamed.iPAddress = iPAddress.getClone;
-        return KeysSuccessUtility.sUCCESS;
-    }
-
-    async #firstQQInitReleaseCallbackQQGetIPAddressWhereJsonipAPIParameterHttpService(exceptionController) {
+    async #firstQQFirstRequestQQGetIPAddressParameterHttpService(exceptionController) {
         this.#namedStreamWState.getDataForNamed.isLoading = false;
         this.#namedStreamWState.getDataForNamed.exceptionController = exceptionController;
         return exceptionController.getKeyParameterException;
@@ -248,7 +253,7 @@ async function main() {
 main();
 // EXPECTED OUTPUT:
 //
-// MainVM: sUCCESS
+// MainVM: success
 // Build: Success(IPAddress(ip: ${your_ip}))
 
 /// OR

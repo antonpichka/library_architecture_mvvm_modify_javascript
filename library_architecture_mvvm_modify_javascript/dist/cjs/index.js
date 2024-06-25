@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.debugPrintException = exports.debugPrint = exports.Result = exports.ExceptionController = exports.RWTMode = exports.NamedCallback = exports.EnumRWTMode = exports.TempCacheService = exports.DefaultStreamWState = exports.BaseNamedStreamWState = exports.DefaultState = exports.BaseNamedState = exports.BaseModel = exports.BaseListModel = exports.BaseModelWNamedWNamedWNamedIterator = exports.CurrentModelWIndex = exports.NetworkException = exports.LocalException = exports.EnumGuilty = exports.BaseException = exports.BaseDataForNamed = void 0;
+exports.debugPrintException = exports.debugPrint = exports.Result = exports.ExceptionController = exports.EnumRWTMode = exports.TempCacheService = exports.DefaultStreamWState = exports.BaseNamedStreamWState = exports.DefaultState = exports.BaseNamedState = exports.BaseModelRepository = exports.BaseModel = exports.BaseListModel = exports.BaseModelWNamedWNamedWNamedIterator = exports.CurrentModelWIndex = exports.NetworkException = exports.LocalException = exports.EnumGuilty = exports.BaseException = exports.BaseDataForNamed = void 0;
 class BaseDataForNamed {
     constructor(isLoading) {
         this.isLoading = isLoading;
@@ -207,6 +207,20 @@ class BaseModel {
     }
 }
 exports.BaseModel = BaseModel;
+class BaseModelRepository {
+    constructor(enumRWTMode) {
+        this.enumRWTMode = enumRWTMode;
+    }
+    getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback, testCallback) {
+        switch (this.enumRWTMode) {
+            case EnumRWTMode.release:
+                return releaseCallback;
+            case EnumRWTMode.test:
+                return testCallback;
+        }
+    }
+}
+exports.BaseModelRepository = BaseModelRepository;
 class BaseNamedState {
     constructor() {
     }
@@ -346,41 +360,6 @@ var EnumRWTMode;
     EnumRWTMode[EnumRWTMode["release"] = 0] = "release";
     EnumRWTMode[EnumRWTMode["test"] = 1] = "test";
 })(EnumRWTMode || (exports.EnumRWTMode = EnumRWTMode = {}));
-class NamedCallback {
-    constructor(name, callback) {
-        this.name = name;
-        this.callback = callback;
-    }
-}
-exports.NamedCallback = NamedCallback;
-class RWTMode {
-    constructor(enumRWTMode, listNamedCallbackWRelease, listNamedCallbackWTest) {
-        this.enumRWTMode = enumRWTMode;
-        this.mapStringWNamedCallbackWRelease = RWTMode.getMapStringWNamedCallbackFromListNamedCallback(listNamedCallbackWRelease);
-        this.mapStringWNamedCallbackWTest = RWTMode.getMapStringWNamedCallbackFromListNamedCallback(listNamedCallbackWTest);
-    }
-    static getMapStringWNamedCallbackFromListNamedCallback(listNamedCallback) {
-        const mapStringWNamedCallback = new Map();
-        for (const itemNamedCallback of listNamedCallback) {
-            mapStringWNamedCallback.set(itemNamedCallback.name, itemNamedCallback);
-        }
-        return mapStringWNamedCallback;
-    }
-    getNamedCallbackFromName(name) {
-        const mapStringWNamedCallbackWhereSelectModParametersThree = this.getMapStringWNamedCallbackWhereSelectModParametersThree;
-        if (!mapStringWNamedCallbackWhereSelectModParametersThree.has(name)) {
-            throw new LocalException("RWTMode", EnumGuilty.developer, "RWTModeQQGetNamedCallbackFromName", "no exists key: " + name);
-        }
-        return mapStringWNamedCallbackWhereSelectModParametersThree.get(name);
-    }
-    get getMapStringWNamedCallbackWhereSelectModParametersThree() {
-        if (this.enumRWTMode == EnumRWTMode.release) {
-            return this.mapStringWNamedCallbackWRelease;
-        }
-        return this.mapStringWNamedCallbackWTest;
-    }
-}
-exports.RWTMode = RWTMode;
 class ExceptionController {
     constructor(exception) {
         this.exception = exception;

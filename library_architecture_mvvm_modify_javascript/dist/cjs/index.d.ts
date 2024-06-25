@@ -62,6 +62,13 @@ export declare abstract class BaseModel {
     abstract get getClone(): BaseModel;
     abstract toString(): string;
 }
+export declare abstract class BaseModelRepository<T extends BaseModel, Y extends BaseListModel<T>> {
+    private readonly enumRWTMode;
+    protected constructor(enumRWTMode: EnumRWTMode);
+    protected abstract getBaseModelFromMapAndListKeys(map: Map<string, any>, listKeys: Array<string>): T;
+    protected abstract getBaseListModelFromListModel(listModel: Array<T>): Y;
+    protected getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback: any, testCallback: any): any;
+}
 export declare abstract class BaseNamedState<T extends BaseDataForNamed<any>> implements IDispose {
     protected constructor();
     abstract dispose(): void;
@@ -109,20 +116,6 @@ export declare class TempCacheService {
 export declare enum EnumRWTMode {
     release = 0,
     test = 1
-}
-export declare class NamedCallback {
-    readonly name: string;
-    readonly callback: any;
-    constructor(name: string, callback: any);
-}
-export declare class RWTMode {
-    private readonly enumRWTMode;
-    private readonly mapStringWNamedCallbackWRelease;
-    private readonly mapStringWNamedCallbackWTest;
-    constructor(enumRWTMode: EnumRWTMode, listNamedCallbackWRelease: Array<NamedCallback>, listNamedCallbackWTest: Array<NamedCallback>);
-    private static getMapStringWNamedCallbackFromListNamedCallback;
-    getNamedCallbackFromName(name: string): NamedCallback;
-    private get getMapStringWNamedCallbackWhereSelectModParametersThree();
 }
 export declare class ExceptionController {
     private readonly exception;

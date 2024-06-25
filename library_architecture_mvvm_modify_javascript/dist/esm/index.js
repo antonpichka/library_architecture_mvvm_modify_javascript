@@ -196,6 +196,19 @@ export class BaseModel {
         this.uniqueId = uniqueId;
     }
 }
+export class BaseModelRepository {
+    constructor(enumRWTMode) {
+        this.enumRWTMode = enumRWTMode;
+    }
+    getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback, testCallback) {
+        switch (this.enumRWTMode) {
+            case EnumRWTMode.release:
+                return releaseCallback;
+            case EnumRWTMode.test:
+                return testCallback;
+        }
+    }
+}
 export class BaseNamedState {
     constructor() {
     }
@@ -330,39 +343,6 @@ export var EnumRWTMode;
     EnumRWTMode[EnumRWTMode["release"] = 0] = "release";
     EnumRWTMode[EnumRWTMode["test"] = 1] = "test";
 })(EnumRWTMode || (EnumRWTMode = {}));
-export class NamedCallback {
-    constructor(name, callback) {
-        this.name = name;
-        this.callback = callback;
-    }
-}
-export class RWTMode {
-    constructor(enumRWTMode, listNamedCallbackWRelease, listNamedCallbackWTest) {
-        this.enumRWTMode = enumRWTMode;
-        this.mapStringWNamedCallbackWRelease = RWTMode.getMapStringWNamedCallbackFromListNamedCallback(listNamedCallbackWRelease);
-        this.mapStringWNamedCallbackWTest = RWTMode.getMapStringWNamedCallbackFromListNamedCallback(listNamedCallbackWTest);
-    }
-    static getMapStringWNamedCallbackFromListNamedCallback(listNamedCallback) {
-        const mapStringWNamedCallback = new Map();
-        for (const itemNamedCallback of listNamedCallback) {
-            mapStringWNamedCallback.set(itemNamedCallback.name, itemNamedCallback);
-        }
-        return mapStringWNamedCallback;
-    }
-    getNamedCallbackFromName(name) {
-        const mapStringWNamedCallbackWhereSelectModParametersThree = this.getMapStringWNamedCallbackWhereSelectModParametersThree;
-        if (!mapStringWNamedCallbackWhereSelectModParametersThree.has(name)) {
-            throw new LocalException("RWTMode", EnumGuilty.developer, "RWTModeQQGetNamedCallbackFromName", "no exists key: " + name);
-        }
-        return mapStringWNamedCallbackWhereSelectModParametersThree.get(name);
-    }
-    get getMapStringWNamedCallbackWhereSelectModParametersThree() {
-        if (this.enumRWTMode == EnumRWTMode.release) {
-            return this.mapStringWNamedCallbackWRelease;
-        }
-        return this.mapStringWNamedCallbackWTest;
-    }
-}
 export class ExceptionController {
     constructor(exception) {
         this.exception = exception;

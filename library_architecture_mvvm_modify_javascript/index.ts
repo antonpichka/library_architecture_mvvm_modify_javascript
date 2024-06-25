@@ -256,6 +256,27 @@ export abstract class BaseModel {
     public abstract toString(): string;
 }
 
+export abstract class BaseModelRepository<T extends BaseModel, Y extends BaseListModel<T>> {
+    private readonly enumRWTMode: EnumRWTMode;
+
+    protected constructor(enumRWTMode: EnumRWTMode) {
+        this.enumRWTMode = enumRWTMode;
+    }
+
+    protected abstract getBaseModelFromMapAndListKeys(map: Map<string,any>, listKeys: Array<string>): T;
+
+    protected abstract getBaseListModelFromListModel(listModel: Array<T>): Y;
+
+    protected getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback: any, testCallback: any): any {
+        switch(this.enumRWTMode) {
+            case EnumRWTMode.release:
+                return releaseCallback;
+            case EnumRWTMode.test:
+                return testCallback;
+        }
+    }
+}
+
 export abstract class BaseNamedState<T extends BaseDataForNamed<any>> implements IDispose {
     protected constructor() {
     }
@@ -427,51 +448,6 @@ export class TempCacheService {
 export enum EnumRWTMode {
     release,
     test
-}
-
-export class NamedCallback {
-    public readonly name: string;
-    public readonly callback: any;
-
-    public constructor(name: string, callback: any) {
-        this.name = name;
-        this.callback = callback;
-    }
-}
-
-export class RWTMode {
-    private readonly enumRWTMode: EnumRWTMode;
-    private readonly mapStringWNamedCallbackWRelease: Map<string,NamedCallback>;
-    private readonly mapStringWNamedCallbackWTest: Map<string,NamedCallback>;
-
-    public constructor(enumRWTMode: EnumRWTMode, listNamedCallbackWRelease: Array<NamedCallback>, listNamedCallbackWTest: Array<NamedCallback>) {
-        this.enumRWTMode = enumRWTMode;
-        this.mapStringWNamedCallbackWRelease = RWTMode.getMapStringWNamedCallbackFromListNamedCallback(listNamedCallbackWRelease);
-        this.mapStringWNamedCallbackWTest = RWTMode.getMapStringWNamedCallbackFromListNamedCallback(listNamedCallbackWTest);
-    }
-
-    private static getMapStringWNamedCallbackFromListNamedCallback(listNamedCallback: Array<NamedCallback>): Map<string,NamedCallback> {
-        const mapStringWNamedCallback = new Map<string,NamedCallback>();
-        for(const itemNamedCallback of listNamedCallback) {
-            mapStringWNamedCallback.set(itemNamedCallback.name,itemNamedCallback);
-        }
-        return mapStringWNamedCallback;
-    }
-
-    public getNamedCallbackFromName(name: string): NamedCallback {
-        const mapStringWNamedCallbackWhereSelectModParametersThree = this.getMapStringWNamedCallbackWhereSelectModParametersThree;
-        if(!mapStringWNamedCallbackWhereSelectModParametersThree.has(name)) {
-            throw new LocalException("RWTMode",EnumGuilty.developer,"RWTModeQQGetNamedCallbackFromName","no exists key: " + name);
-        }
-        return mapStringWNamedCallbackWhereSelectModParametersThree.get(name)!;
-    }
-
-    private get getMapStringWNamedCallbackWhereSelectModParametersThree(): Map<string,NamedCallback> {
-        if(this.enumRWTMode == EnumRWTMode.release) {
-            return this.mapStringWNamedCallbackWRelease;
-        }
-        return this.mapStringWNamedCallbackWTest;
-    }
 }
 
 export class ExceptionController {
