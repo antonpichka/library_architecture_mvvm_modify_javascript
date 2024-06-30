@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.debugPrintException = exports.debugPrint = exports.Result = exports.ExceptionController = exports.EnumRWTMode = exports.TempCacheService = exports.DefaultStreamWState = exports.BaseNamedStreamWState = exports.DefaultState = exports.BaseNamedState = exports.BaseModelRepository = exports.BaseModel = exports.BaseListModel = exports.BaseModelWNamedWNamedWNamedIterator = exports.CurrentModelWIndex = exports.NetworkException = exports.LocalException = exports.EnumGuilty = exports.BaseException = exports.BaseDataForNamed = void 0;
+exports.debugPrintException = exports.debugPrint = exports.Result = exports.ExceptionController = exports.BaseModelRepository = exports.EnumRWTMode = exports.TempCacheService = exports.DefaultStreamWState = exports.BaseNamedStreamWState = exports.DefaultState = exports.BaseNamedState = exports.BaseModel = exports.BaseListModel = exports.BaseModelWNamedWNamedWNamedIterator = exports.CurrentModelWIndex = exports.NetworkException = exports.LocalException = exports.EnumGuilty = exports.BaseException = exports.BaseDataForNamed = void 0;
 class BaseDataForNamed {
     constructor(isLoading) {
         this.isLoading = isLoading;
@@ -154,13 +154,13 @@ class BaseModelWNamedWNamedWNamedIterator {
             return new Array();
         }
         this.listModelIterator.push(...newListModel);
-        const newListModelFIRST = new Array();
+        const newListModelFirst = new Array();
         while (this.listModelIterator.length > 0) {
             const currentModelWIndex = this.currentModelWIndex;
             this.listModelIterator.splice(currentModelWIndex.index, 1);
-            newListModelFIRST.push(currentModelWIndex.currentModel);
+            newListModelFirst.push(currentModelWIndex.currentModel);
         }
-        return newListModelFIRST;
+        return newListModelFirst;
     }
 }
 exports.BaseModelWNamedWNamedWNamedIterator = BaseModelWNamedWNamedWNamedIterator;
@@ -207,20 +207,6 @@ class BaseModel {
     }
 }
 exports.BaseModel = BaseModel;
-class BaseModelRepository {
-    constructor(enumRWTMode) {
-        this.enumRWTMode = enumRWTMode;
-    }
-    getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback, testCallback) {
-        switch (this.enumRWTMode) {
-            case EnumRWTMode.release:
-                return releaseCallback;
-            case EnumRWTMode.test:
-                return testCallback;
-        }
-    }
-}
-exports.BaseModelRepository = BaseModelRepository;
 class BaseNamedState {
     constructor() {
     }
@@ -360,6 +346,28 @@ var EnumRWTMode;
     EnumRWTMode[EnumRWTMode["release"] = 0] = "release";
     EnumRWTMode[EnumRWTMode["test"] = 1] = "test";
 })(EnumRWTMode || (exports.EnumRWTMode = EnumRWTMode = {}));
+class BaseModelRepository {
+    constructor() {
+    }
+    getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback, testCallback) {
+        switch (BaseModelRepository.enumRWTMode) {
+            case EnumRWTMode.release:
+                return releaseCallback;
+            case EnumRWTMode.test:
+                return testCallback;
+        }
+    }
+    getSafeValueWhereUsedInMethodGetModelFromMapAndListKeysAndIndexAndDefaultValue(map, listKeys, index, defaultValue) {
+        try {
+            return map.has(listKeys[index]) ? map.get(listKeys[index]) : defaultValue;
+        }
+        catch (exception) {
+            return defaultValue;
+        }
+    }
+}
+exports.BaseModelRepository = BaseModelRepository;
+BaseModelRepository.enumRWTMode = EnumRWTMode.test;
 class ExceptionController {
     constructor(exception) {
         this.exception = exception;

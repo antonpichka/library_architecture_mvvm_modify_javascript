@@ -184,13 +184,13 @@ export abstract class BaseModelWNamedWNamedWNamedIterator<T extends BaseModel> {
             return new Array<T>();
         }
         this.listModelIterator.push(...newListModel);
-        const newListModelFIRST = new Array<T>();
+        const newListModelFirst = new Array<T>();
         while(this.listModelIterator.length > 0) {
             const currentModelWIndex = this.currentModelWIndex;
             this.listModelIterator.splice(currentModelWIndex.index,1);
-            newListModelFIRST.push(currentModelWIndex.currentModel);
+            newListModelFirst.push(currentModelWIndex.currentModel);
         }
-        return newListModelFIRST;
+        return newListModelFirst;
     }   
 }
 
@@ -254,27 +254,6 @@ export abstract class BaseModel {
     public abstract get getClone(): BaseModel;
 
     public abstract toString(): string;
-}
-
-export abstract class BaseModelRepository<T extends BaseModel, Y extends BaseListModel<T>> {
-    private readonly enumRWTMode: EnumRWTMode;
-
-    protected constructor(enumRWTMode: EnumRWTMode) {
-        this.enumRWTMode = enumRWTMode;
-    }
-
-    protected abstract getBaseModelFromMapAndListKeys(map: Map<string,any>, listKeys: Array<string>): T;
-
-    protected abstract getBaseListModelFromListModel(listModel: Array<T>): Y;
-
-    protected getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback: any, testCallback: any): any {
-        switch(this.enumRWTMode) {
-            case EnumRWTMode.release:
-                return releaseCallback;
-            case EnumRWTMode.test:
-                return testCallback;
-        }
-    }
 }
 
 export abstract class BaseNamedState<T extends BaseDataForNamed<any>> implements IDispose {
@@ -448,6 +427,34 @@ export class TempCacheService {
 export enum EnumRWTMode {
     release,
     test
+}
+
+export abstract class BaseModelRepository<T extends BaseModel, Y extends BaseListModel<T>> {
+    public static enumRWTMode = EnumRWTMode.test;
+
+    protected constructor() {
+    }
+
+    protected abstract getBaseModelFromMapAndListKeys(map: Map<string,any>, listKeys: Array<string>): T;
+
+    protected abstract getBaseListModelFromListModel(listModel: Array<T>): Y;
+
+    protected getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback: any, testCallback: any): any {
+        switch(BaseModelRepository.enumRWTMode) {
+            case EnumRWTMode.release:
+                return releaseCallback;
+            case EnumRWTMode.test:
+                return testCallback;
+        }
+    }
+
+    protected getSafeValueWhereUsedInMethodGetModelFromMapAndListKeysAndIndexAndDefaultValue(map: Map<string,any>, listKeys: Array<string>, index: number, defaultValue: any): any {
+        try {
+            return map.has(listKeys[index]) ? map.get(listKeys[index]) : defaultValue;
+        } catch(exception) {
+            return defaultValue;
+        }
+    }
 }
 
 export class ExceptionController {

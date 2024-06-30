@@ -1,5 +1,15 @@
 import { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, ExceptionController, BaseNamedStreamWState, BaseModelRepository, EnumRWTMode } from "library_architecture_mvvm_modify_javascript";
 
+class FactoryObjectUtility {
+    private constructor() {
+    }
+
+    /* ModelRepository */
+    public static get getIPAddressRepository(): IPAddressRepository<IPAddress,ListIPAddress<IPAddress>> {
+        return new IPAddressRepository<IPAddress,ListIPAddress<IPAddress>>();
+    }
+}
+
 class ReadyDataUtility {
     public static readonly success = "success";
     public static readonly unknown = "unknown";
@@ -68,15 +78,14 @@ class HttpService {
 class IPAddressRepository<T extends IPAddress,Y extends ListIPAddress<T>> extends BaseModelRepository<T,Y> {
     protected readonly httpService = HttpService.instance;
 
-    public constructor(enumRWTMode: EnumRWTMode) {
-        super(enumRWTMode);
+    public constructor() {
+        super();
     }
 
     protected override getBaseModelFromMapAndListKeys(map: Map<string, any>, listKeys: string[]): T {
-        if(listKeys.length <= 0) {
-            return new IPAddress("") as T;
-        }
-        return new IPAddress(map.has(listKeys[0]) ? map.get(listKeys[0]) : "") as T;
+        return new IPAddress(
+            this.getSafeValueWhereUsedInMethodGetModelFromMapAndListKeysAndIndexAndDefaultValue(
+                map, listKeys, 0, "")) as T;
     }
 
     protected override getBaseListModelFromListModel(listModel: T[]): Y {
@@ -89,7 +98,7 @@ class IPAddressRepository<T extends IPAddress,Y extends ListIPAddress<T>> extend
             this.getIPAddressParameterHttpServiceWTestCallback)();
     }
     
-    private getIPAddressParameterHttpServiceWReleaseCallback = async (): Promise<Result> => {
+    protected getIPAddressParameterHttpServiceWReleaseCallback = async (): Promise<Result> => {
         try {
             const response = await fetch(ReadyDataUtility.iPAPI, {
                 method: "GET",
@@ -102,7 +111,9 @@ class IPAddressRepository<T extends IPAddress,Y extends ListIPAddress<T>> extend
             }
             const json = await response.json();
             const map = new Map<string,any>(Object.entries(json));
-            return Result.success(this.getBaseModelFromMapAndListKeys(map,[KeysHttpServiceUtility.iPAddressQQIp]));
+            return Result.success(this.getBaseModelFromMapAndListKeys(
+                map,
+                this.getIPAddressParameterHttpServiceWListKeys));
         } catch(exception) {
             if(exception instanceof NetworkException) {
                 return Result.exception(exception);
@@ -111,14 +122,18 @@ class IPAddressRepository<T extends IPAddress,Y extends ListIPAddress<T>> extend
         }
     };
 
-    private getIPAddressParameterHttpServiceWTestCallback = async (): Promise<Result> => {
+    protected getIPAddressParameterHttpServiceWTestCallback = async (): Promise<Result> => {
         await new Promise(resolve => setTimeout(resolve,1000));
         return Result.success(this.getBaseModelFromMapAndListKeys(
             new Map<string,any>([
                 [KeysHttpServiceUtility.iPAddressQQIp,"121.121.12.12"]
             ]),
-            [KeysHttpServiceUtility.iPAddressQQIp]));
+            this.getIPAddressParameterHttpServiceWListKeys));
     };
+
+    protected get getIPAddressParameterHttpServiceWListKeys(): Array<string> {
+        return [KeysHttpServiceUtility.iPAddressQQIp];
+    }
 }
 
 enum EnumDataForMainVM {
@@ -154,7 +169,7 @@ class DataForMainVM extends BaseDataForNamed<EnumDataForMainVM> {
 
 class MainVM {
     // ModelRepository
-    private readonly iPAddressRepository = new IPAddressRepository(EnumRWTMode.release);
+    private readonly iPAddressRepository = FactoryObjectUtility.getIPAddressRepository;
     
     // NamedUtility
     
@@ -213,6 +228,7 @@ class MainVM {
 }
 
 async function main() {
+    BaseModelRepository.enumRWTMode = EnumRWTMode.release;
     const mainVM = new MainVM();
     await mainVM.init();
     mainVM.dispose();

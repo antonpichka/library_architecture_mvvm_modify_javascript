@@ -3,13 +3,12 @@ import { EnumGuilty } from "../base_exception/enum_guilty.js";
 import { EnumRWTMode } from "../enum_rwt_mode.js";
 
 export class BaseModelRepository {
-    #enumRWTMode;
+    static enumRWTMode = EnumRWTMode.test;
 
-    constructor(enumRWTMode) {
+    constructor() {
         if (new.target === BaseModelRepository) {
             throw new LocalException("BaseModelRepository",EnumGuilty.developer,"BaseModelRepositoryQQConstructor","Cannot instantiate abstract class");
         }
-        this.#enumRWTMode = enumRWTMode;
     }
 
     _getBaseModelFromMapAndListKeys(map,listKeys) {
@@ -21,11 +20,19 @@ export class BaseModelRepository {
     }
 
     _getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback,testCallback) {
-        switch(this.#enumRWTMode) {
+        switch(BaseModelRepository.enumRWTMode) {
             case EnumRWTMode.release:
                 return releaseCallback;
             case EnumRWTMode.test:
                 return testCallback;
+        }
+    }
+
+    _getSafeValueWhereUsedInMethodGetModelFromMapAndListKeysAndIndexAndDefaultValue(map,listKeys,index,defaultValue) {
+        try {
+            return map.has(listKeys[index]) ? map.get(listKeys[index]) : defaultValue;
+        } catch(e) {
+            return defaultValue;
         }
     }
 }

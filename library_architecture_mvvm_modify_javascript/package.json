@@ -1,6 +1,6 @@
 {
   "name": "library_architecture_mvvm_modify_javascript",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "MVVM Modify for Javascript/Typescript but you can also port to another language",
   "source": "index.ts",
   "main": "dist/cjs/index.js",

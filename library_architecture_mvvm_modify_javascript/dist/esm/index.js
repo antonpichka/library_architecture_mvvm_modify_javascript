@@ -146,13 +146,13 @@ export class BaseModelWNamedWNamedWNamedIterator {
             return new Array();
         }
         this.listModelIterator.push(...newListModel);
-        const newListModelFIRST = new Array();
+        const newListModelFirst = new Array();
         while (this.listModelIterator.length > 0) {
             const currentModelWIndex = this.currentModelWIndex;
             this.listModelIterator.splice(currentModelWIndex.index, 1);
-            newListModelFIRST.push(currentModelWIndex.currentModel);
+            newListModelFirst.push(currentModelWIndex.currentModel);
         }
-        return newListModelFIRST;
+        return newListModelFirst;
     }
 }
 export class BaseListModel {
@@ -194,19 +194,6 @@ export class BaseListModel {
 export class BaseModel {
     constructor(uniqueId) {
         this.uniqueId = uniqueId;
-    }
-}
-export class BaseModelRepository {
-    constructor(enumRWTMode) {
-        this.enumRWTMode = enumRWTMode;
-    }
-    getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback, testCallback) {
-        switch (this.enumRWTMode) {
-            case EnumRWTMode.release:
-                return releaseCallback;
-            case EnumRWTMode.test:
-                return testCallback;
-        }
     }
 }
 export class BaseNamedState {
@@ -343,6 +330,27 @@ export var EnumRWTMode;
     EnumRWTMode[EnumRWTMode["release"] = 0] = "release";
     EnumRWTMode[EnumRWTMode["test"] = 1] = "test";
 })(EnumRWTMode || (EnumRWTMode = {}));
+export class BaseModelRepository {
+    constructor() {
+    }
+    getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback, testCallback) {
+        switch (BaseModelRepository.enumRWTMode) {
+            case EnumRWTMode.release:
+                return releaseCallback;
+            case EnumRWTMode.test:
+                return testCallback;
+        }
+    }
+    getSafeValueWhereUsedInMethodGetModelFromMapAndListKeysAndIndexAndDefaultValue(map, listKeys, index, defaultValue) {
+        try {
+            return map.has(listKeys[index]) ? map.get(listKeys[index]) : defaultValue;
+        }
+        catch (exception) {
+            return defaultValue;
+        }
+    }
+}
+BaseModelRepository.enumRWTMode = EnumRWTMode.test;
 export class ExceptionController {
     constructor(exception) {
         this.exception = exception;

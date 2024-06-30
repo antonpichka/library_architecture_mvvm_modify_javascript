@@ -1,5 +1,18 @@
 import { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, ExceptionController, BaseNamedStreamWState, BaseModelRepository, EnumRWTMode } from "library_architecture_mvvm_modify_javascript";
 
+class FactoryObjectUtility {
+    constructor() {
+        if (new.target === FactoryObjectUtility) {
+            throw new LocalException("FactoryObjectUtility",EnumGuilty.developer,"FactoryObjectUtilityQQConstructor","This class is static, there is no point in calling an object and inheritance");
+        }
+    }
+    
+    /* ModelRepository */
+    static get getIPAddressRepository() {
+        return new IPAddressRepository();
+    }
+}
+
 class ReadyDataUtility {
     static #success = "success";
     static #unknown = "unknown";
@@ -97,32 +110,27 @@ class HttpService {
 class IPAddressRepository extends BaseModelRepository {
     #httpService = HttpService.instance;
 
-    constructor(enumRWTMode) {
-        super(enumRWTMode);
+    _getBaseModelFromMapAndListKeys(map,listKeys) {
+        return new IPAddress(
+            this.getSafeValueWhereUsedInMethodGetModelFromMapAndListKeysAndIndexAndDefaultValue(
+                map, listKeys, 0, ""));
     }
 
-    getBaseModelFromMapAndListKeys(map,listKeys) {
-        if(listKeys.length <= 0) {
-            return new IPAddress("");
-        }
-        return new IPAddress(map.has(listKeys[0]) ? map.get(listKeys[0]) : "");
-    }
-
-    getBaseListModelFromListModel(listModel) {
+    _getBaseListModelFromListModel(listModel) {
         return new ListIPAddress(listModel);
     }
 
     async getIPAddressParameterHttpService() {
         return this.getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(
-            this.#getIPAddressParameterHttpServiceWReleaseCallback,
-            this.#getIPAddressParameterHttpServiceWTestCallback)();
+            this._getIPAddressParameterHttpServiceWReleaseCallback,
+            this._getIPAddressParameterHttpServiceWTestCallback)();
     }
 
     get _httpService() {
         return this.#httpService;
     }
 
-    #getIPAddressParameterHttpServiceWReleaseCallback = async () => {
+    _getIPAddressParameterHttpServiceWReleaseCallback = async () => {
         try {
             const response = await fetch(ReadyDataUtility.iPAPI, {
                 method: "GET",
@@ -135,7 +143,9 @@ class IPAddressRepository extends BaseModelRepository {
             }
             const json = await response.json();
             const map = new Map(Object.entries(json));
-            return Result.success(this.getBaseModelFromMapAndListKeys(map,[KeysHttpServiceUtility.iPAddressQQIp]));
+            return Result.success(this._getBaseModelFromMapAndListKeys(
+                map,
+                this._getIPAddressParameterHttpClientServiceWListKeys()));
         } catch(exception) {
             if(exception instanceof NetworkException) {
                 return Result.exception(exception);
@@ -144,14 +154,18 @@ class IPAddressRepository extends BaseModelRepository {
         }
     };
 
-    #getIPAddressParameterHttpServiceWTestCallback = async () => {
+    _getIPAddressParameterHttpServiceWTestCallback = async () => {
         await new Promise(resolve => setTimeout(resolve,1000));
-        return Result.success(this.getBaseModelFromMapAndListKeys(
+        return Result.success(this._getBaseModelFromMapAndListKeys(
             new Map([
                 [KeysHttpServiceUtility.iPAddressQQIp,"121.121.12.12"]
             ]),
-            [KeysHttpServiceUtility.iPAddressQQIp]));
+            this._getIPAddressParameterHttpClientServiceWListKeys()));
     };
+
+    _getIPAddressParameterHttpClientServiceWListKeys() {
+        return [KeysHttpServiceUtility.iPAddressQQIp];
+    }
 }
 
 const EnumDataForMainVM = {
@@ -161,7 +175,7 @@ const EnumDataForMainVM = {
 };
 
 class DataForMainVM extends BaseDataForNamed {
-    iPAddress;
+    iPAddress;  
 
     constructor(isLoading,iPAddress) {
         super(isLoading);
@@ -187,7 +201,7 @@ class DataForMainVM extends BaseDataForNamed {
 
 class MainVM {
     // ModelRepository
-    #iPAddressRepository = new IPAddressRepository(EnumRWTMode.release);
+    #iPAddressRepository = FactoryObjectUtility.getIPAddressRepository;
     
     // NamedUtility
     
@@ -246,6 +260,7 @@ class MainVM {
 }
 
 async function main() {
+    BaseModelRepository.enumRWTMode = EnumRWTMode.release;
     const mainVM = new MainVM();
     await mainVM.init();
     mainVM.dispose();
