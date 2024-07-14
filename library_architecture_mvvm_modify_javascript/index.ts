@@ -407,7 +407,7 @@ export class TempCacheService {
         this.tempCache.set(keyTempCache,value);
     }
 
-    public updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterOne(keyTempCache: string,value: any): void {
+    public updateWNotificationFromKeyTempCacheAndValueParameterOne(keyTempCache: string,value: any): void {
         this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache,value);
         const tempCacheWListAction = this.tempCacheWListAction;
         if(!tempCacheWListAction.has(keyTempCache)) {

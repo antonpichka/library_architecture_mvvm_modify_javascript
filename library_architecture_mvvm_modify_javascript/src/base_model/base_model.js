@@ -15,11 +15,11 @@ export class BaseModel {
         throw new LocalException("BaseModel",EnumGuilty.developer,"BaseModelQQGetClone","Needs extends and must return type 'BaseModel'");
     }
 
-    get uniqueId() {
-        return this.#uniqueId;
-    }
-
     toString() {
         throw new LocalException("BaseModel",EnumGuilty.developer,"BaseModelQQToString","Needs extends and must return type 'string'");
+    }
+
+    get uniqueId() {
+        return this.#uniqueId;
     }
 }

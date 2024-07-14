@@ -1,4 +1,4 @@
-import { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, ExceptionController, BaseNamedStreamWState, BaseModelRepository, EnumRWTMode } from "library_architecture_mvvm_modify_javascript";
+const { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, ExceptionController, BaseNamedStreamWState, BaseModelRepository, EnumRWTMode } = require("library_architecture_mvvm_modify_javascript");
 
 class FactoryObjectUtility {
     constructor() {
@@ -10,6 +10,11 @@ class FactoryObjectUtility {
     /* ModelRepository */
     static get getIPAddressRepository() {
         return new IPAddressRepository();
+    }
+
+    /* NamedStreamWState */
+    static get getNamedStreamWStateWhereDataWMainVM() {
+        return new DefaultStreamWState(new DataForMainVM(true,new IPAddress("")));
     }
 }
 
@@ -209,7 +214,7 @@ class MainVM {
     #namedStreamWState;
 
     constructor() {
-        this.#namedStreamWState = new DefaultStreamWState(new DataForMainVM(true,new IPAddress("")));
+        this.#namedStreamWState = FactoryObjectUtility.getNamedStreamWStateWhereDataWMainVM;
     }
 
     async init() {

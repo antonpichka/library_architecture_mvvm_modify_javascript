@@ -3,18 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "webpack --config webpack.config.js",
-    "index_js": "npx ts-node index_js.js",
-    "index_ts": "npx ts-node index_ts.js"
-  },
-  "devDependencies": {
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.4.5",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4"
+    "index": "node index.js"
   },
   "dependencies": {
-    "library_architecture_mvvm_modify_javascript": "file:..",
-    "lodash": "^4.17.21"
+    "library_architecture_mvvm_modify_javascript": "file:.."
   }
 }

@@ -324,7 +324,7 @@ class TempCacheService {
     updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value) {
         this.tempCache.set(keyTempCache, value);
     }
-    updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterOne(keyTempCache, value) {
+    updateWNotificationFromKeyTempCacheAndValueParameterOne(keyTempCache, value) {
         this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value);
         const tempCacheWListAction = this.tempCacheWListAction;
         if (!tempCacheWListAction.has(keyTempCache)) {

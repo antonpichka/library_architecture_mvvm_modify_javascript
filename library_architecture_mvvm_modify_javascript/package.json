@@ -1,13 +1,15 @@
 {
   "name": "library_architecture_mvvm_modify_javascript",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "MVVM Modify for Javascript/Typescript but you can also port to another language",
   "source": "index.ts",
   "main": "dist/cjs/index.js",
   "types": "dist/cjs/index.d.ts",
   "scripts": {
     "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json"
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "iterator_test_main:named_test_main": "node ./src/named_test_main/iterator_test_main.js",
+    "temp_cache_test_main:named_test_main": "node ./src/named_test_main/temp_cache_test_main.js"
   },
   "exports": {
     ".": {

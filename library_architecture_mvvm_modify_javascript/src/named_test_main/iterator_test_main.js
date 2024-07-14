@@ -1,39 +1,47 @@
-import { BaseModel, BaseListModel, BaseModelWNamedWNamedWNamedIterator, debugPrint, CurrentModelWIndex } from "library_architecture_mvvm_modify_javascript";
+const { BaseModel, BaseListModel, BaseModelWNamedWNamedWNamedIterator, debugPrint, CurrentModelWIndex } =  require("library_architecture_mvvm_modify_javascript");
 
 class UserBalance extends BaseModel {
-    public readonly username: string;
-    public readonly money: number;
+    #username;
+    #money;
 
-    public constructor(username: string, money: number) {
+    constructor(username, money) {
         super(username);
-        this.username = username;
-        this.money = money;
+        this.#username = username;
+        this.#money = money;
     }
 
-    public override get getClone(): UserBalance {
+    get getClone() {
         return new UserBalance(this.username,this.money);
     }
 
-    public override toString(): string {
+    toString() {
         return "UserBalance(username: " + this.username + ", " 
             + "money: " + this.money + ")";
     }
+
+    get username() {
+        return this.#username;
+    }
+
+    get money() {
+        return this.#money;
+    }
 }
 
-class ListUserBalance<T extends UserBalance> extends BaseListModel<T> {
-    public constructor(listModel: Array<T>) {
+class ListUserBalance extends BaseListModel {
+    constructor(listModel) {
         super(listModel);
     }
 
-    public override get getClone(): ListUserBalance<T> {
-        const newListModel = new Array<T>();
+    get getClone() {
+        const newListModel = new Array();
         for(const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone as T);
+            newListModel.push(itemModel.getClone);
         }
         return new ListUserBalance(newListModel);
     }
 
-    public override toString(): string {
+    toString() {
         let strListModel = "\n";
         for(const itemModel of this.listModel) {
             strListModel += itemModel + ",\n";
@@ -42,29 +50,29 @@ class ListUserBalance<T extends UserBalance> extends BaseListModel<T> {
     }
 }
 
-class UserBalanceWOrderByDescWMoneyIterator<T extends UserBalance> extends BaseModelWNamedWNamedWNamedIterator<T> {
-    public constructor() {
+class UserBalanceWOrderByDescWMoneyIterator extends BaseModelWNamedWNamedWNamedIterator {
+    constructor() {
         super();
     }
 
-    protected override get currentModelWIndex(): CurrentModelWIndex<T> {
-        let clone = this.listModelIterator[0].getClone as T;
+    get currentModelWIndex() {
+        let clone = this.listModelIterator[0].getClone;
         if(this.listModelIterator.length <= 1) {
-            return new CurrentModelWIndex<T>(clone,0)
+            return new CurrentModelWIndex(clone,0)
         }
         let indexRemove = 0;
         for(let i = 1; i < this.listModelIterator.length; i++) {
             const itemModelIterator = this.listModelIterator[i];
             if(itemModelIterator.money > clone.money) {
-                clone = itemModelIterator.getClone as T;
+                clone = itemModelIterator.getClone;
                 indexRemove = i;
                 continue;
             }
         }
-        return new CurrentModelWIndex<T>(clone,indexRemove)
+        return new CurrentModelWIndex(clone,indexRemove)
     }
 }
-const listUserBalance = new ListUserBalance<UserBalance>(new Array<UserBalance>());
+const listUserBalance = new ListUserBalance(new Array());
 listUserBalance.insertListFromNewListModelParameterListModel([
     new UserBalance("Jone",3),
     new UserBalance("Freddy",1),
@@ -74,7 +82,7 @@ listUserBalance.insertListFromNewListModelParameterListModel([
     new UserBalance("Sexy",-1)
 ]);
 debugPrint("Before: " + listUserBalance); // 3, 1, 10, 5, 7, -1
-const userBalanceWOrderByDescWMoneyIterator = new UserBalanceWOrderByDescWMoneyIterator<UserBalance>();
+const userBalanceWOrderByDescWMoneyIterator = new UserBalanceWOrderByDescWMoneyIterator();
 listUserBalance.sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(userBalanceWOrderByDescWMoneyIterator);
 debugPrint("After: " + listUserBalance); // 10, 7, 5, 3, 1, -1
 listUserBalance.updateFromNewModelParameterListModel(new UserBalance("Duramichi", 15));

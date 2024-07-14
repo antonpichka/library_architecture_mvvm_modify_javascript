@@ -103,7 +103,7 @@ export declare class TempCacheService {
     getFromKeyTempCacheParameterTempCache(keyTempCache: string): any;
     listenStreamFromKeyTempCacheAndCallbackParameterOne(keyTempCache: string, callback: (data: any) => void): void;
     updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache: string, value: any): void;
-    updateWhereStreamNotificationIsPossibleFromKeyTempCacheAndValueParameterOne(keyTempCache: string, value: any): void;
+    updateWNotificationFromKeyTempCacheAndValueParameterOne(keyTempCache: string, value: any): void;
     deleteFromKeyTempCacheParameterTempCache(keyTempCache: string): void;
 }
 export declare enum EnumRWTMode {
