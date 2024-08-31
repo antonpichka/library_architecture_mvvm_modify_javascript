@@ -11,7 +11,7 @@ export class BaseException {
         this.key = key;
     }
     /// Call this method in the descendant constructor as the last line
-    debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass() {
+    debugPrintExceptionParametersThisClassAndExceptionClass() {
         debugPrintException("\n===start_to_trace_exception===\n");
         debugPrintException("WhereHappenedException(Class) --> " + this.thisClass + "\n" +
             "NameException(Class) --> " + this.exceptionClass + "\n" +
@@ -26,14 +26,14 @@ export var EnumGuilty;
     EnumGuilty[EnumGuilty["user"] = 2] = "user";
 })(EnumGuilty || (EnumGuilty = {}));
 export class LocalException extends BaseException {
-    constructor(thisClass, valueWEnumGuilty, key, message = "") {
+    constructor(thisClass, enumGuilty, key, message = "") {
         super(thisClass, "LocalException", key);
-        this.valueWEnumGuilty = valueWEnumGuilty;
+        this.enumGuilty = enumGuilty;
         this.message = message;
-        this.debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass();
+        this.debugPrintExceptionParametersThisClassAndExceptionClass();
     }
     toString() {
-        return "LocalException(valueWEnumGuilty: " + this.valueWEnumGuilty + ", " +
+        return "LocalException(enumGuilty: " + this.enumGuilty + ", " +
             "key: " + this.key + ", " +
             "message (optional): " + this.message + ")";
     }
@@ -44,7 +44,7 @@ export class NetworkException extends BaseException {
         this.statusCode = statusCode;
         this.nameStatusCode = nameStatusCode;
         this.descriptionStatusCode = descriptionStatusCode;
-        this.debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass();
+        this.debugPrintExceptionParametersThisClassAndExceptionClass();
     }
     static fromKeyAndStatusCode(thisClass, key, statusCode) {
         switch (statusCode) {
@@ -137,32 +137,32 @@ export class CurrentModelWIndex {
         this.index = index;
     }
 }
-export class BaseModelWNamedWNamedWNamedIterator {
+export class BaseModelTTNamedTTNamedTTNamedTTIterator {
     constructor() {
         this.listModelIterator = new Array();
     }
-    getSortedListModelFromNewListModelParameterListModelIterator(newListModel) {
-        if (newListModel.length <= 0) {
+    getSortedListModelFromListModelParameterListModelIterator(listModel) {
+        if (listModel.length <= 0) {
             return new Array();
         }
-        this.listModelIterator.push(...newListModel);
-        const newListModelFirst = new Array();
+        this.listModelIterator.push(...listModel);
+        const newListModel = new Array();
         while (this.listModelIterator.length > 0) {
             const currentModelWIndex = this.currentModelWIndex;
             this.listModelIterator.splice(currentModelWIndex.index, 1);
-            newListModelFirst.push(currentModelWIndex.currentModel);
+            newListModel.push(currentModelWIndex.currentModel);
         }
-        return newListModelFirst;
+        return newListModel;
     }
 }
 export class BaseListModel {
     constructor(listModel) {
         this.listModel = listModel;
     }
-    sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(modelWNamedWNamedWNamedIterator) {
-        const sortedListModelFromNewListModelParameterListModelIterator = modelWNamedWNamedWNamedIterator.getSortedListModelFromNewListModelParameterListModelIterator(this.listModel);
+    sortingFromModelTTNamedTTNamedTTNamedTTIteratorParameterListModel(modelTTNamedTTNamedTTNamedTTIterator) {
+        const sortedListModelFromListModelParameterListModelIterator = modelTTNamedTTNamedTTNamedTTIterator.getSortedListModelFromListModelParameterListModelIterator(this.listModel);
         this.listModel.length > 0 ? this.listModel.splice(0, this.listModel.length) : null;
-        sortedListModelFromNewListModelParameterListModelIterator.length > 0 ? this.listModel.push(...sortedListModelFromNewListModelParameterListModelIterator) : null;
+        sortedListModelFromListModelParameterListModelIterator.length > 0 ? this.listModel.push(...sortedListModelFromListModelParameterListModelIterator) : null;
     }
     insertFromNewModelParameterListModel(newModel) {
         this.listModel.push(newModel);
@@ -194,6 +194,16 @@ export class BaseListModel {
 export class BaseModel {
     constructor(uniqueId) {
         this.uniqueId = uniqueId;
+    }
+}
+export class BaseModelWrapper {
+    constructor(listObject) {
+        this.listObject = listObject;
+    }
+}
+export class BaseListModelWrapper {
+    constructor(listsListObject) {
+        this.listsListObject = listsListObject;
     }
 }
 export class BaseNamedState {
@@ -259,98 +269,101 @@ export class DefaultStreamWState extends BaseNamedStreamWState {
 export class TempCacheService {
     constructor() {
         this.tempCache = new Map();
-        this.tempCacheWListAction = new Map();
+        this.tempCacheWStreams = new Map();
     }
-    static clearTempCacheParmeterInstance() {
-        const tempCache = this.instance.tempCache;
-        tempCache.clear();
-    }
-    static closeStreamFromKeyTempCacheParmeterInstance(keyTempCache) {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        if (!tempCacheWListAction.has(keyTempCache)) {
-            return;
-        }
-        const get = tempCacheWListAction.get(keyTempCache);
-        get === null || get === void 0 ? void 0 : get.splice(0, get.length);
-    }
-    static closeStreamFromListKeyTempCacheParmeterInstance(listKeyTempCache) {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        for (const itemKeyTempCache of listKeyTempCache) {
-            if (!tempCacheWListAction.has(itemKeyTempCache)) {
-                return;
-            }
-            const get = tempCacheWListAction.get(itemKeyTempCache);
-            get === null || get === void 0 ? void 0 : get.splice(0, get.length);
-        }
-    }
-    static closeStreamsParameterInstance() {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        for (const [, value] of tempCacheWListAction) {
-            value.splice(0, value.length);
-        }
-    }
-    getFromKeyTempCacheParameterTempCache(keyTempCache) {
+    getNamed(keyTempCache, defaultValue) {
         const tempCache = this.tempCache;
         if (!tempCache.has(keyTempCache)) {
-            throw new LocalException("TempCacheService", EnumGuilty.developer, keyTempCache, "No exists key");
+            return defaultValue;
         }
         return tempCache.get(keyTempCache);
     }
-    listenStreamFromKeyTempCacheAndCallbackParameterOne(keyTempCache, callback) {
-        var _a, _b;
-        const tempCacheWListAction = this.tempCacheWListAction;
-        if (!tempCacheWListAction.has(keyTempCache)) {
-            tempCacheWListAction.set(keyTempCache, new Array());
-            (_a = tempCacheWListAction.get(keyTempCache)) === null || _a === void 0 ? void 0 : _a.push(callback);
+    dispose(listKeyTempCache, iteration) {
+        var _a;
+        for (const itemKeyTempCache of listKeyTempCache) {
+            if (!this.tempCacheWStreams.has(itemKeyTempCache)) {
+                return;
+            }
+            (_a = this.tempCacheWStreams.get(itemKeyTempCache)) === null || _a === void 0 ? void 0 : _a.delete(iteration);
+        }
+    }
+    listenNamed(keyTempCache, callback, iteration) {
+        var _a, _b, _c;
+        this.tempCacheWStreams;
+        if (!this.tempCacheWStreams.has(keyTempCache)) {
+            this.tempCacheWStreams.set(keyTempCache, new Map());
+            (_a = this.tempCacheWStreams.get(keyTempCache)) === null || _a === void 0 ? void 0 : _a.set(iteration, callback);
             return;
         }
-        (_b = tempCacheWListAction.get(keyTempCache)) === null || _b === void 0 ? void 0 : _b.push(callback);
+        if ((_b = this.tempCacheWStreams.get(keyTempCache)) === null || _b === void 0 ? void 0 : _b.has(iteration)) {
+            throw new LocalException("TempCacheService", EnumGuilty.developer, "{ " + keyTempCache + "---" + iteration + "}", "Under such a key and iteration there already exists a listener: " + "{ " + keyTempCache + "---" + iteration + "}");
+        }
+        (_c = this.tempCacheWStreams.get(keyTempCache)) === null || _c === void 0 ? void 0 : _c.set(iteration, callback);
     }
-    updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value) {
+    update(keyTempCache, value) {
         this.tempCache.set(keyTempCache, value);
     }
-    updateWNotificationFromKeyTempCacheAndValueParameterOne(keyTempCache, value) {
-        this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache, value);
-        const tempCacheWListAction = this.tempCacheWListAction;
-        if (!tempCacheWListAction.has(keyTempCache)) {
+    updateWNotify(keyTempCache, value) {
+        this.update(keyTempCache, value);
+        if (!this.tempCacheWStreams.has(keyTempCache)) {
             return;
         }
-        const get = tempCacheWListAction.get(keyTempCache);
-        for (const itemGet of get) {
-            itemGet(value);
+        for (const [_key, callback] of this.tempCacheWStreams.get(keyTempCache).entries()) {
+            callback(value);
         }
     }
-    deleteFromKeyTempCacheParameterTempCache(keyTempCache) {
+    delete(keyTempCache) {
         this.tempCache.delete(keyTempCache);
+        this.tempCacheWStreams.delete(keyTempCache);
     }
 }
 TempCacheService.instance = new TempCacheService();
-export var EnumRWTMode;
-(function (EnumRWTMode) {
-    EnumRWTMode[EnumRWTMode["release"] = 0] = "release";
-    EnumRWTMode[EnumRWTMode["test"] = 1] = "test";
-})(EnumRWTMode || (EnumRWTMode = {}));
-export class BaseModelRepository {
+export class IterationService {
+    constructor() {
+        this.iteration = -1;
+    }
+    newValueParameterIteration() {
+        this.iteration++;
+        return this.iteration;
+    }
+}
+IterationService.instance = new IterationService();
+export class TempCacheProvider {
+    constructor() {
+        this.tempCacheService = TempCacheService.instance;
+        this.iteration = IterationService.instance.newValueParameterIteration();
+    }
+    getNamed(keyTempCache, defaultValue) {
+        return this.tempCacheService.getNamed(keyTempCache, defaultValue);
+    }
+    dispose(listKeyTempCache) {
+        this.tempCacheService.dispose(listKeyTempCache, this.iteration);
+    }
+    listenNamed(keyTempCache, callback) {
+        this.tempCacheService.listenNamed(keyTempCache, callback, this.iteration);
+    }
+    update(keyTempCache, value) {
+        this.tempCacheService.update(keyTempCache, value);
+    }
+    updateWNotify(keyTempCache, value) {
+        this.tempCacheService.updateWNotify(keyTempCache, value);
+    }
+    delete(keyTempCache) {
+        this.tempCacheService.delete(keyTempCache);
+    }
+}
+export class BaseModelWrapperRepository {
     constructor() {
     }
-    getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback, testCallback) {
-        switch (BaseModelRepository.enumRWTMode) {
-            case EnumRWTMode.release:
-                return releaseCallback;
-            case EnumRWTMode.test:
-                return testCallback;
-        }
-    }
-    getSafeValueWhereUsedInMethodGetModelFromMapAndListKeysAndIndexAndDefaultValue(map, listKeys, index, defaultValue) {
+    getSafeValueFromMapAndKeyAndDefaultValue(map, key, defaultValue) {
         try {
-            return map.has(listKeys[index]) ? map.get(listKeys[index]) : defaultValue;
+            return map.has(key) ? map.get(key) : defaultValue;
         }
-        catch (exception) {
+        catch (e) {
             return defaultValue;
         }
     }
 }
-BaseModelRepository.enumRWTMode = EnumRWTMode.test;
 export class ExceptionController {
     constructor(exception) {
         this.exception = exception;
@@ -385,6 +398,30 @@ export class Result {
     }
     static exception(exception) {
         return new Result(null, ExceptionController.exception(exception));
+    }
+}
+export class ResultWithModelWrapper {
+    constructor(modelWrapper, exceptionController) {
+        this.modelWrapper = modelWrapper;
+        this.exceptionController = exceptionController;
+    }
+    static success(modelWrapper) {
+        return new ResultWithModelWrapper(modelWrapper, ExceptionController.success());
+    }
+    static exception(exception) {
+        return new ResultWithModelWrapper(null, ExceptionController.exception(exception));
+    }
+}
+export class ResultWithListModelsWrapper {
+    constructor(listModelWrapper, exceptionController) {
+        this.listModelWrapper = listModelWrapper;
+        this.exceptionController = exceptionController;
+    }
+    static success(listModelWrapper) {
+        return new ResultWithListModelsWrapper(listModelWrapper, ExceptionController.success());
+    }
+    static exception(exception) {
+        return new ResultWithListModelsWrapper(null, ExceptionController.exception(exception));
     }
 }
 export function debugPrint(text) {

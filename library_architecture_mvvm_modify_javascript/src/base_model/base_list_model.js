@@ -11,8 +11,8 @@ export class BaseListModel {
         this.#listModel = listModel;
     }
 
-    get getClone() {
-        throw new LocalException("BaseListModel",EnumGuilty.developer,"BaseListModelQQGetClone","Needs extends and must return type 'BaseListModel'"); 
+    clone() {
+        throw new LocalException("BaseListModel",EnumGuilty.developer,"BaseListModelQQClone","Needs extends and must return type 'BaseListModel'"); 
     }
 
     toString() {
@@ -23,10 +23,10 @@ export class BaseListModel {
         return this.#listModel;
     }
 
-    sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(modelWNamedWNamedWNamedIterator) {
-        const sortedListModelFromNewListModelParameterListModelIterator = modelWNamedWNamedWNamedIterator.getSortedListModelFromNewListModelParameterListModelIterator(this.listModel);
+    sortingFromModelTTNamedTTNamedTTNamedTTIteratorParameterListModel(modelTTNamedTTNamedTTNamedTTIterator) {
+        const sortedListModelFromListModelParameterListModelIterator = modelTTNamedTTNamedTTNamedTTIterator.getSortedListModelFromListModelParameterListModelIterator(this.listModel);
         this.listModel.length > 0 ? this.listModel.splice(0,this.listModel.length) : null; 
-        sortedListModelFromNewListModelParameterListModelIterator.length > 0 ? this.listModel.push(...sortedListModelFromNewListModelParameterListModelIterator) : null;
+        sortedListModelFromListModelParameterListModelIterator.length > 0 ? this.listModel.push(...sortedListModelFromListModelParameterListModelIterator) : null;
     }
 
     insertFromNewModelParameterListModel(newModel) {

@@ -11,7 +11,7 @@ export declare abstract class BaseException {
     private readonly exceptionClass;
     protected constructor(thisClass: string, exceptionClass: string, key: string);
     abstract toString(): string;
-    protected debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass(): void;
+    protected debugPrintExceptionParametersThisClassAndExceptionClass(): void;
 }
 export declare enum EnumGuilty {
     developer = 0,
@@ -19,9 +19,9 @@ export declare enum EnumGuilty {
     user = 2
 }
 export declare class LocalException extends BaseException {
-    readonly valueWEnumGuilty: EnumGuilty;
+    readonly enumGuilty: EnumGuilty;
     readonly message: string;
-    constructor(thisClass: string, valueWEnumGuilty: EnumGuilty, key: string, message?: string);
+    constructor(thisClass: string, enumGuilty: EnumGuilty, key: string, message?: string);
     toString(): string;
 }
 export declare class NetworkException extends BaseException {
@@ -37,18 +37,18 @@ export declare class CurrentModelWIndex<T extends BaseModel> {
     readonly index: number;
     constructor(currentModel: T, index: number);
 }
-export declare abstract class BaseModelWNamedWNamedWNamedIterator<T extends BaseModel> {
+export declare abstract class BaseModelTTNamedTTNamedTTNamedTTIterator<T extends BaseModel> {
     protected readonly listModelIterator: Array<T>;
     protected constructor();
     protected abstract get currentModelWIndex(): CurrentModelWIndex<T>;
-    getSortedListModelFromNewListModelParameterListModelIterator(newListModel: Array<T>): T[];
+    getSortedListModelFromListModelParameterListModelIterator(listModel: Array<T>): T[];
 }
 export declare abstract class BaseListModel<T extends BaseModel> {
     readonly listModel: Array<T>;
     protected constructor(listModel: Array<T>);
-    abstract get getClone(): BaseListModel<T>;
+    abstract clone(): BaseListModel<T>;
     abstract toString(): string;
-    sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(modelWNamedWNamedWNamedIterator: BaseModelWNamedWNamedWNamedIterator<T>): void;
+    sortingFromModelTTNamedTTNamedTTNamedTTIteratorParameterListModel(modelTTNamedTTNamedTTNamedTTIterator: BaseModelTTNamedTTNamedTTNamedTTIterator<T>): void;
     insertFromNewModelParameterListModel(newModel: T): void;
     updateFromNewModelParameterListModel(newModel: T): void;
     deleteFromUniqueIdByModelParameterListModel(uniqueIdByModel: string): void;
@@ -59,8 +59,18 @@ export declare abstract class BaseListModel<T extends BaseModel> {
 export declare abstract class BaseModel {
     readonly uniqueId: string;
     protected constructor(uniqueId: string);
-    abstract get getClone(): BaseModel;
+    abstract clone(): BaseModel;
     abstract toString(): string;
+}
+export declare abstract class BaseModelWrapper {
+    protected readonly listObject: Array<any>;
+    protected constructor(listObject: Array<any>);
+    abstract createModel(): BaseModel;
+}
+export declare abstract class BaseListModelWrapper {
+    protected readonly listsListObject: Array<Array<any>>;
+    protected constructor(listsListObject: Array<Array<any>>);
+    abstract createListModel(): BaseListModel<BaseModel>;
 }
 export declare abstract class BaseNamedState<T extends BaseDataForNamed<any>> implements IDispose {
     protected constructor();
@@ -94,29 +104,36 @@ export declare class DefaultStreamWState<T extends BaseDataForNamed<any>> extend
 export declare class TempCacheService {
     static readonly instance: TempCacheService;
     private readonly tempCache;
-    private readonly tempCacheWListAction;
+    private readonly tempCacheWStreams;
     private constructor();
-    static clearTempCacheParmeterInstance(): void;
-    static closeStreamFromKeyTempCacheParmeterInstance(keyTempCache: string): void;
-    static closeStreamFromListKeyTempCacheParmeterInstance(listKeyTempCache: Array<string>): void;
-    static closeStreamsParameterInstance(): void;
-    getFromKeyTempCacheParameterTempCache(keyTempCache: string): any;
-    listenStreamFromKeyTempCacheAndCallbackParameterOne(keyTempCache: string, callback: (data: any) => void): void;
-    updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache: string, value: any): void;
-    updateWNotificationFromKeyTempCacheAndValueParameterOne(keyTempCache: string, value: any): void;
-    deleteFromKeyTempCacheParameterTempCache(keyTempCache: string): void;
+    getNamed<T>(keyTempCache: string, defaultValue: T): T;
+    dispose(listKeyTempCache: Array<string>, iteration: number): void;
+    listenNamed(keyTempCache: string, callback: (data: any) => void, iteration: number): void;
+    update(keyTempCache: string, value: any): void;
+    updateWNotify(keyTempCache: string, value: any): void;
+    delete(keyTempCache: string): void;
 }
-export declare enum EnumRWTMode {
-    release = 0,
-    test = 1
+export declare class IterationService {
+    static readonly instance: IterationService;
+    private iteration;
+    private constructor();
+    newValueParameterIteration(): number;
 }
-export declare abstract class BaseModelRepository<T extends BaseModel, Y extends BaseListModel<T>> {
-    static enumRWTMode: EnumRWTMode;
+export declare class TempCacheProvider {
+    private readonly tempCacheService;
+    private readonly iteration;
+    constructor();
+    getNamed<T>(keyTempCache: string, defaultValue: T): T;
+    dispose(listKeyTempCache: Array<string>): void;
+    listenNamed(keyTempCache: string, callback: (data: any) => void): void;
+    update(keyTempCache: string, value: any): void;
+    updateWNotify(keyTempCache: string, value: any): void;
+    delete(keyTempCache: string): void;
+}
+export declare abstract class BaseModelWrapperRepository implements IDispose {
     protected constructor();
-    protected abstract getBaseModelFromMapAndListKeys(map: Map<string, any>, listKeys: Array<string>): T;
-    protected abstract getBaseListModelFromListModel(listModel: Array<T>): Y;
-    protected getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback: any, testCallback: any): any;
-    protected getSafeValueWhereUsedInMethodGetModelFromMapAndListKeysAndIndexAndDefaultValue(map: Map<string, any>, listKeys: Array<string>, index: number, defaultValue: any): any;
+    abstract dispose(): void;
+    protected getSafeValueFromMapAndKeyAndDefaultValue(map: Map<string, any>, key: string, defaultValue: any): any;
 }
 export declare class ExceptionController {
     private readonly exception;
@@ -136,6 +153,20 @@ export declare class Result {
     private constructor();
     static success(parameter: any): Result;
     static exception(exception: BaseException): Result;
+}
+export declare class ResultWithModelWrapper {
+    readonly modelWrapper: BaseModelWrapper | null;
+    readonly exceptionController: ExceptionController;
+    private constructor();
+    static success(modelWrapper: BaseModelWrapper): ResultWithModelWrapper;
+    static exception(exception: BaseException): ResultWithModelWrapper;
+}
+export declare class ResultWithListModelsWrapper {
+    readonly listModelWrapper: BaseListModelWrapper | null;
+    readonly exceptionController: ExceptionController;
+    private constructor();
+    static success(listModelWrapper: BaseListModelWrapper): ResultWithListModelsWrapper;
+    static exception(exception: BaseException): ResultWithListModelsWrapper;
 }
 export declare function debugPrint(text: string): void;
 export declare function debugPrintException(text: string): void;

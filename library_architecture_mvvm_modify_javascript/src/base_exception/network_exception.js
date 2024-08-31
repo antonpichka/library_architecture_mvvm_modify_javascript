@@ -10,7 +10,7 @@ export class NetworkException extends BaseException {
         this.#statusCode = statusCode;
         this.#nameStatusCode = nameStatusCode;
         this.#descriptionStatusCode = descriptionStatusCode;
-        this._debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass();
+        this._debugPrintExceptionParametersThisClassAndExceptionClass();
     }
 
     static fromKeyAndStatusCode(thisClass,key,statusCode) {

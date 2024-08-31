@@ -1,24 +1,24 @@
 import { BaseException } from "./base_exception.js";
 
 export class LocalException extends BaseException {
-    #valueWEnumGuilty;
+    #enumGuilty;
     #message;
     
-    constructor(thisClass,valueWEnumGuilty,key,message = "") {
+    constructor(thisClass,enumGuilty,key,message = "") {
         super(thisClass,"LocalException",key);
-        this.#valueWEnumGuilty = valueWEnumGuilty;
+        this.#enumGuilty = enumGuilty;
         this.#message = message;
-        this._debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass();
+        this._debugPrintExceptionParametersThisClassAndExceptionClass();
     }
 
     toString() {
-        return "LocalException(valueWEnumGuilty: " + this.valueWEnumGuilty + ", " + 
+        return "LocalException(enumGuilty: " + this.enumGuilty + ", " + 
             "key: " + this.key + ", " + 
             "message (optional): " + this.message + ")";
     }
 
-    get valueWEnumGuilty() {
-        return this.#valueWEnumGuilty;
+    get enumGuilty() {
+        return this.#enumGuilty;
     }
 
     get message() {

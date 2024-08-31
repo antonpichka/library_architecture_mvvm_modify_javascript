@@ -1,4 +1,4 @@
-const { BaseModel, BaseListModel, BaseModelWNamedWNamedWNamedIterator, debugPrint, CurrentModelWIndex } =  require("library_architecture_mvvm_modify_javascript");
+const { BaseModel, BaseListModel, BaseModelTTNamedTTNamedTTNamedTTIterator, debugPrint, CurrentModelWIndex } =  require("library_architecture_mvvm_modify_javascript");
 
 class UserBalance extends BaseModel {
     #username;
@@ -10,7 +10,7 @@ class UserBalance extends BaseModel {
         this.#money = money;
     }
 
-    get getClone() {
+    clone() {
         return new UserBalance(this.username,this.money);
     }
 
@@ -33,10 +33,10 @@ class ListUserBalance extends BaseListModel {
         super(listModel);
     }
 
-    get getClone() {
+    clone() {
         const newListModel = new Array();
         for(const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone);
+            newListModel.push(itemModel.clone());
         }
         return new ListUserBalance(newListModel);
     }
@@ -50,13 +50,13 @@ class ListUserBalance extends BaseListModel {
     }
 }
 
-class UserBalanceWOrderByDescWMoneyIterator extends BaseModelWNamedWNamedWNamedIterator {
+class UserBalanceTTOrderByDescTTMoneyTTIterator extends BaseModelTTNamedTTNamedTTNamedTTIterator {
     constructor() {
         super();
     }
 
     get currentModelWIndex() {
-        let clone = this.listModelIterator[0].getClone;
+        let clone = this.listModelIterator[0].clone();
         if(this.listModelIterator.length <= 1) {
             return new CurrentModelWIndex(clone,0)
         }
@@ -64,7 +64,7 @@ class UserBalanceWOrderByDescWMoneyIterator extends BaseModelWNamedWNamedWNamedI
         for(let i = 1; i < this.listModelIterator.length; i++) {
             const itemModelIterator = this.listModelIterator[i];
             if(itemModelIterator.money > clone.money) {
-                clone = itemModelIterator.getClone;
+                clone = itemModelIterator.clone();
                 indexRemove = i;
                 continue;
             }
@@ -72,6 +72,7 @@ class UserBalanceWOrderByDescWMoneyIterator extends BaseModelWNamedWNamedWNamedI
         return new CurrentModelWIndex(clone,indexRemove)
     }
 }
+
 const listUserBalance = new ListUserBalance(new Array());
 listUserBalance.insertListFromNewListModelParameterListModel([
     new UserBalance("Jone",3),
@@ -82,14 +83,14 @@ listUserBalance.insertListFromNewListModelParameterListModel([
     new UserBalance("Sexy",-1)
 ]);
 debugPrint("Before: " + listUserBalance); // 3, 1, 10, 5, 7, -1
-const userBalanceWOrderByDescWMoneyIterator = new UserBalanceWOrderByDescWMoneyIterator();
-listUserBalance.sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(userBalanceWOrderByDescWMoneyIterator);
+const userBalanceTTOrderByDescTTMoneyTTIterator = new UserBalanceTTOrderByDescTTMoneyTTIterator();
+listUserBalance.sortingFromModelTTNamedTTNamedTTNamedTTIteratorParameterListModel(userBalanceTTOrderByDescTTMoneyTTIterator);
 debugPrint("After: " + listUserBalance); // 10, 7, 5, 3, 1, -1
 listUserBalance.updateFromNewModelParameterListModel(new UserBalance("Duramichi", 15));
-listUserBalance.sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(userBalanceWOrderByDescWMoneyIterator);
+listUserBalance.sortingFromModelTTNamedTTNamedTTNamedTTIteratorParameterListModel(userBalanceTTOrderByDescTTMoneyTTIterator);
 debugPrint("After(Two): " + listUserBalance); // 15, 10, 7, 3, 1, -1
 listUserBalance.deleteFromUniqueIdByModelParameterListModel("Mitsuya")
-listUserBalance.sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(userBalanceWOrderByDescWMoneyIterator);
+listUserBalance.sortingFromModelTTNamedTTNamedTTNamedTTIteratorParameterListModel(userBalanceTTOrderByDescTTMoneyTTIterator);
 debugPrint("After(Three): " + listUserBalance); // 15, 7, 3, 1, -1
 // EXPECTED OUTPUT:
 //

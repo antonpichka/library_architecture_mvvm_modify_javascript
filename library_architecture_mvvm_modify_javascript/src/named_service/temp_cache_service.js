@@ -4,83 +4,64 @@ import { LocalException } from "../base_exception/local_exception.js";
 export class TempCacheService {
     static instance = new TempCacheService();
     #tempCache;
-    #tempCacheWListAction;
+    #tempCacheWStreams;
 
     constructor() {
         if(TempCacheService.instance != null) {
             return TempCacheService.instance;
         }
         this.#tempCache = new Map();
-        this.#tempCacheWListAction = new Map();
-    }
-
-    static clearTempCacheParmeterInstance() {
-        const tempCache = this.instance.#tempCache;
-        tempCache.clear();
-    }
-
-    static closeStreamFromKeyTempCacheParmeterInstance(keyTempCache) {
-        const tempCacheWListAction = this.instance.#tempCacheWListAction;
-        if(!tempCacheWListAction.has(keyTempCache)) {
-            return;
-        }
-        const get = tempCacheWListAction.get(keyTempCache);
-        get.splice(0,get.length);
-    }
-
-    static closeStreamFromListKeyTempCacheParmeterInstance(listKeyTempCache) {
-        const tempCacheWListAction = this.instance.#tempCacheWListAction;
-        for(const itemKeyTempCache of listKeyTempCache) {
-            if(!tempCacheWListAction.has(itemKeyTempCache)) {
-                return;
-            }
-            const get = tempCacheWListAction.get(itemKeyTempCache);
-            get.splice(0,get.length);
-        }
-    }
-
-    static closeStreamsParameterInstance() {
-        const tempCacheWListAction = this.instance.#tempCacheWListAction;
-        for(const [,value] of tempCacheWListAction) {
-            value.splice(0,value.length);
-        }
+        this.#tempCacheWStreams = new Map();
     }
     
-    getFromKeyTempCacheParameterTempCache(keyTempCache) {
-        const tempCache = this.#tempCache;
-        if(!tempCache.has(keyTempCache)) {
-            throw new LocalException("TempCacheService",EnumGuilty.developer,keyTempCache,"No exists key");
+    getNamed(keyTempCache, defaultValue) {
+        if(!this.#tempCache.has(keyTempCache)) {
+            return defaultValue;
         }
-        return tempCache.get(keyTempCache);
+        return this.#tempCache.get(keyTempCache);
     }
 
-    listenStreamFromKeyTempCacheAndCallbackParameterOne(keyTempCache,callback) {
-        const tempCacheWListAction = this.#tempCacheWListAction;
-        if(!tempCacheWListAction.has(keyTempCache)) {
-            tempCacheWListAction.set(keyTempCache,[]);
-            tempCacheWListAction.get(keyTempCache).push(callback);
+    dispose(listKeyTempCache, iteration) {
+        for(const itemKeyTempCache of listKeyTempCache) {
+            if(!this.#tempCacheWStreams.has(itemKeyTempCache)) {
+                return;
+            }
+            this.#tempCacheWStreams.get(itemKeyTempCache).delete(iteration);
+        }
+    }
+
+    listenNamed(keyTempCache,callback,iteration) {
+        if(!this.#tempCacheWStreams.has(keyTempCache)) {
+            this.#tempCacheWStreams.set(keyTempCache,new Map());
+            this.#tempCacheWStreams.get(keyTempCache).set(iteration,callback);
             return;
         }
-        tempCacheWListAction.get(keyTempCache).push(callback);
+        if(this.#tempCacheWStreams.get(keyTempCache).has(iteration)) {
+            throw new LocalException(
+                "TempCacheService",
+                EnumGuilty.developer,
+                "{ " + keyTempCache + "---" + iteration + "}", 
+                "Under such a key and iteration there already exists a listener: " + "{ " + keyTempCache + "---" + iteration + "}"); 
+        }
+        this.#tempCacheWStreams.get(keyTempCache).set(iteration,callback);
     }
 
-    updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache,value) {
+    update(keyTempCache,value) {
         this.#tempCache.set(keyTempCache,value);
     }
 
-    updateWNotificationFromKeyTempCacheAndValueParameterOne(keyTempCache,value) {
-        this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache,value);
-        const tempCacheWListAction = this.#tempCacheWListAction;
-        if(!tempCacheWListAction.has(keyTempCache)) {
+    updateWNotify(keyTempCache,value) {
+        this.update(keyTempCache,value);
+        if(!this.#tempCacheWStreams.has(keyTempCache)) {
             return;
         }
-        const get = tempCacheWListAction.get(keyTempCache);
-        for(const itemGet of get) {
-            itemGet(value);
+        for(const [_key,callback] of this.#tempCacheWStreams.get(keyTempCache).entries()) {
+            callback(value);
         }
     }
 
-    deleteFromKeyTempCacheParameterTempCache(keyTempCache) {
+    delete(keyTempCache) {
         this.#tempCache.delete(keyTempCache);
+        this.#tempCacheWStreams.delete(keyTempCache);
     }
 }

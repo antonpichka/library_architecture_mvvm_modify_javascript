@@ -1,4 +1,4 @@
-const { LocalException, EnumGuilty, BaseModel, BaseListModel, Result, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, ExceptionController, BaseNamedStreamWState, BaseModelRepository, EnumRWTMode } = require("library_architecture_mvvm_modify_javascript");
+const { LocalException, EnumGuilty, BaseModel, BaseListModel, BaseModelWrapper, BaseListModelWrapper, ResultWithModelWrapper, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, ExceptionController, BaseNamedStreamWState, BaseModelWrapperRepository } = require("library_architecture_mvvm_modify_javascript");
 
 class FactoryObjectUtility {
     constructor() {
@@ -7,9 +7,9 @@ class FactoryObjectUtility {
         }
     }
     
-    /* ModelRepository */
-    static get getIPAddressRepository() {
-        return new IPAddressRepository();
+    /* ModelWrapperRepository */
+    static getIPAddressWrapperRepositoryFromNamedHttpClientService(namedHttpClientService) {
+        return new IPAddressWrapperRepository(namedHttpClientService);
     }
 
     /* NamedStreamWState */
@@ -18,37 +18,52 @@ class FactoryObjectUtility {
     }
 }
 
+class KeysUrlEndpointUtility {
+    /* JsonipAPI */
+    static #jsonipAPI = "https://jsonip.com";
+    static #jsonipAPIQQProviders = this.#jsonipAPI + "/providers";
+
+    constructor() {
+        if (new.target === KeysUrlEndpointUtility) {
+            throw new LocalException("KeysUrlEndpointUtility",EnumGuilty.developer,"KeysUrlEndpointUtilityQQConstructor","This class is static, there is no point in calling an object and inheritance");
+        }
+    }
+
+    static get jsonipAPI() {
+        return this.#jsonipAPI;
+    }
+
+    static get jsonipAPIQQProviders() {
+        return this.#jsonipAPIQQProviders;
+    }
+}
+
 class ReadyDataUtility {
-    static #success = "success";
     static #unknown = "unknown";
-    static #iPAPI = "https://jsonip.com/";
+    static #success = "success";
 
     constructor() {
         if (new.target === ReadyDataUtility) {
             throw new LocalException("ReadyDataUtility",EnumGuilty.developer,"ReadyDataUtilityQQConstructor","This class is static, there is no point in calling an object and inheritance");
         }
     }
-    
-    static get success() {
-        return this.#success;
-    }
 
     static get unknown() {
         return this.#unknown;
     }
 
-    static get iPAPI() {
-        return this.#iPAPI;
+    static get success() {
+        return this.#success;
     }
 }
 
-class KeysHttpServiceUtility {
+class KeysHttpClientServiceUtility {
     /* IPAddress */
     static #iPAddressQQIp = "ip";
 
     constructor() {
-        if (new.target === KeysHttpServiceUtility) {
-            throw new LocalException("KeysHttpServiceUtility",EnumGuilty.developer,"KeysHttpServiceUtilityQQConstructor","This class is static, there is no point in calling an object and inheritance");
+        if (new.target === KeysHttpClientServiceUtility) {
+            throw new LocalException("KeysHttpClientServiceUtility",EnumGuilty.developer,"KeysHttpClientServiceUtilityQQConstructor","This class is static, there is no point in calling an object and inheritance");
         }
     }
 
@@ -65,7 +80,7 @@ class IPAddress extends BaseModel {
         this.#ip = ip;
     }
 
-    get getClone() {
+    clone() {
         return new IPAddress(this.ip);
     }
 
@@ -83,10 +98,10 @@ class ListIPAddress extends BaseListModel {
         super(listModel);
     }
 
-    get getClone() {
+    clone() {
         const newListModel = new Array();
         for(const itemModel of this.listModel) {
-            newListModel.push(itemModel.getClone);
+            newListModel.push(itemModel.clone());
         }
         return new ListIPAddress(newListModel);
     }
@@ -100,76 +115,110 @@ class ListIPAddress extends BaseListModel {
     }
 }
 
-/// This class needs to be called where there are network requests (in the data source), 
-/// since without this class the developer will not know in which class the network requests are
-class HttpService {
-    static instance = new HttpService();
+class IPAddressWrapper extends BaseModelWrapper {
+    constructor(listObject) {
+        super(listObject);
+    }
 
+    createModel() {
+        return new IPAddress(this.listObject[0]);
+    }
+}
+
+class ListIPAddressWrapper extends BaseListModelWrapper {
+    constructor(listsListObject) {
+        super(listsListObject);
+    }
+
+    createListModel() {
+        const listModel = new Array();
+        for(const itemListObject of this.listsListObject) {
+            listModel.push(new IPAddress(itemListObject[0]));
+        }
+        return new ListIPAddress(listModel);
+    }
+}
+
+class BaseNamedHttpClient {
     constructor() {
-        if(HttpService.instance != null) {
-            return HttpService.instance;
+        if (new.target === BaseNamedHttpClient) {
+            throw new LocalException("BaseNamedHttpClient",EnumGuilty.developer,"BaseNamedHttpClientQQConstructor","Cannot instantiate abstract class");
         }
     }
 }
 
-class IPAddressRepository extends BaseModelRepository {
-    #httpService = HttpService.instance;
+class DefaultHttpClient extends BaseNamedHttpClient {
 
-    _getBaseModelFromMapAndListKeys(map,listKeys) {
-        return new IPAddress(
-            this.getSafeValueWhereUsedInMethodGetModelFromMapAndListKeysAndIndexAndDefaultValue(
-                map, listKeys, 0, ""));
+}
+
+class BaseNamedHttpClientService {
+    constructor() {
+        if (new.target === BaseNamedHttpClientService) {
+            throw new LocalException("BaseNamedHttpClientService",EnumGuilty.developer,"BaseNamedHttpClientServiceQQConstructor","Cannot instantiate abstract class");
+        }
     }
 
-    _getBaseListModelFromListModel(listModel) {
-        return new ListIPAddress(listModel);
+    get getParameterNamedHttpClient() {
+        throw new LocalException("BaseNamedHttpClientService",EnumGuilty.developer,"BaseNamedHttpClientServiceQQGetParameterNamedHttpClient","Needs extends and must return type 'BaseNamedHttpClient'");
+    }
+}
+
+class DefaultHttpClientService extends BaseNamedHttpClientService {
+    static instance = new DefaultHttpClientService();
+    #namedHttpClient;
+
+    constructor() {
+        super();
+        if(DefaultHttpClientService.instance != null) {
+            return DefaultHttpClientService.instance;
+        }
     }
 
-    async getIPAddressParameterHttpService() {
-        return this.getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(
-            this._getIPAddressParameterHttpServiceWReleaseCallback,
-            this._getIPAddressParameterHttpServiceWTestCallback)();
+    get getParameterNamedHttpClient() {
+        if(this.#namedHttpClient != null) {
+            return this.#namedHttpClient;
+        }
+        this.#namedHttpClient = DefaultHttpClient();
+        return this.#namedHttpClient;
+    }
+}
+
+class IPAddressWrapperRepository extends BaseModelWrapperRepository {
+    #namedHttpClientService;
+
+    constructor(namedHttpClientService) {
+        super();
+        this.#namedHttpClientService = namedHttpClientService;
     }
 
-    get _httpService() {
-        return this.#httpService;
+    dispose() {
     }
 
-    _getIPAddressParameterHttpServiceWReleaseCallback = async () => {
+    async getIPAddressParameterNamedHttpClientService() {
         try {
-            const response = await fetch(ReadyDataUtility.iPAPI, {
+            const response = await fetch(KeysUrlEndpointUtility.jsonipAPI, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
             if(response.status != 200) {
-                throw NetworkException.fromKeyAndStatusCode("IPAddressRepository",response.status.toString(),response.status);
+                throw NetworkException.fromKeyAndStatusCode("IPAddressWrapperRepository",response.status.toString(),response.status);
             }
             const json = await response.json();
-            const map = new Map(Object.entries(json));
-            return Result.success(this._getBaseModelFromMapAndListKeys(
-                map,
-                this._getIPAddressParameterHttpClientServiceWListKeys()));
+            const data = new Map(Object.entries(json));
+            const ipByIPAddress = this.getSafeValueFromMapAndKeyAndDefaultValue(data,KeysHttpClientServiceUtility.iPAddressQQIp,"");
+            return ResultWithModelWrapper.success(new IPAddressWrapper([ipByIPAddress]));
         } catch(exception) {
             if(exception instanceof NetworkException) {
-                return Result.exception(exception);
+                return ResultWithModelWrapper.exception(exception);
             }
-            return Result.exception(new LocalException("IPAddressRepository",EnumGuilty.device,ReadyDataUtility.unknown,exception.toString()));
+            return ResultWithModelWrapper.exception(new LocalException("IPAddressWrapperRepository",EnumGuilty.device,ReadyDataUtility.unknown,exception.toString()));
         }
-    };
+    }
 
-    _getIPAddressParameterHttpServiceWTestCallback = async () => {
-        await new Promise(resolve => setTimeout(resolve,1000));
-        return Result.success(this._getBaseModelFromMapAndListKeys(
-            new Map([
-                [KeysHttpServiceUtility.iPAddressQQIp,"121.121.12.12"]
-            ]),
-            this._getIPAddressParameterHttpClientServiceWListKeys()));
-    };
-
-    _getIPAddressParameterHttpClientServiceWListKeys() {
-        return [KeysHttpServiceUtility.iPAddressQQIp];
+    get _namedHttpClientService() {
+        return this.#namedHttpClientService;
     }
 }
 
@@ -205,8 +254,8 @@ class DataForMainVM extends BaseDataForNamed {
 }
 
 class MainVM {
-    // ModelRepository
-    #iPAddressRepository = FactoryObjectUtility.getIPAddressRepository;
+    // ModelWrapperRepository
+    #iPAddressWrapperRepository = FactoryObjectUtility.getIPAddressWrapperRepositoryFromNamedHttpClientService(DefaultHttpClientService.instance);
     
     // NamedUtility
     
@@ -248,16 +297,16 @@ class MainVM {
     }
 
     async #firstRequest() {
-        const getIPAddressParameterHttpService = await this.#iPAddressRepository.getIPAddressParameterHttpService();
-        if(getIPAddressParameterHttpService.exceptionController.isWhereNotEqualsNullParameterException()) {
-            return this.#firstQQFirstRequestQQGetIPAddressParameterHttpService(getIPAddressParameterHttpService.exceptionController);
+        const getIPAddressParameterNamedHttpClientService = await this.#iPAddressWrapperRepository.getIPAddressParameterNamedHttpClientService();
+        if(getIPAddressParameterNamedHttpClientService.exceptionController.isWhereNotEqualsNullParameterException()) {
+            return this.#firstQQFirstRequestQQGetIPAddressParameterNamedHttpClientService(getIPAddressParameterNamedHttpClientService.exceptionController);
         }
         this.#namedStreamWState.getDataForNamed.isLoading = false;
-        this.#namedStreamWState.getDataForNamed.iPAddress = getIPAddressParameterHttpService.parameter.getClone;
+        this.#namedStreamWState.getDataForNamed.iPAddress = getIPAddressParameterNamedHttpClientService.modelWrapper.createModel();
         return ReadyDataUtility.success;
     }
 
-    async #firstQQFirstRequestQQGetIPAddressParameterHttpService(exceptionController) {
+    async #firstQQFirstRequestQQGetIPAddressParameterNamedHttpClientService(exceptionController) {
         this.#namedStreamWState.getDataForNamed.isLoading = false;
         this.#namedStreamWState.getDataForNamed.exceptionController = exceptionController;
         return exceptionController.getKeyParameterException;
@@ -265,7 +314,6 @@ class MainVM {
 }
 
 async function main() {
-    BaseModelRepository.enumRWTMode = EnumRWTMode.release;
     const mainVM = new MainVM();
     await mainVM.init();
     mainVM.dispose();

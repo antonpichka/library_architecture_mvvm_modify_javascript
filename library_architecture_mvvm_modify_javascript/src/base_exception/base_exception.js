@@ -25,7 +25,7 @@ export class BaseException {
     }
     
     /// Call this method in the descendant constructor as the last line
-    _debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass() {
+    _debugPrintExceptionParametersThisClassAndExceptionClass() {
         debugPrintException("\n===start_to_trace_exception===\n");
         debugPrintException(
             "WhereHappenedException(Class) --> " + this.#thisClass + "\n" +

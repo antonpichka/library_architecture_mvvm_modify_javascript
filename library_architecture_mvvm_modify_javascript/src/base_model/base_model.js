@@ -11,8 +11,8 @@ export class BaseModel {
         this.#uniqueId = uniqueId;
     }
 
-    get getClone() {
-        throw new LocalException("BaseModel",EnumGuilty.developer,"BaseModelQQGetClone","Needs extends and must return type 'BaseModel'");
+    clone() {
+        throw new LocalException("BaseModel",EnumGuilty.developer,"BaseModelQQClone","Needs extends and must return type 'BaseModel'");
     }
 
     toString() {

@@ -26,7 +26,7 @@ export abstract class BaseException {
     public abstract toString(): string;
        
     /// Call this method in the descendant constructor as the last line
-    protected debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass(): void {
+    protected debugPrintExceptionParametersThisClassAndExceptionClass(): void {
         debugPrintException("\n===start_to_trace_exception===\n");
         debugPrintException(
             "WhereHappenedException(Class) --> " + this.thisClass + "\n" +
@@ -43,18 +43,18 @@ export enum EnumGuilty {
 }
 
 export class LocalException extends BaseException {
-    public readonly valueWEnumGuilty: EnumGuilty;
+    public readonly enumGuilty: EnumGuilty;
     public readonly message: string;
     
-    public constructor(thisClass: string,valueWEnumGuilty: EnumGuilty,key: string,message: string = "") {
+    public constructor(thisClass: string,enumGuilty: EnumGuilty,key: string,message: string = "") {
         super(thisClass,"LocalException",key);
-        this.valueWEnumGuilty = valueWEnumGuilty;
+        this.enumGuilty = enumGuilty;
         this.message = message;
-        this.debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass();
+        this.debugPrintExceptionParametersThisClassAndExceptionClass();
     }
 
     public override toString(): string {
-        return "LocalException(valueWEnumGuilty: " + this.valueWEnumGuilty + ", " + 
+        return "LocalException(enumGuilty: " + this.enumGuilty + ", " + 
             "key: " + this.key + ", " + 
             "message (optional): " + this.message + ")";
     }
@@ -70,7 +70,7 @@ export class NetworkException extends BaseException {
         this.statusCode = statusCode;
         this.nameStatusCode = nameStatusCode;
         this.descriptionStatusCode = descriptionStatusCode;
-        this.debugPrintExceptionWhereToStringParametersThisClassAndExceptionClass();
+        this.debugPrintExceptionParametersThisClassAndExceptionClass();
     }
 
     public static fromKeyAndStatusCode(thisClass: string,key: string,statusCode: number): NetworkException {
@@ -170,7 +170,7 @@ export class CurrentModelWIndex<T extends BaseModel> {
     }
 }
 
-export abstract class BaseModelWNamedWNamedWNamedIterator<T extends BaseModel> {
+export abstract class BaseModelTTNamedTTNamedTTNamedTTIterator<T extends BaseModel> {
     protected readonly listModelIterator: Array<T>;
 
     protected constructor() {
@@ -179,18 +179,18 @@ export abstract class BaseModelWNamedWNamedWNamedIterator<T extends BaseModel> {
 
     protected abstract get currentModelWIndex(): CurrentModelWIndex<T>;
 
-    public getSortedListModelFromNewListModelParameterListModelIterator(newListModel: Array<T>) {
-        if(newListModel.length <= 0) {
+    public getSortedListModelFromListModelParameterListModelIterator(listModel: Array<T>) {
+        if(listModel.length <= 0) {
             return new Array<T>();
         }
-        this.listModelIterator.push(...newListModel);
-        const newListModelFirst = new Array<T>();
+        this.listModelIterator.push(...listModel);
+        const newListModel = new Array<T>();
         while(this.listModelIterator.length > 0) {
             const currentModelWIndex = this.currentModelWIndex;
             this.listModelIterator.splice(currentModelWIndex.index,1);
-            newListModelFirst.push(currentModelWIndex.currentModel);
+            newListModel.push(currentModelWIndex.currentModel);
         }
-        return newListModelFirst;
+        return newListModel;
     }   
 }
 
@@ -201,14 +201,14 @@ export abstract class BaseListModel<T extends BaseModel> {
         this.listModel = listModel;
     }
 
-    public abstract get getClone(): BaseListModel<T>;
+    public abstract clone(): BaseListModel<T>;
 
     public abstract toString(): string;
 
-    public sortingFromModelWNamedWNamedWNamedIteratorParameterListModel(modelWNamedWNamedWNamedIterator: BaseModelWNamedWNamedWNamedIterator<T>): void {
-        const sortedListModelFromNewListModelParameterListModelIterator = modelWNamedWNamedWNamedIterator.getSortedListModelFromNewListModelParameterListModelIterator(this.listModel);
+    public sortingFromModelTTNamedTTNamedTTNamedTTIteratorParameterListModel(modelTTNamedTTNamedTTNamedTTIterator: BaseModelTTNamedTTNamedTTNamedTTIterator<T>): void {
+        const sortedListModelFromListModelParameterListModelIterator = modelTTNamedTTNamedTTNamedTTIterator.getSortedListModelFromListModelParameterListModelIterator(this.listModel);
         this.listModel.length > 0 ? this.listModel.splice(0,this.listModel.length) : null; 
-        sortedListModelFromNewListModelParameterListModelIterator.length > 0 ? this.listModel.push(...sortedListModelFromNewListModelParameterListModelIterator) : null;
+        sortedListModelFromListModelParameterListModelIterator.length > 0 ? this.listModel.push(...sortedListModelFromListModelParameterListModelIterator) : null;
     }
 
     public insertFromNewModelParameterListModel(newModel: T): void {
@@ -251,9 +251,29 @@ export abstract class BaseModel {
         this.uniqueId = uniqueId;
     }
 
-    public abstract get getClone(): BaseModel;
+    public abstract clone(): BaseModel;
 
     public abstract toString(): string;
+}
+
+export abstract class BaseModelWrapper {
+    protected readonly listObject: Array<any>;
+
+    protected constructor(listObject: Array<any>) {
+        this.listObject = listObject;
+    }
+    
+    public abstract createModel(): BaseModel;
+}
+
+export abstract class BaseListModelWrapper {
+    protected readonly listsListObject: Array<Array<any>>;
+    
+    protected constructor(listsListObject: Array<Array<any>>) {
+        this.listsListObject = listsListObject;
+    }
+
+    public abstract createListModel(): BaseListModel<BaseModel>;
 }
 
 export abstract class BaseNamedState<T extends BaseDataForNamed<any>> implements IDispose {
@@ -344,114 +364,127 @@ export class DefaultStreamWState<T extends BaseDataForNamed<any>> extends BaseNa
 }
 
 export class TempCacheService {
-    public static readonly instance = new TempCacheService();
+    public static readonly instance: TempCacheService = new TempCacheService();
     private readonly tempCache: Map<string,any>;
-    private readonly tempCacheWListAction: Map<string,Array<(data: any) => void>>;
+    private readonly tempCacheWStreams: Map<string,Map<number,(data: any) => void>>;
 
     private constructor() {
         this.tempCache = new Map<string,any>();
-        this.tempCacheWListAction = new Map<string,Array<(data: any) => void>>();
-    }
-
-    public static clearTempCacheParmeterInstance(): void {
-        const tempCache = this.instance.tempCache;
-        tempCache.clear();
-    }
-
-    public static closeStreamFromKeyTempCacheParmeterInstance(keyTempCache: string): void {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        if(!tempCacheWListAction.has(keyTempCache)) {
-            return;
-        }
-        const get = tempCacheWListAction.get(keyTempCache);
-        get?.splice(0,get.length);
-    }
-
-    public static closeStreamFromListKeyTempCacheParmeterInstance(listKeyTempCache: Array<string>): void {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        for(const itemKeyTempCache of listKeyTempCache) {
-            if(!tempCacheWListAction.has(itemKeyTempCache)) {
-                return;
-            }
-            const get = tempCacheWListAction.get(itemKeyTempCache);
-            get?.splice(0,get.length);
-        }
-    }
-
-    public static closeStreamsParameterInstance(): void {
-        const tempCacheWListAction = this.instance.tempCacheWListAction;
-        for(const [,value] of tempCacheWListAction) {
-            value.splice(0,value.length);
-        }
+        this.tempCacheWStreams = new Map<string,Map<number,(data: any) => void>>();
     }
     
-    public getFromKeyTempCacheParameterTempCache(keyTempCache: string): any {
+    public getNamed<T>(keyTempCache: string, defaultValue: T): T {
         const tempCache = this.tempCache;
         if(!tempCache.has(keyTempCache)) {
-            throw new LocalException("TempCacheService",EnumGuilty.developer,keyTempCache,"No exists key");
+            return defaultValue;
         }
         return tempCache.get(keyTempCache);
     }
 
-    public listenStreamFromKeyTempCacheAndCallbackParameterOne(keyTempCache: string,callback: (data: any) => void): void {
-        const tempCacheWListAction = this.tempCacheWListAction;
-        if(!tempCacheWListAction.has(keyTempCache)) {
-            tempCacheWListAction.set(keyTempCache,new Array<(data: any) => void>());
-            tempCacheWListAction.get(keyTempCache)?.push(callback);
-            return;
+    public dispose(listKeyTempCache: Array<string>, iteration: number): void {
+        for(const itemKeyTempCache of listKeyTempCache) {
+            if(!this.tempCacheWStreams.has(itemKeyTempCache)) {
+                return;
+            }
+            this.tempCacheWStreams.get(itemKeyTempCache)?.delete(iteration);
         }
-        tempCacheWListAction.get(keyTempCache)?.push(callback);
     }
 
-    public updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache: string,value: any): void {
+    public listenNamed(keyTempCache: string, callback: (data: any) => void, iteration: number): void {
+        this.tempCacheWStreams;
+        if(!this.tempCacheWStreams.has(keyTempCache)) {
+            this.tempCacheWStreams.set(keyTempCache,new Map<number,(data: any) => void>());
+            this.tempCacheWStreams.get(keyTempCache)?.set(iteration,callback);
+            return;
+        }
+        if(this.tempCacheWStreams.get(keyTempCache)?.has(iteration)) {
+            throw new LocalException(
+                "TempCacheService",
+                EnumGuilty.developer,
+                "{ " + keyTempCache + "---" + iteration + "}", 
+                "Under such a key and iteration there already exists a listener: " + "{ " + keyTempCache + "---" + iteration + "}");
+        }
+        this.tempCacheWStreams.get(keyTempCache)?.set(iteration,callback);
+    }
+
+    public update(keyTempCache: string, value: any): void {
         this.tempCache.set(keyTempCache,value);
     }
 
-    public updateWNotificationFromKeyTempCacheAndValueParameterOne(keyTempCache: string,value: any): void {
-        this.updateFromKeyTempCacheAndValueParameterTempCache(keyTempCache,value);
-        const tempCacheWListAction = this.tempCacheWListAction;
-        if(!tempCacheWListAction.has(keyTempCache)) {
+    public updateWNotify(keyTempCache: string, value: any): void {
+        this.update(keyTempCache,value);
+        if(!this.tempCacheWStreams.has(keyTempCache)) {
             return;
         }
-        const get = tempCacheWListAction.get(keyTempCache)!;
-        for(const itemGet of get) {
-            itemGet(value);
+        for(const [_key,callback] of this.tempCacheWStreams.get(keyTempCache)!.entries()) {
+            callback(value);
         }
     }
 
-    public deleteFromKeyTempCacheParameterTempCache(keyTempCache: string): void {
+    public delete(keyTempCache: string): void {
         this.tempCache.delete(keyTempCache);
+        this.tempCacheWStreams.delete(keyTempCache);
     }
 }
 
-export enum EnumRWTMode {
-    release,
-    test
+export class IterationService {
+    public static readonly instance: IterationService = new IterationService();
+    private iteration: number;
+
+    private constructor() {
+        this.iteration = -1;
+    }
+
+    public newValueParameterIteration(): number {
+        this.iteration++;
+        return this.iteration;
+    }
 }
 
-export abstract class BaseModelRepository<T extends BaseModel, Y extends BaseListModel<T>> {
-    public static enumRWTMode = EnumRWTMode.test;
+export class TempCacheProvider {
+    private readonly tempCacheService: TempCacheService;
+    private readonly iteration: number;
 
+    public constructor() {
+        this.tempCacheService = TempCacheService.instance;
+        this.iteration = IterationService.instance.newValueParameterIteration();
+    }
+
+    public getNamed<T>(keyTempCache: string, defaultValue: T): T {
+        return this.tempCacheService.getNamed<T>(keyTempCache,defaultValue);
+    }
+
+    public dispose(listKeyTempCache: Array<string>): void {
+        this.tempCacheService.dispose(listKeyTempCache,this.iteration);
+    }
+
+    public listenNamed(keyTempCache: string, callback: (data: any) => void): void {
+        this.tempCacheService.listenNamed(keyTempCache,callback,this.iteration);
+    }
+
+    public update(keyTempCache: string, value: any): void {
+        this.tempCacheService.update(keyTempCache,value);
+    }
+
+    public updateWNotify(keyTempCache: string, value: any): void {
+        this.tempCacheService.updateWNotify(keyTempCache,value);
+    }
+
+    public delete(keyTempCache: string): void {
+        this.tempCacheService.delete(keyTempCache);
+    }
+}
+
+export abstract class BaseModelWrapperRepository implements IDispose {
     protected constructor() {
     }
+    
+    public abstract dispose(): void;
 
-    protected abstract getBaseModelFromMapAndListKeys(map: Map<string,any>, listKeys: Array<string>): T;
-
-    protected abstract getBaseListModelFromListModel(listModel: Array<T>): Y;
-
-    protected getModeCallbackFromReleaseCallbackAndTestCallbackParameterEnumRWTMode(releaseCallback: any, testCallback: any): any {
-        switch(BaseModelRepository.enumRWTMode) {
-            case EnumRWTMode.release:
-                return releaseCallback;
-            case EnumRWTMode.test:
-                return testCallback;
-        }
-    }
-
-    protected getSafeValueWhereUsedInMethodGetModelFromMapAndListKeysAndIndexAndDefaultValue(map: Map<string,any>, listKeys: Array<string>, index: number, defaultValue: any): any {
+    protected getSafeValueFromMapAndKeyAndDefaultValue(map: Map<string,any>, key: string, defaultValue: any): any {
         try {
-            return map.has(listKeys[index]) ? map.get(listKeys[index]) : defaultValue;
-        } catch(exception) {
+            return map.has(key) ? map.get(key) : defaultValue;
+        } catch(e) {
             return defaultValue;
         }
     }
@@ -507,6 +540,42 @@ export class Result {
 
     public static exception(exception: BaseException): Result {
         return new Result(null,ExceptionController.exception(exception));
+    }
+}
+
+export class ResultWithModelWrapper {
+    public readonly modelWrapper: BaseModelWrapper | null;
+    public readonly exceptionController: ExceptionController;
+
+    private constructor(modelWrapper: BaseModelWrapper | null, exceptionController: ExceptionController) {
+        this.modelWrapper = modelWrapper;
+        this.exceptionController = exceptionController;
+    }
+
+    public static success(modelWrapper: BaseModelWrapper): ResultWithModelWrapper {
+        return new ResultWithModelWrapper(modelWrapper,ExceptionController.success());
+    }
+
+    public static exception(exception: BaseException): ResultWithModelWrapper {
+        return new ResultWithModelWrapper(null,ExceptionController.exception(exception));
+    }
+}
+
+export class ResultWithListModelsWrapper {
+    public readonly listModelWrapper: BaseListModelWrapper | null;
+    public readonly exceptionController: ExceptionController;
+
+    private constructor(listModelWrapper: BaseListModelWrapper | null, exceptionController: ExceptionController) {
+        this.listModelWrapper = listModelWrapper;
+        this.exceptionController = exceptionController;
+    }
+
+    public static success(listModelWrapper: BaseListModelWrapper): ResultWithListModelsWrapper {
+        return new ResultWithListModelsWrapper(listModelWrapper,ExceptionController.success());
+    }
+
+    public static exception(exception: BaseException): ResultWithListModelsWrapper {
+        return new ResultWithListModelsWrapper(null,ExceptionController.exception(exception));
     }
 }
 
