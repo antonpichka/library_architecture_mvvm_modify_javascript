@@ -14,7 +14,7 @@
 
 ## Example
 
-- [Small project](https://github.com/antonpichka/library_architecture_mvvm_modify_javascript/blob/main/library_architecture_mvvm_modify_javascript/example/index.ts)
+- [Small project](https://github.com/antonpichka/library_architecture_mvvm_modify_javascript/blob/main/library_architecture_mvvm_modify_javascript/example/index.js)
 
 ## Template For LAMM
 
