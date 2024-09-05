@@ -1,4 +1,4 @@
-const { LocalException, EnumGuilty, BaseModel, BaseListModel, BaseModelWrapper, BaseListModelWrapper, ResultWithModelWrapper, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, ExceptionController, BaseNamedStreamWState, BaseModelWrapperRepository } = require("library_architecture_mvvm_modify_javascript");
+const { LocalException, EnumGuilty, BaseModel, BaseListModel, BaseModelWrapper, BaseListModelWrapper, ResultWithModelWrapper, NetworkException, BaseDataForNamed, DefaultStreamWState, debugPrint, ExceptionController, BaseNamedStreamWState, BaseModelWrapperRepository, TempCacheProvider } = require("library_architecture_mvvm_modify_javascript");
 
 class FactoryObjectUtility {
     constructor() {
@@ -257,6 +257,9 @@ class MainVM {
     // ModelWrapperRepository
     #iPAddressWrapperRepository = FactoryObjectUtility.getIPAddressWrapperRepositoryFromNamedHttpClientService(DefaultHttpClientService.instance);
     
+    // TempCacheProvider
+    #tempCacheProvider = new TempCacheProvider();
+
     // NamedUtility
     
     // NamedStreamWState
@@ -276,20 +279,22 @@ class MainVM {
     }
 
     dispose() {
+        this.#iPAddressWrapperRepository.dispose();
+        this.#tempCacheProvider.dispose(new Array());
         this.#namedStreamWState.dispose();
     }
 
     #build() {
-        const dataForNamed = this.#namedStreamWState.getDataForNamed;
-        switch(dataForNamed.getEnumDataForNamed) {
+        const dataWNamed = this.#namedStreamWState.getDataForNamed;
+        switch(dataWNamed.getEnumDataForNamed) {
             case EnumDataForMainVM.isLoading:
                 debugPrint("Build: IsLoading");
                 break;
             case EnumDataForMainVM.exception:
-                debugPrint("Build: Exception(" + dataForNamed.exceptionController.getKeyParameterException + ")");
+                debugPrint("Build: Exception(" + dataWNamed.exceptionController.getKeyParameterException + ")");
                 break;
             case EnumDataForMainVM.success:
-                debugPrint("Build: Success(" + dataForNamed.iPAddress + ")");
+                debugPrint("Build: Success(" + dataWNamed.iPAddress + ")");
                 break;
             default:
                 break;      

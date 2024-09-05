@@ -74,20 +74,20 @@ export declare abstract class BaseListModelWrapper {
 }
 export declare abstract class BaseNamedState<T extends BaseDataForNamed<any>> implements IDispose {
     protected constructor();
-    abstract dispose(): void;
     abstract get getDataForNamed(): T;
+    abstract dispose(): void;
 }
 export declare class DefaultState<T extends BaseDataForNamed<any>> extends BaseNamedState<T> {
     private readonly dataForNamed;
     private isDispose;
     constructor(dataForNamed: T);
-    dispose(): void;
     get getDataForNamed(): T;
+    dispose(): void;
 }
 export declare abstract class BaseNamedStreamWState<T extends BaseDataForNamed<any>> implements IDispose {
     protected constructor();
-    abstract dispose(): void;
     abstract get getDataForNamed(): T;
+    abstract dispose(): void;
     abstract listenStreamDataForNamedFromCallback(callback: (data: T) => void): void;
     abstract notifyStreamDataForNamed(): void;
 }
@@ -96,8 +96,8 @@ export declare class DefaultStreamWState<T extends BaseDataForNamed<any>> extend
     private isDispose;
     private callback;
     constructor(dataForNamed: T);
-    dispose(): void;
     get getDataForNamed(): T;
+    dispose(): void;
     listenStreamDataForNamedFromCallback(callback: (data: T) => void): void;
     notifyStreamDataForNamed(): void;
 }

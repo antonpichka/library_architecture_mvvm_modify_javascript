@@ -9,14 +9,14 @@ export class DefaultState extends BaseNamedState {
         this.#dataForNamed = dataForNamed;
     }
 
+    get getDataForNamed() {
+        return this.#dataForNamed;
+    }
+    
     dispose() {
         if(this.#isDispose) {
             return;
         }
         this.#isDispose = true;
-    }
-
-    get getDataForNamed() {
-        return this.#dataForNamed;
     }
 }

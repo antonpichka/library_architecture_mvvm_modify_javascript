@@ -8,12 +8,12 @@ export class BaseNamedStreamWState {
         }
     }
 
-    dispose() {
-        throw new LocalException("BaseNamedStreamWState",EnumGuilty.developer,"BaseNamedStreamWStateQQDispose","Needs extends");
-    }
-
     get getDataForNamed() {
         throw new LocalException("BaseNamedStreamWState",EnumGuilty.developer,"BaseNamedStreamWStateQQGetDataForNamed","Needs extends and must return type 'BaseDataForNamed'");
+    }
+    
+    dispose() {
+        throw new LocalException("BaseNamedStreamWState",EnumGuilty.developer,"BaseNamedStreamWStateQQDispose","Needs extends");
     }
 
     listenStreamDataForNamedFromCallback(callback) {

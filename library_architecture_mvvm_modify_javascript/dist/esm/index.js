@@ -216,14 +216,14 @@ export class DefaultState extends BaseNamedState {
         this.isDispose = false;
         this.dataForNamed = dataForNamed;
     }
+    get getDataForNamed() {
+        return this.dataForNamed;
+    }
     dispose() {
         if (this.isDispose) {
             return;
         }
         this.isDispose = true;
-    }
-    get getDataForNamed() {
-        return this.dataForNamed;
     }
 }
 export class BaseNamedStreamWState {
@@ -237,6 +237,9 @@ export class DefaultStreamWState extends BaseNamedStreamWState {
         this.dataForNamed = dataForNamed;
         this.callback = null;
     }
+    get getDataForNamed() {
+        return this.dataForNamed;
+    }
     dispose() {
         if (this.isDispose) {
             return;
@@ -244,24 +247,21 @@ export class DefaultStreamWState extends BaseNamedStreamWState {
         this.isDispose = true;
         this.callback = null;
     }
-    get getDataForNamed() {
-        return this.dataForNamed;
-    }
     listenStreamDataForNamedFromCallback(callback) {
         if (this.isDispose) {
-            throw new LocalException("DefaultStreamWState", EnumGuilty.developer, "DefaultStreamWStateQQListenStreamDataForNamedFromCallback", "Already disposed of");
+            throw new LocalException("DefaultStreamWState", EnumGuilty.developer, "DefaultStreamWStateQQListenStreamDataWNamedWCallback", "Already disposed of");
         }
         if (this.callback != null) {
-            throw new LocalException("DefaultStreamWState", EnumGuilty.developer, "DefaultStreamWStateQQListenStreamDataForNamedFromCallback", "Duplicate");
+            throw new LocalException("DefaultStreamWState", EnumGuilty.developer, "DefaultStreamWStateQQListenStreamDataWNamedWCallback", "Duplicate");
         }
         this.callback = callback;
     }
     notifyStreamDataForNamed() {
         if (this.isDispose) {
-            throw new LocalException("DefaultStreamWState", EnumGuilty.developer, "DefaultStreamWStateQQNotifyStreamDataForNamed", "Already disposed of");
+            throw new LocalException("DefaultStreamWState", EnumGuilty.developer, "DefaultStreamWStateQQNotifyStreamDataWNamed", "Already disposed of");
         }
         if (this.callback == null) {
-            throw new LocalException("DefaultStreamWState", EnumGuilty.developer, "DefaultStreamWStateQQNotifyStreamDataForNamed", "Stream has no listener");
+            throw new LocalException("DefaultStreamWState", EnumGuilty.developer, "DefaultStreamWStateQQNotifyStreamDataWNamed", "Stream has no listener");
         }
         this.callback(this.dataForNamed);
     }
@@ -289,7 +289,6 @@ export class TempCacheService {
     }
     listenNamed(keyTempCache, callback, iteration) {
         var _a, _b, _c;
-        this.tempCacheWStreams;
         if (!this.tempCacheWStreams.has(keyTempCache)) {
             this.tempCacheWStreams.set(keyTempCache, new Map());
             (_a = this.tempCacheWStreams.get(keyTempCache)) === null || _a === void 0 ? void 0 : _a.set(iteration, callback);

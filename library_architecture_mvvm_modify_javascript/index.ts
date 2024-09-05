@@ -280,9 +280,9 @@ export abstract class BaseNamedState<T extends BaseDataForNamed<any>> implements
     protected constructor() {
     }
     
-    public abstract dispose(): void;
-
     public abstract get getDataForNamed(): T;
+
+    public abstract dispose(): void;
 }
 
 export class DefaultState<T extends BaseDataForNamed<any>> extends BaseNamedState<T> {
@@ -294,15 +294,15 @@ export class DefaultState<T extends BaseDataForNamed<any>> extends BaseNamedStat
         this.dataForNamed = dataForNamed;
     }
 
+    public override get getDataForNamed(): T {
+        return this.dataForNamed;
+    }
+
     public override dispose(): void {
         if(this.isDispose) {
             return;
         }
         this.isDispose = true;
-    }
-
-    public override get getDataForNamed(): T {
-        return this.dataForNamed;
     }
 }
 
@@ -310,9 +310,9 @@ export abstract class BaseNamedStreamWState<T extends BaseDataForNamed<any>> imp
     protected constructor() {
     }
 
-    public abstract dispose(): void;
-
     public abstract get getDataForNamed(): T;
+
+    public abstract dispose(): void;
 
     public abstract listenStreamDataForNamedFromCallback(callback: (data: T) => void): void;
 
@@ -329,7 +329,11 @@ export class DefaultStreamWState<T extends BaseDataForNamed<any>> extends BaseNa
         this.dataForNamed = dataForNamed;
         this.callback = null;
     }
-    
+
+    public override get getDataForNamed(): T {
+        return this.dataForNamed;
+    }
+
     public override dispose(): void {
         if(this.isDispose) {
             return;
@@ -338,26 +342,22 @@ export class DefaultStreamWState<T extends BaseDataForNamed<any>> extends BaseNa
         this.callback = null;
     }
 
-    public override get getDataForNamed(): T {
-        return this.dataForNamed;
-    }
-
     public override listenStreamDataForNamedFromCallback(callback: (data: T) => void): void {
         if(this.isDispose) {
-            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQListenStreamDataForNamedFromCallback","Already disposed of");
+            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQListenStreamDataWNamedWCallback","Already disposed of");
         }
         if(this.callback != null) {
-            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQListenStreamDataForNamedFromCallback","Duplicate");
+            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQListenStreamDataWNamedWCallback","Duplicate");
         }
         this.callback = callback;
     }
 
     public override notifyStreamDataForNamed(): void {
         if(this.isDispose) {
-            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQNotifyStreamDataForNamed","Already disposed of");
+            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQNotifyStreamDataWNamed","Already disposed of");
         }
         if(this.callback == null) {
-            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQNotifyStreamDataForNamed","Stream has no listener");
+            throw new LocalException("DefaultStreamWState",EnumGuilty.developer,"DefaultStreamWStateQQNotifyStreamDataWNamed","Stream has no listener");
         }
         this.callback(this.dataForNamed);
     }
@@ -391,7 +391,6 @@ export class TempCacheService {
     }
 
     public listenNamed(keyTempCache: string, callback: (data: any) => void, iteration: number): void {
-        this.tempCacheWStreams;
         if(!this.tempCacheWStreams.has(keyTempCache)) {
             this.tempCacheWStreams.set(keyTempCache,new Map<number,(data: any) => void>());
             this.tempCacheWStreams.get(keyTempCache)?.set(iteration,callback);
